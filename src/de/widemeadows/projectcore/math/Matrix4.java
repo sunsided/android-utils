@@ -509,8 +509,21 @@ public final class Matrix4 {
                     c1123 * c32 -
                     c1221 * c33;
 
+        // Zweiter Block
+        float c2233 = c22 * c33;
+        float c1320 = c13 * c20;
+        float c2332 = c23 * c32;
+        float c1220 = c12 * c20;
+
+        // Determinant row 0, cell 1
+        float m12 = c2233 * c10 +
+                    c1223 * c30 +
+                    c1320 * c32 -
+                    c1322 * c30 -
+                    c2332 * c10 -
+                    c1220 * c33;
+
 		float c1133 = c11*c33;
-		float c2233 = c22*c33;
 		float c1231 = c12*c31;
 		float c2331 = c23*c31;
 		float c1332 = c13*c32;
@@ -518,20 +531,17 @@ public final class Matrix4 {
 		float c1331 = c13*c31;
 		float c2231 = c22*c31;
 		float c1132 = c11*c32;
-		float c2332 = c23*c32;
 		float c1233 = c12*c33;
 		float c2133 = c21*c33;
 		float c1022 = c10*c22;
 		float c1033 = c10*c33;
 		float c1230 = c12*c30;
 		float c2330 = c23*c30;
-		float c1320 = c13*c20;
 		float c2032 = c20*c32;
 		float c1330 = c13*c30;
 		float c2230 = c22*c30;
 		float c1023 = c10*c23;
 		float c1032 = c10*c32;
-		float c1220 = c12*c20;
 		float c2033 = c20*c33;
 		float c1021 = c10*c21;
 		float c1130 = c11*c30;
@@ -539,14 +549,6 @@ public final class Matrix4 {
 		float c2130 = c21*c30;
 		float c1031 = c10*c31;
 		float c1120 = c11*c20;
-
-		// Determinant row 0, cell 1
-		float m12 =  c2233*c10 +
-		             c1223*c30 +
-		             c1320*c32 -
-		             c1322*c30 -
-                     c2332*c10 -
-		             c1220*c33;
 
 		// Determinant row 0, cell 2
 		float m13 =  c2133*c10 +
