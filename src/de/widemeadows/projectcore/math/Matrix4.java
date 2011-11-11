@@ -655,24 +655,27 @@ public final class Matrix4 {
                 c2033 * c02;
 
         // Elfter Block
-        float c2031 = c20 * c31;
-        float c2130 = c21 * c30;
+        float m24, m23;
+        {
+            float c2031 = c20 * c31;
+            float c2130 = c21 * c30;
 
-        // Determinant row 1, cell 2
-        float m23 = c2133 * c00 +
-                c2330 * c01 +
-                c2031 * c03 -
-                c2130 * c03 -
-                c2331 * c00 -
-                c2033 * c01;
+            // Determinant row 1, cell 2
+            m23 = c2133 * c00 +
+                    c2330 * c01 +
+                    c2031 * c03 -
+                    c2130 * c03 -
+                    c2331 * c00 -
+                    c2033 * c01;
 
-        // Determinant row 1, cell 3
-        float m24 = c2132 * c00 +
-                c2230 * c01 +
-                c2031 * c02 -
-                c2130 * c02 -
-                c2231 * c00 -
-                c2032 * c01;
+            // Determinant row 1, cell 3
+            m24 = c2132 * c00 +
+                    c2230 * c01 +
+                    c2031 * c02 -
+                    c2130 * c02 -
+                    c2231 * c00 -
+                    c2032 * c01;
+        }
 
         // Determinant row 3, cell 0
         float m41 = c1223 * c01 +
