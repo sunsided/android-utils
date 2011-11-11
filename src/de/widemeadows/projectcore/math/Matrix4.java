@@ -7,9 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 
-import java.util.HashSet;
-import java.util.Stack;
-
 /**
  * 4D-Matrix.
  * <p>
@@ -40,7 +37,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	public static Matrix4 createNew() {
-		return Recycling.getOrCreate();
+        return Recycling.getOrCreate().toUnit();
 	}
 
 	/**
@@ -63,72 +60,12 @@ public final class Matrix4 {
     public void recycle() {
         Recycling.registerElement(this);
     }
-
-	/**
-	 * Memory-Manager für 4x4-Float-Arrays
-	 * @author sunside
-	 */
-	@Deprecated
-	protected final static class MemoryManager { // TODO: Speicherverbrauch verprofilern
-		
-		/**
-		 * Die Liste des verfügbaren Speichers
-		 */
-		@NotNull
-		private final Stack<float[]> _available = new Stack<float[]>(); // TODO: Capacity setzen
-		
-		/**
-		 * Die Liste des benutzten Speichers
-		 */
-		@NotNull
-		private final HashSet<float[]> _used = new HashSet<float[]>(); // TODO: Capacity setzen
-
-		/**
-		 * Bezieht den Speicher für ein 4x4-Array.
-		 * Steht nicht genügend pre-allozierter Speicher zur Verfügung, wird neuer Speicher bezogen
-		 * und in das System eingetragen.
-		 *
-		 * @return Der Speicher, muss mit release() freigegeben werden!
-		 * @see MemoryManager#release
-		 */
-		@NotNull
-		public float[] acquire() {
-			float[] array;
-			synchronized(this) {
-				if (_available.size() == 0) {
-					array = new float[16];
-					_used.add(array);
-				}
-				else {
-					array = _available.pop();
-				}
-			}
-			return array;
-		}
-		
-		/**
-		 * Gibt den Speicher für ein 4x4-Array frei
-		 * @param array Das zu registrierende Array
-		 * @see MemoryManager#acquire
-		 */
-		public void release(@NotNull float[] array) {
-			synchronized(this) {
-				if (!_used.remove(array)) return;
-				_available.push(array);
-			}
-		}
-	}
-	
-	/**
-	 * Der Speichermanager
-	 */
-	@NotNull
-	protected static final MemoryManager ArrayManager = new MemoryManager();
 	
 	/**
 	 * Die Elemente
 	 */
-	public final float[] values;
+	@NotNull
+    public final float[] values = new float[16];
 	
 	/**
 	 * Die Einheitsmatrix
@@ -180,8 +117,6 @@ public final class Matrix4 {
 	 * Erzeugt eine neue, leere Matrix
 	 */
 	private Matrix4() {
-		// Array beziehen
-		values = ArrayManager.acquire();
 	}
 
 	/**
@@ -209,23 +144,11 @@ public final class Matrix4 {
 					float m31, float m32, float m33, float m34,
 					float m41, float m42, float m43, float m44
 	) {
-		// Array beziehen
-		values = ArrayManager.acquire();
-		
+		// Array füllen
 		values[ 0] = m11;	values[ 1] = m12;	values[ 2] = m13;	values[ 3] = m14;
 		values[ 4] = m21;	values[ 5] = m22;	values[ 6] = m23;	values[ 7] = m24;
 		values[ 8] = m31;	values[ 9] = m32;	values[10] = m33;	values[11] = m34;
 		values[12] = m41;	values[13] = m42;	values[14] = m43;	values[15] = m44;
-	}
-
-	/**
-	 * Der Finalizer
-	 * @throws Throwable
-	 */
-	protected void finalize() throws Throwable {
-		// Array wieder freigeben
-		ArrayManager.release(values);
-		super.finalize();
 	}
 
 	/**
@@ -311,12 +234,14 @@ public final class Matrix4 {
 
 	/**
 	 * Wandelt die Matrix in die Einheitsmatrix um
+     * @return Dieselbe Instanz für method chaining
 	 */
-	public void toUnit() {
+	public Matrix4 toUnit() {
 		values[ 0] = 1.0f;	values[ 1] = 0.0f;	values[ 2] = 0.0f;	values[ 3] = 0.0f;
 		values[ 4] = 0.0f;	values[ 5] = 1.0f;	values[ 6] = 0.0f;	values[ 7] = 0.0f;
 		values[ 8] = 0.0f;	values[ 9] = 0.0f;	values[10] = 1.0f;	values[11] = 0.0f;
 		values[12] = 0.0f;	values[13] = 0.0f;	values[14] = 0.0f;	values[15] = 1.0f;
+        return this;
 	}
 
 	/**
