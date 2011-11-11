@@ -1,7 +1,7 @@
-package math;
+package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
-import utils.cache.annotations.ReturnsCachedValue;
 
 /**
  * Basisklasse für Boxen (AABB, OBB, ...)

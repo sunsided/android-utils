@@ -1,9 +1,9 @@
-package utils.cache;
+package de.widemeadows.projectcore.cache;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.lists.DoubleLinkedListNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import utils.cache.annotations.ReturnsCachedValue;
-import utils.lists.DoubleLinkedListNode;
 
 /**
  * A cache that allows recycling of destroyed objects to compensate for the garbage collector.

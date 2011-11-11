@@ -1,10 +1,10 @@
-package math;
+package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import utils.cache.ObjectCache;
-import utils.cache.ObjectFactory;
-import utils.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.cache.ObjectCache;
+import de.widemeadows.projectcore.cache.ObjectFactory;
 
 import java.util.HashSet;
 import java.util.Stack;

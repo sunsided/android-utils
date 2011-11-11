@@ -1,7 +1,7 @@
-package utils.cache;
+package de.widemeadows.projectcore.cache;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
-import utils.cache.annotations.ReturnsCachedValue;
 
 /**
  * Recycling for objects, used by the {@link ObjectCache}.
@@ -15,6 +15,6 @@ public interface ObjectFactory<T> {
 	 * @return The new object
 	 */
 	@NotNull
-    @ReturnsCachedValue
+	@ReturnsCachedValue
 	T createNew();
 }

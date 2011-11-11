@@ -1,4 +1,4 @@
-package math;
+package de.widemeadows.projectcore.math;
 
 /**
  * Definiert einen Schnittbereich

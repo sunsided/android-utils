@@ -1,4 +1,4 @@
-package math;
+package de.widemeadows.projectcore.math;
 
 import android.opengl.GLU;
 import org.jetbrains.annotations.NotNull;

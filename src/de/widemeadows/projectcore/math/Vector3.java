@@ -1,9 +1,9 @@
-package math;
+package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
-import utils.cache.ObjectCache;
-import utils.cache.ObjectFactory;
-import utils.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.cache.ObjectCache;
+import de.widemeadows.projectcore.cache.ObjectFactory;
 
 /**
  * 3D-Vektor

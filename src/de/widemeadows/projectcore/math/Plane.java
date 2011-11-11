@@ -1,4 +1,4 @@
-package math;
+package de.widemeadows.projectcore.math;
 
 import org.jetbrains.annotations.NotNull;
 

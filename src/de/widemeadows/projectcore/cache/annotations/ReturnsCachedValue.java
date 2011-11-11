@@ -1,4 +1,4 @@
-package utils.cache.annotations;
+package de.widemeadows.projectcore.cache.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
