@@ -1,6 +1,7 @@
 package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import de.widemeadows.projectcore.cache.ObjectCache;

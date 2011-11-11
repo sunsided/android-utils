@@ -1,8 +1,8 @@
-package de.widemeadows.projectcore.math;
+package de.widemeadows.projectcore.math.exceptions;
 
 /**
  * Exception, die in einer Matrix auftritt
- * @see Matrix4
+ * @see de.widemeadows.projectcore.math.Matrix4
  * 
  * User: sunside
  * Date: 29.07.11
