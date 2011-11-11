@@ -871,7 +871,7 @@ public final class Matrix4 {
 	@NotNull
 	public Vector3 transform(@NotNull final Vector3 vector, float w) {
         Vector3 v = vector.clone();
-        transformInPlace(v);
+        transformInPlace(v, w);
         return v;
 	}
 
