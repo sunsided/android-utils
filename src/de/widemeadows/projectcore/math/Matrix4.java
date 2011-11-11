@@ -492,23 +492,33 @@ public final class Matrix4 {
         float c31 = getAt(3, 1);
         float c32 = getAt(3, 2);
         float c33 = getAt(3, 3);
-        
-		float c1122 = c11*c22; // TODO: Reorder for memory efficiency
+
+        // Erster Block
+		float c1122 = c11*c22;
+        float c1223 = c12*c23;
+        float c1321 = c13*c21;
+        float c1322 = c13*c22;
+        float c1123 = c11*c23;
+        float c1221 = c12*c21;
+
+        // Determinant row 0, cell 0
+        float m11 = c1122 * c33 +
+                    c1223 * c31 +
+                    c1321 * c32 -
+                    c1322 * c31 -
+                    c1123 * c32 -
+                    c1221 * c33;
+
 		float c1133 = c11*c33;
 		float c2233 = c22*c33;
-		float c1223 = c12*c23;
 		float c1231 = c12*c31;
 		float c2331 = c23*c31;
-		float c1321 = c13*c21;
 		float c1332 = c13*c32;
 		float c2132 = c21*c32;
-		float c1322 = c13*c22;
 		float c1331 = c13*c31;
 		float c2231 = c22*c31;
-		float c1123 = c11*c23;
 		float c1132 = c11*c32;
 		float c2332 = c23*c32;
-		float c1221 = c12*c21;
 		float c1233 = c12*c33;
 		float c2133 = c21*c33;
 		float c1022 = c10*c22;
@@ -529,14 +539,6 @@ public final class Matrix4 {
 		float c2130 = c21*c30;
 		float c1031 = c10*c31;
 		float c1120 = c11*c20;
-
-		// Determinant row 0, cell 0
-		float m11 =  c1122*c33 +
-		             c1223*c31 +
-		             c1321*c32 -
-		             c1322*c31 -
-		             c1123*c32 -
-		             c1221*c33;
 
 		// Determinant row 0, cell 1
 		float m12 =  c2233*c10 +
