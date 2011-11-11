@@ -731,7 +731,17 @@ public final class Matrix4 {
 	
 	/**
 	 * Wandelt die Matrix in eine Translationsmatrix um
-	 *
+	 *<h2>Form der Matrix</h2>
+     * <pre>
+     * +---------+---+
+     * | 1  0  0 | 0 |
+     * | 0  1  0 | 0 |
+     * | 0  0  1 | 0 |
+     * +---------+---+
+     * |Tx Ty Tz | 1 |
+     * +---------+---+
+     * </pre>
+     *
 	 * @param translation Der Translationsvektor
 	 *
 	 * @see Matrix4#toTranslation(float, float, float)
@@ -748,6 +758,17 @@ public final class Matrix4 {
 	
 	/**
 	 * Wandelt die Matrix in eine Translationsmatrix um
+     * *
+     * <h2>Form der Matrix</h2>
+     * <pre>
+     * +---------+---+
+     * | 1  0  0 | 0 |
+     * | 0  1  0 | 0 |
+     * | 0  0  1 | 0 |
+     * +---------+---+
+     * | x  y  z | 1 |
+     * +---------+---+
+     * </pre>
 	 *
 	 * @param x Die X-Komponente des Translationsvektors
 	 * @param y Die Y-Komponente des Translationsvektors
@@ -764,6 +785,17 @@ public final class Matrix4 {
 	
 	/**
 	 * Wandelt die Matrix in eine Skalierungsmatrix um
+     *
+     * <h2>Form der Matrix</h2>
+     * <pre>
+     * +---------+---+
+     * |Sx  0  0 | 0 |
+     * | 0 Sy  0 | 0 |
+     * | 0  0 Sz | 0 |
+     * +---------+---+
+     * | 0  0  0 | 1 |
+     * +---------+---+
+     * </pre>
 	 *
 	 * @param factors Die Skalierungsfaktoren
 	 *
@@ -779,6 +811,17 @@ public final class Matrix4 {
 	
 	/**
 	 * Wandelt die Matrix in eine Skalierungsmatrix um
+     *
+     * <h2>Form der Matrix</h2>
+     * <pre>
+     * +---------+---+
+     * | x  0  0 | 0 |
+     * | 0  y  0 | 0 |
+     * | 0  0  z | 0 |
+     * +---------+---+
+     * | 0  0  0 | 1 |
+     * +---------+---+
+     * </pre>
 	 *
 	 * @param x X-Skalierungsfaktor
 	 * @param y Y-Skalierungsfaktor
@@ -796,7 +839,17 @@ public final class Matrix4 {
 	
 	/**
 	 * Wandelt die Matrix in eine Skalierungsmatrix um
-
+     *
+     * <h2>Form der Matrix</h2>
+     * <pre>
+     * +---------+---+
+     * | s  0  0 | 0 |
+     * | 0  s  0 | 0 |
+     * | 0  0  s | 0 |
+     * +---------+---+
+     * | 0  0  0 | 1 |
+     * +---------+---+
+     * </pre>
 	 * @param s Der Skalierungsfaktor
 	 * @see Matrix4#toScaling(float)
 	 */
