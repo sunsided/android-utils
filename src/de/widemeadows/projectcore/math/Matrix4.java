@@ -389,15 +389,15 @@ public final class Matrix4 {
 
 		float value3 = getAt(0, 2)*(c1021*getAt(3, 3) +
 		                            c1123*getAt(3, 0) +
-		                            getAt(1, 3)*c2031 -
-		                            getAt(1, 3)*c2130 -
+                                    c2031*getAt(1, 3) -
+                                    c2130*getAt(1, 3) -
 		                            c1023*getAt(3, 1) -
 		                            c1120*getAt(3, 3));
 
 		float value4 = getAt(0, 3)*(c1021*getAt(3, 2) +
 		                            c1122*getAt(3, 0) +
-		                            getAt(1, 2)*c2031 -
-		                            getAt(1, 2)*c2130 -
+                                    c2031*getAt(1, 2) -
+                                    c2130*getAt(1, 2) -
 		                            c1022*getAt(3, 1) -
 		                            c1120*getAt(3, 2));
 
@@ -472,171 +472,176 @@ public final class Matrix4 {
 			+GetSubDeterminant(2, 0), -GetSubDeterminant(2, 1), +GetSubDeterminant(2, 2), -GetSubDeterminant(2, 3),
 			-GetSubDeterminant(3, 0), +GetSubDeterminant(3, 1), -GetSubDeterminant(3, 2), +GetSubDeterminant(3, 3)).GetTransposed();
 		*/
-		
-		float c1122 = getAt(1, 1)*getAt(2, 2);
-		float c1133 = getAt(1, 1)*getAt(3, 3);
-		float c2233 = getAt(2, 2)*getAt(3, 3);
+
+        float c30 = getAt(3, 0);
+        float c31 = getAt(3, 1);
+        float c32 = getAt(3, 2);
+        float c33 = getAt(3, 3);
+        
+		float c1122 = getAt(1, 1)*getAt(2, 2); // TODO: Reorder for memory efficiency
+		float c1133 = getAt(1, 1)*c33;
+		float c2233 = getAt(2, 2)*c33;
 		float c1223 = getAt(1, 2)*getAt(2, 3);
-		float c1231 = getAt(1, 2)*getAt(3, 1);
-		float c2331 = getAt(2, 3)*getAt(3, 1);
+		float c1231 = getAt(1, 2)*c31;
+		float c2331 = getAt(2, 3)*c31;
 		float c1321 = getAt(1, 3)*getAt(2, 1);
-		float c1332 = getAt(1, 3)*getAt(3, 2);
-		float c2132 = getAt(2, 1)*getAt(3, 2);
+		float c1332 = getAt(1, 3)*c32;
+		float c2132 = getAt(2, 1)*c32;
 		float c1322 = getAt(1, 3)*getAt(2, 2);
-		float c1331 = getAt(1, 3)*getAt(3, 1);
-		float c2231 = getAt(2, 2)*getAt(3, 1);
+		float c1331 = getAt(1, 3)*c31;
+		float c2231 = getAt(2, 2)*c31;
 		float c1123 = getAt(1, 1)*getAt(2, 3);
-		float c1132 = getAt(1, 1)*getAt(3, 2);
-		float c2332 = getAt(2, 3)*getAt(3, 2);
+		float c1132 = getAt(1, 1)*c32;
+		float c2332 = getAt(2, 3)*c32;
 		float c1221 = getAt(1, 2)*getAt(2, 1);
-		float c1233 = getAt(1, 2)*getAt(3, 3);
-		float c2133 = getAt(2, 1)*getAt(3, 3);
+		float c1233 = getAt(1, 2)*c33;
+		float c2133 = getAt(2, 1)*c33;
 		float c1022 = getAt(1, 0)*getAt(2, 2);
-		float c1033 = getAt(1, 0)*getAt(3, 3);
-		float c1230 = getAt(1, 2)*getAt(3, 0);
-		float c2330 = getAt(2, 3)*getAt(3, 0);
+		float c1033 = getAt(1, 0)*c33;
+		float c1230 = getAt(1, 2)*c30;
+		float c2330 = getAt(2, 3)*c30;
 		float c1320 = getAt(1, 3)*getAt(2, 0);
-		float c2032 = getAt(2, 0)*getAt(3, 2);
-		float c1330 = getAt(1, 3)*getAt(3, 0);
-		float c2230 = getAt(2, 2)*getAt(3, 0);
+		float c2032 = getAt(2, 0)*c32;
+		float c1330 = getAt(1, 3)*c30;
+		float c2230 = getAt(2, 2)*c30;
 		float c1023 = getAt(1, 0)*getAt(2, 3);
-		float c1032 = getAt(1, 0)*getAt(3, 2);
+		float c1032 = getAt(1, 0)*c32;
 		float c1220 = getAt(1, 2)*getAt(2, 0);
-		float c2033 = getAt(2, 0)*getAt(3, 3);
+		float c2033 = getAt(2, 0)*c33;
 		float c1021 = getAt(1, 0)*getAt(2, 1);
-		float c1130 = getAt(1, 1)*getAt(3, 0);
-		float c2031 = getAt(2, 0)*getAt(3, 1);
-		float c2130 = getAt(2, 1)*getAt(3, 0);
-		float c1031 = getAt(1, 0)*getAt(3, 1);
+		float c1130 = getAt(1, 1)*c30;
+		float c2031 = getAt(2, 0)*c31;
+		float c2130 = getAt(2, 1)*c30;
+		float c1031 = getAt(1, 0)*c31;
 		float c1120 = getAt(1, 1)*getAt(2, 0);
 
 		// Determinant row 0, cell 0
-		float m11 = c1122*getAt(3, 3) +
-		             c1223*getAt(3, 1) +
-		             c1321*getAt(3, 2) -
-		             c1322*getAt(3, 1) -
-		             c1123*getAt(3, 2) -
-		             c1221*getAt(3, 3);
+		float m11 =  c1122*c33 +
+		             c1223*c31 +
+		             c1321*c32 -
+		             c1322*c31 -
+		             c1123*c32 -
+		             c1221*c33;
 
 		// Determinant row 0, cell 1
-		float m12 = getAt(1, 0)*c2233 +
-		             c1223*getAt(3, 0) +
-		             c1320*getAt(3, 2) -
-		             c1322*getAt(3, 0) -
-		             getAt(1, 0)*c2332 -
-		             c1220*getAt(3, 3);
+		float m12 =  c2233*getAt(1, 0) +
+		             c1223*c30 +
+		             c1320*c32 -
+		             c1322*c30 -
+                     c2332*getAt(1, 0) -
+		             c1220*c33;
 
 		// Determinant row 0, cell 2
-		float m13 = getAt(1, 0)*c2133 +
-		             c1123*getAt(3, 0) +
-		             c1320*getAt(3, 1) -
-		             c1321*getAt(3, 0) -
-		             getAt(1, 0)*c2331 -
-		             getAt(1, 1)*c2033;
+		float m13 =  c2133*getAt(1, 0) +
+		             c1123*c30 +
+		             c1320*c31 -
+		             c1321*c30 -
+                     c2331*getAt(1, 0) -
+                     c2033*getAt(1, 1);
 
 		// Determinant row 0, cell 3
-		float m14 = getAt(1, 0)*c2132 +
-		             c1122*getAt(3, 0) +
-		             c1220*getAt(3, 1) -
-		             c1221*getAt(3, 0) -
-		             getAt(1, 0)*c2231 -
-		             getAt(1, 1)*c2032;
+		float m14 =  c2132*getAt(1, 0) +
+		             c1122*c30 +
+		             c1220*c31 -
+		             c1221*c30 -
+                     c2231*getAt(1, 0) -
+                     c2032*getAt(1, 1);
 
 		// Determinant row 1, cell 0
-		float m21 = getAt(0, 1)*c2233 +
-		             getAt(0, 2)*c2331 +
-		             getAt(0, 3)*c2132 -
-		             getAt(0, 3)*c2231 -
-		             getAt(0, 1)*c2332 -
-		             getAt(0, 2)*c2133;
+		float m21 =  c2233*getAt(0, 1) +
+                     c2331*getAt(0, 2) +
+                     c2132*getAt(0, 3) -
+                     c2231*getAt(0, 3) -
+                     c2332*getAt(0, 1) -
+                     c2133*getAt(0, 2);
 
 		// Determinant row 1, cell 1
-		float m22 = getAt(0, 0)*c2233 +
-		             getAt(0, 2)*c2330 +
-		             getAt(0, 3)*c2032 -
-		             getAt(0, 3)*c2230 -
-		             getAt(0, 0)*c2332 -
-		             getAt(0, 2)*c2033;
+		float m22 = c2233*getAt(0, 0) +
+                    c2330*getAt(0, 2) +
+                    c2032*getAt(0, 3) -
+                    c2230*getAt(0, 3) -
+                    c2332*getAt(0, 0) -
+                    c2033*getAt(0, 2);
 
 		// Determinant row 1, cell 2
-		float m23 = getAt(0, 0)*c2133 +
-		             getAt(0, 1)*c2330 +
-		             getAt(0, 3)*c2031 -
-		             getAt(0, 3)*c2130 -
-		             getAt(0, 0)*c2331 -
-		             getAt(0, 1)*c2033;
+		float m23 =  c2133*getAt(0, 0) +
+		             c2330*getAt(0, 1) +
+		             c2031*getAt(0, 3) -
+		             c2130*getAt(0, 3) -
+		             c2331*getAt(0, 0) -
+		             c2033*getAt(0, 1);
 
 		// Determinant row 1, cell 3
-		float m24 = getAt(0, 0)*c2132 +
-		             getAt(0, 1)*c2230 +
-		             getAt(0, 2)*c2031 -
-		             getAt(0, 2)*c2130 -
-		             getAt(0, 0)*c2231 -
-		             getAt(0, 1)*c2032;
+		float m24 =  c2132*getAt(0, 0) +
+		             c2230*getAt(0, 1) +
+		             c2031*getAt(0, 2) -
+		             c2130*getAt(0, 2) -
+		             c2231*getAt(0, 0) -
+		             c2032*getAt(0, 1);
 
 		// Determinant row 2, cell 0
-		float m31 = getAt(0, 1)*c1233 +
-		             getAt(0, 2)*c1331 +
-		             getAt(0, 3)*c1132 -
-		             getAt(0, 3)*c1231 -
-		             getAt(0, 1)*c1332 -
-		             getAt(0, 2)*c1133;
+		float m31 =  c1233*getAt(0, 1) +
+		             c1331*getAt(0, 2) +
+		             c1132*getAt(0, 3) -
+		             c1231*getAt(0, 3) -
+		             c1332*getAt(0, 1) -
+		             c1133*getAt(0, 2);
 
 		// Determinant row 2, cell 1
-		float m32 = getAt(0, 0)*c1233 +
-		             getAt(0, 2)*c1330 +
-		             getAt(0, 3)*c1032 -
-		             getAt(0, 3)*c1230 -
-		             getAt(0, 0)*c1332 -
-		             getAt(0, 2)*c1033;
+		float m32 =  c1233*getAt(0, 0) +
+		             c1330*getAt(0, 2) +
+		             c1032*getAt(0, 3) -
+		             c1230*getAt(0, 3) -
+		             c1332*getAt(0, 0) -
+		             c1033*getAt(0, 2);
 
 		// Determinant row 2, cell 2
-		float m33 = getAt(0, 0)*c1133 +
-		             getAt(0, 1)*c1330 +
-		             getAt(0, 3)*c1031 -
-		             getAt(0, 3)*c1130 -
-		             getAt(0, 0)*c1331 -
-		             getAt(0, 1)*c1033;
+		float m33 =  c1133*getAt(0, 0) +
+		             c1330*getAt(0, 1) +
+		             c1031*getAt(0, 3) -
+		             c1130*getAt(0, 3) -
+		             c1331*getAt(0, 0) -
+		             c1033*getAt(0, 1);
 
 		// Determinant row 2, cell 3
-		float m34 = getAt(0, 0)*c1132 +
-		             getAt(0, 1)*c1230 +
-		             getAt(0, 2)*c1031 -
-		             getAt(0, 2)*c1130 -
-		             getAt(0, 0)*c1231 -
-		             getAt(0, 1)*c1032;
+		float m34 =  c1132*getAt(0, 0) +
+		             c1230*getAt(0, 1) +
+		             c1031*getAt(0, 2) -
+		             c1130*getAt(0, 2) -
+		             c1231*getAt(0, 0) -
+		             c1032*getAt(0, 1);
 
 		// Determinant row 3, cell 0
-		float m41 = getAt(0, 1)*c1223 +
-		             getAt(0, 2)*c1321 +
-		             getAt(0, 3)*c1122 -
-		             getAt(0, 3)*c1221 -
-		             getAt(0, 1)*c1322 -
-		             getAt(0, 2)*c1123;
+		float m41 =  c1223*getAt(0, 1) +
+		             c1321*getAt(0, 2) +
+		             c1122*getAt(0, 3) -
+		             c1221*getAt(0, 3) -
+		             c1322*getAt(0, 1) -
+		             c1123*getAt(0, 2);
 
 		// Determinant row 3, cell 1
-		float m42 = getAt(0, 0)*c1223 +
-		             getAt(0, 2)*c1320 +
-		             getAt(0, 3)*c1022 -
-		             getAt(0, 3)*c1220 -
-		             getAt(0, 0)*c1322 -
-		             getAt(0, 2)*c1023;
+		float m42 =  c1223*getAt(0, 0) +
+		             c1320*getAt(0, 2) +
+		             c1022*getAt(0, 3) -
+		             c1220*getAt(0, 3) -
+		             c1322*getAt(0, 0) -
+		             c1023*getAt(0, 2);
 
 		// Determinant row 3, cell 2
-		float m43 = getAt(0, 0)*c1123 +
-		             getAt(0, 1)*c1320 +
-		             getAt(0, 3)*c1021 -
-		             getAt(0, 3)*c1120 -
-		             getAt(0, 0)*c1321 -
-		             getAt(0, 1)*c1023;
+		float m43 =  c1123*getAt(0, 0) +
+		             c1320*getAt(0, 1) +
+		             c1021*getAt(0, 3) -
+		             c1120*getAt(0, 3) -
+		             c1321*getAt(0, 0) -
+		             c1023*getAt(0, 1);
 
 		// Determinant row 3, cell 3
-		float m44 = getAt(0, 0)*c1122 +
-		             getAt(0, 1)*c1220 +
-		             getAt(0, 2)*c1021 -
-		             getAt(0, 2)*c1120 -
-		             getAt(0, 0)*c1221 -
-		             getAt(0, 1)*c1022;
+		float m44 =  c1122*getAt(0, 0) +
+		             c1220*getAt(0, 1) +
+		             c1021*getAt(0, 2) -
+		             c1120*getAt(0, 2) -
+		             c1221*getAt(0, 0) -
+		             c1022*getAt(0, 1);
 
 		//return new Matrix4D(
 		//    +m11, -m12, +m13, -m14,
