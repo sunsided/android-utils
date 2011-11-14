@@ -880,7 +880,6 @@ public final class Matrix4 {
      *
      * @param vector Der zu transformierende Vektor
      * @param w      Der 4-dimensionale Überhang
-     * @return Der transformierte Vektor
      * @see Matrix4#transform(Vector3)
      */
     public void transformInPlace(@NotNull Vector3 vector, float w) {
@@ -910,7 +909,6 @@ public final class Matrix4 {
      * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
      *
      * @param vector Der zu transformierende Vektor
-     * @return Der transformierte Vektor
      * @see Matrix4#transform(Vector3, float)
      */
     public void transformInPlace(@NotNull Vector3 vector) {
