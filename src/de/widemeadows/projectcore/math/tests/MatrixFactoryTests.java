@@ -142,4 +142,32 @@ public class MatrixFactoryTests {
 		assertEquals((a.y), vectorResult.z, MathUtils.DEFAULT_EPSILON);
 	}
 
+	/**
+	 * Trestet kombinierte Translation udn Rotation
+	 */
+	@Test
+	public void scaleTranslateRotate() {
+
+		Vector3 translate = Vector3.createNew(10, 20, 30);
+		Matrix4 transform = MatrixFactory.getTransformation(
+				Vector3.createNew(10, 100, 1000),
+				Vector3.createNew(MathUtils.deg2Rad(90), 0, 0), // 90° um die X-Achse
+				translate);
+
+		Vector3 a = Vector3.createNew(1, 2, 3);
+
+		Vector3 pointResult = transform.transformPoint(a);
+		Vector3 vectorResult = transform.transformVector(a);
+
+		// Punkt wurde skaliert, gedreht und verschoben
+		assertEquals(translate.x + (a.x) * 10, pointResult.x, MathUtils.DEFAULT_EPSILON*10);
+		assertEquals(translate.y + (-a.z) * 1000, pointResult.y, MathUtils.DEFAULT_EPSILON*1000);
+		assertEquals(translate.z + (a.y) * 100, pointResult.z, MathUtils.DEFAULT_EPSILON*100);
+
+		// Vektor wurde skaliert und gedreht, aber nicht verschoben
+		assertEquals((a.x) * 10, vectorResult.x, MathUtils.DEFAULT_EPSILON*10);
+		assertEquals((-a.z) * 1000, vectorResult.y, MathUtils.DEFAULT_EPSILON*1000);
+		assertEquals((a.y) * 100, vectorResult.z, MathUtils.DEFAULT_EPSILON*100);
+	}
+
 }
