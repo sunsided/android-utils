@@ -259,4 +259,20 @@ public class MatrixTests {
 				 8, 28, 30,  2,
 				Epsilon));
 	}
+
+	/**
+	 * Testet das Ermitteln der Determinante
+	 */
+	@Test
+	public void getDeterminant() {
+		assertEquals(0, Matrix4.MAGIC.getDeterminant(), Epsilon);
+		assertEquals(1, Matrix4.UNIT.getDeterminant(), Epsilon);
+
+		Matrix4 a = Matrix4.createNew(
+				 9,  2,  3,  4,
+				 5,  6,  7,  8,
+				 9, 20, 11, 12,
+				13, 14, 15, 16);
+		assertEquals(640, a.getDeterminant(), Epsilon);
+	}
 }
