@@ -129,6 +129,16 @@ public final class Matrix4 {
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 
+	/**
+	 * Magische Matrix
+	 */
+	@NotNull
+	public static final Matrix4 MAGIC = new Matrix4(
+			16,  2,  3, 13,
+			 5, 11, 10,  8,
+			 9,  7,  6, 12,
+			 4, 14, 15,  1);
+
 	/**  Zeile 1, Spalte 1 */
 	public static final int M11 = 0;
 	/**  Zeile 1, Spalte 2 */
@@ -280,6 +290,33 @@ public final class Matrix4 {
 		values[ 4] = m21;	values[ 5] = m22;	values[ 6] = m23;	values[ 7] = m24;
 		values[ 8] = m31;	values[ 9] = m32;	values[10] = m33;	values[11] = m34;
 		values[12] = m41;	values[13] = m42;	values[14] = m43;	values[15] = m44;
+
+		return this;
+	}
+
+	/**
+	 * Setzt die Matrix aus ihren Einzelkomponenten
+	 *
+	 * @param other Die Matrix, deren Werte übernommen werden sollen
+	 * @return Dieselbe Instanz für method chaining
+	 */
+	public final Matrix4 set(@NotNull Matrix4 other) {
+		values[0] = other.values[0];
+		values[1] = other.values[1];
+		values[2] = other.values[2];
+		values[3] = other.values[3];
+		values[4] = other.values[4];
+		values[5] = other.values[5];
+		values[6] = other.values[6];
+		values[7] = other.values[7];
+		values[8] = other.values[8];
+		values[9] = other.values[9];
+		values[10] = other.values[10];
+		values[11] = other.values[11];
+		values[12] = other.values[12];
+		values[13] = other.values[13];
+		values[14] = other.values[14];
+		values[15] = other.values[15];
 
 		return this;
 	}
@@ -788,7 +825,35 @@ public final class Matrix4 {
 		if (Float.isInfinite(invDeterminant)) return null;
 		return getAdjoint().mulInPlace(invDeterminant);
 	}
-	
+
+	/**
+	 * Liefert eine transponierte Kopie dieser Matrix
+	 * @return Die transponierte Kopie
+	 */
+	@NotNull @ReturnsCachedValue
+	public Matrix4 getTransposed() {
+		return Matrix4.createNew(
+				values[M11], values[M21], values[M31], values[M41],
+				values[M12], values[M22], values[M32], values[M42],
+				values[M13], values[M23], values[M33], values[M43],
+				values[M14], values[M24], values[M34], values[M44]
+				);
+	}
+
+	/**
+	 * Transponiert diese Matrix
+	 *
+	 * @return Dieselbe Instanz für Method chaining
+	 */
+	@NotNull
+	public Matrix4 transposeInPlace() {
+		set(values[M11], values[M21], values[M31], values[M41],
+			values[M12], values[M22], values[M32], values[M42],
+			values[M13], values[M23], values[M33], values[M43],
+			values[M14], values[M24], values[M34], values[M44]);
+		return this;
+	}
+
 	/**
 	 * Wandelt die Matrix in eine Translationsmatrix um
 	 *<h2>Form der Matrix</h2>

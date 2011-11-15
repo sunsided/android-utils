@@ -141,4 +141,18 @@ public class MatrixTests {
 			}
 		}
 	}
+
+	/**
+	 * Testet das Transponieren der Matrix
+	 */
+	@Test
+	public void transpose() {
+
+		Matrix4 a = Matrix4.MAGIC.getTransposed();
+		for (int r = 0; r < 4; ++r) {
+			for (int c = 0; c < 4; ++c) {
+				assertEquals(Matrix4.MAGIC.getAt(c, r), a.getAt(r, c), ZeroEpsilon);
+			}
+		}
+	}
 }
