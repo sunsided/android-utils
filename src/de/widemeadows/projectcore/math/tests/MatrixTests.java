@@ -227,10 +227,10 @@ public class MatrixTests {
 	}
 
 	/**
-	 * Testet das Multiplizieren zweier Matrizen
+	 * Testet das Multiplizieren einer Matrix mit einem Skalar
 	 */
 	@Test
-	public void multiplyMatrixVector() {
+	public void multiplyMatrixScalar() {
 
 		// Testet die Multiplikation mit der Einheitsmatrix
 		Matrix4 result = Matrix4.UNIT.mul(2);
@@ -253,10 +253,10 @@ public class MatrixTests {
 		// Test einer vollen Matrix
 		result = Matrix4.MAGIC.clone().mulInPlace(2);
 		assertTrue(result.equals(
-				32, 4, 6, 26,
+				32,  4,  6, 26,
 				10, 22, 20, 16,
 				18, 14, 12, 24,
-				8, 28, 30, 2,
+				 8, 28, 30,  2,
 				Epsilon));
 	}
 }
