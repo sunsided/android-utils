@@ -1042,12 +1042,22 @@ public final class Matrix4 {
      * @see Matrix4#transform(Vector3)
      */
     public final void transformInPlace(@NotNull Vector3 vector, float w) {
-        float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0) * w);
-        float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1) * w);
-        float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2) * w);
-        float w2 = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3) * w);
 
-        vector.set(x / w2, y / w2, z / w2);
+	    if (w != 0) {
+			final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0) * w);
+		    final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1) * w);
+		    final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2) * w);
+		    final float w2 = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3) * w);
+
+			vector.set(x / w2, y / w2, z / w2);
+	    }
+	    else {
+		    final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z);
+		    final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z);
+		    final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z);
+
+		    vector.set(x, y, z);
+	    }
     }
 	
 	/**
