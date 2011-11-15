@@ -6,6 +6,11 @@ package de.widemeadows.projectcore.math;
 public class MathUtils {
 
 	/**
+	 * Default-Epsilonwert für {@link Float}
+	 */
+	public static final float DEFAULT_EPSILON = 0.00001f;
+
+	/**
 	 * Verstecker Konstruktor
 	 */
 	private MathUtils() {}

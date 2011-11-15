@@ -1044,7 +1044,120 @@ public final class Matrix4 {
 
         vector.set(x / w, y / w, z / w);
     }
-	
+
+	/**
+	 * Ermittelt, ob diese Matrix gleich einer anderen unter Beachtung des Vorgabe-Deltawertes {@link MathUtils#DEFAULT_EPSILON} ist
+	 *
+	 * @param other Die Vergleichsmatrix
+	 * @return <code>true</code> wenn die Matrizen identisch sind
+	 */
+	public final boolean equals(@NotNull Matrix4 other) {
+		return equals(other, MathUtils.DEFAULT_EPSILON);
+	}
+
+	/**
+	 * Ermittelt, ob diese Matrix gleich einer anderen unter Beachtung des Vorgabe-Deltawertes {@link MathUtils#DEFAULT_EPSILON} ist
+	 * @param other Die Vergleichsmatrix
+	 * @param delta Der zu verwendende Deltawert
+	 * @return <code>true</code> wenn die Matrizen identisch sind
+	 */
+	public final boolean equals(@NotNull Matrix4 other, float delta) {
+		for (int i=15; i>=0; --i) {
+			if (!MathUtils.equals(values[i], other.values[i], delta)) return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Ermittelt, ob diese Matrix gleich einer anderen unter Beachtung eines gegebenen Deltawertes ist
+	 *
+	 * @param m11 Zeile 1, Spalte 1 der Vergleichsmatrix
+	 * @param m12 Zeile 1, Spalte 2 der Vergleichsmatrix
+	 * @param m13 Zeile 1, Spalte 3 der Vergleichsmatrix
+	 * @param m14 Zeile 1, Spalte 4 der Vergleichsmatrix
+	 * @param m21 Zeile 2, Spalte 1 der Vergleichsmatrix
+	 * @param m22 Zeile 2, Spalte 2 der Vergleichsmatrix
+	 * @param m23 Zeile 2, Spalte 3 der Vergleichsmatrix
+	 * @param m24 Zeile 2, Spalte 4 der Vergleichsmatrix
+	 * @param m31 Zeile 3, Spalte 1 der Vergleichsmatrix
+	 * @param m32 Zeile 3, Spalte 2 der Vergleichsmatrix
+	 * @param m33 Zeile 3, Spalte 3 der Vergleichsmatrix
+	 * @param m34 Zeile 3, Spalte 4 der Vergleichsmatrix
+	 * @param m41 Zeile 4, Spalte 1 der Vergleichsmatrix
+	 * @param m42 Zeile 4, Spalte 2 der Vergleichsmatrix
+	 * @param m43 Zeile 4, Spalte 3 der Vergleichsmatrix
+	 * @param m44 Zeile 4, Spalte 4 der Vergleichsmatrix
+	 * @return <code>true</code> wenn die Matrizen identisch sind
+	 */
+	public final boolean equals(float m11, float m12, float m13, float m14,
+	                            float m21, float m22, float m23, float m24,
+	                            float m31, float m32, float m33, float m34,
+	                            float m41, float m42, float m43, float m44) {
+		return equals(m11, m12, m13, m14,
+				m21, m22, m23, m24,
+				m31, m32, m33, m34,
+				m41, m42, m43, m44,
+				MathUtils.DEFAULT_EPSILON);
+	}
+
+	/**
+	 * Ermittelt, ob diese Matrix gleich einer anderen unter Beachtung eines gegebenen Deltawertes ist
+	 *
+	 * @param m11 Zeile 1, Spalte 1 der Vergleichsmatrix
+	 * @param m12 Zeile 1, Spalte 2 der Vergleichsmatrix
+	 * @param m13 Zeile 1, Spalte 3 der Vergleichsmatrix
+	 * @param m14 Zeile 1, Spalte 4 der Vergleichsmatrix
+	 * @param m21 Zeile 2, Spalte 1 der Vergleichsmatrix
+	 * @param m22 Zeile 2, Spalte 2 der Vergleichsmatrix
+	 * @param m23 Zeile 2, Spalte 3 der Vergleichsmatrix
+	 * @param m24 Zeile 2, Spalte 4 der Vergleichsmatrix
+	 * @param m31 Zeile 3, Spalte 1 der Vergleichsmatrix
+	 * @param m32 Zeile 3, Spalte 2 der Vergleichsmatrix
+	 * @param m33 Zeile 3, Spalte 3 der Vergleichsmatrix
+	 * @param m34 Zeile 3, Spalte 4 der Vergleichsmatrix
+	 * @param m41 Zeile 4, Spalte 1 der Vergleichsmatrix
+	 * @param m42 Zeile 4, Spalte 2 der Vergleichsmatrix
+	 * @param m43 Zeile 4, Spalte 3 der Vergleichsmatrix
+	 * @param m44 Zeile 4, Spalte 4 der Vergleichsmatrix
+	 * @param delta Der zu verwendende Deltawert
+	 * @return <code>true</code> wenn die Matrizen identisch sind
+	 */
+	public final boolean equals(float m11, float m12, float m13, float m14,
+	                            float m21, float m22, float m23, float m24,
+	                            float m31, float m32, float m33, float m34,
+	                            float m41, float m42, float m43, float m44,
+	                            float delta) {
+		return  MathUtils.equals(values[M11], m11, delta) &&
+				MathUtils.equals(values[M12], m12, delta) &&
+				MathUtils.equals(values[M13], m13, delta) &&
+				MathUtils.equals(values[M14], m14, delta) &&
+				MathUtils.equals(values[M21], m21, delta) &&
+				MathUtils.equals(values[M22], m22, delta) &&
+				MathUtils.equals(values[M23], m23, delta) &&
+				MathUtils.equals(values[M24], m24, delta) &&
+				MathUtils.equals(values[M31], m31, delta) &&
+				MathUtils.equals(values[M32], m32, delta) &&
+				MathUtils.equals(values[M33], m33, delta) &&
+				MathUtils.equals(values[M34], m34, delta) &&
+				MathUtils.equals(values[M41], m41, delta) &&
+				MathUtils.equals(values[M42], m42, delta) &&
+				MathUtils.equals(values[M43], m43, delta) &&
+				MathUtils.equals(values[M44], m44, delta);
+	}
+
+	/**
+	 * Eigenimplementierung der Vergleichmethode
+	 *
+	 * @param o Das Vergleichsobjekt
+	 * @return <code>true</code>, wenn die Objekte identisch sind
+	 */
+	@Override
+	public boolean equals(Object o) {
+		// TODO: Test auf 16-Elemente-Array
+		if (o instanceof Matrix4) return equals((Matrix4)o, MathUtils.DEFAULT_EPSILON);
+		return super.equals(o);
+	}
+
 	/**
 	 * Erzeugt eine Matrix zur Rotation um die X-Achse
 	 * @param theta Der Winkel

@@ -1,12 +1,13 @@
 package de.widemeadows.projectcore.math.tests;
 
+import de.widemeadows.projectcore.math.MathUtils;
 import de.widemeadows.projectcore.math.Matrix4;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Unit Tests für {@link de.widemeadows.projectcore.math.Matrix4}
@@ -16,7 +17,7 @@ public class MatrixTests {
 	/**
 	 * Epsilonwert für Float-Vergleiche
 	 */
-	private static final float Epsilon = 0.00001f;
+	private static final float Epsilon = MathUtils.DEFAULT_EPSILON;
 
 	/**
 	 * Null-Epsilonumgebung
@@ -161,5 +162,49 @@ public class MatrixTests {
 				assertEquals(Matrix4.MAGIC.getAt(c, r), a.getAt(r, c), ZeroEpsilon);
 			}
 		}
+	}
+
+	/**
+	 * Testet den Vergleich zweier Matrizen
+	 */
+	@Test
+	public void is() {
+
+		// Selbsttest
+		assertTrue(Matrix4.MAGIC.equals(Matrix4.MAGIC));
+		assertTrue(Matrix4.MAGIC.equals(Matrix4.MAGIC.clone()));
+
+		// Gegentest
+		assertFalse(Matrix4.MAGIC.equals(Matrix4.UNIT));
+
+	}
+
+	/**
+	 * Testet das Multiplizieren zweier Matrizen
+	 */
+	@Test
+	public void multiplyMatrices() {
+
+		// Testet die Multiplikation mit der Einheitsmatrix
+		Matrix4 result = Matrix4.MAGIC.mul(Matrix4.UNIT);
+		assertTrue(result.equals(Matrix4.MAGIC, ZeroEpsilon));
+
+		// Testet die Multiplikation mit sich selbst
+		result = Matrix4.MAGIC.mul(Matrix4.MAGIC);
+		assertTrue(result.equals(
+				345, 257, 281, 273,
+				257, 313, 305, 281,
+				281, 305, 313, 257,
+				273, 281, 257, 345,
+				Epsilon));
+
+		// Testet die Multiplikation mit dem transponierten selbst
+		result = Matrix4.MAGIC.mul(Matrix4.MAGIC.getTransposed());
+		assertTrue(result.equals(
+				438, 236, 332, 150,
+				236, 310, 278, 332,
+				332, 278, 310, 236,
+				150, 332, 236, 438,
+				Epsilon));
 	}
 }
