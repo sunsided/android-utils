@@ -206,5 +206,23 @@ public class MatrixTests {
 				332, 278, 310, 236,
 				150, 332, 236, 438,
 				Epsilon));
+
+		// Testet die Multiplikation mit sich selbst
+		result = Matrix4.MAGIC.mul(Matrix4.MAGIC);
+		assertTrue(result.equals(
+				345, 257, 281, 273,
+				257, 313, 305, 281,
+				281, 305, 313, 257,
+				273, 281, 257, 345,
+				Epsilon));
+
+		// Testet die Multiplikation mit dem transponierten selbst
+		result = Matrix4.MAGIC.clone().mulInPlace(Matrix4.MAGIC.getTransposed());
+		assertTrue(result.equals(
+				438, 236, 332, 150,
+				236, 310, 278, 332,
+				332, 278, 310, 236,
+				150, 332, 236, 438,
+				Epsilon));
 	}
 }

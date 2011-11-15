@@ -375,11 +375,45 @@ public final class Matrix4 {
 	 * @param b Die zweite Matrix
 	 *
 	 * @return Das Ergebnis
+	 * @see #mulInPlace(Matrix4)
 	 */
 	@NotNull
 	@ReturnsCachedValue
 	public final Matrix4 mul(@NotNull final Matrix4 b) {
 		return createNew().set(
+
+				values[M11] * b.values[M11] + values[M12] * b.values[M21] + values[M13] * b.values[M31] + values[M14] * b.values[M41],
+				values[M11] * b.values[M12] + values[M12] * b.values[M22] + values[M13] * b.values[M32] + values[M14] * b.values[M42],
+				values[M11] * b.values[M13] + values[M12] * b.values[M23] + values[M13] * b.values[M33] + values[M14] * b.values[M43],
+				values[M11] * b.values[M14] + values[M12] * b.values[M24] + values[M13] * b.values[M34] + values[M14] * b.values[M44],
+
+				values[M21] * b.values[M11] + values[M22] * b.values[M21] + values[M23] * b.values[M31] + values[M24] * b.values[M41],
+				values[M21] * b.values[M12] + values[M22] * b.values[M22] + values[M23] * b.values[M32] + values[M24] * b.values[M42],
+				values[M21] * b.values[M13] + values[M22] * b.values[M23] + values[M23] * b.values[M33] + values[M24] * b.values[M43],
+				values[M21] * b.values[M14] + values[M22] * b.values[M24] + values[M23] * b.values[M34] + values[M24] * b.values[M44],
+
+				values[M31] * b.values[M11] + values[M32] * b.values[M21] + values[M33] * b.values[M31] + values[M34] * b.values[M41],
+				values[M31] * b.values[M12] + values[M32] * b.values[M22] + values[M33] * b.values[M32] + values[M34] * b.values[M42],
+				values[M31] * b.values[M13] + values[M32] * b.values[M23] + values[M33] * b.values[M33] + values[M34] * b.values[M43],
+				values[M31] * b.values[M14] + values[M32] * b.values[M24] + values[M33] * b.values[M34] + values[M34] * b.values[M44],
+
+				values[M41] * b.values[M11] + values[M42] * b.values[M21] + values[M43] * b.values[M31] + values[M44] * b.values[M41],
+				values[M41] * b.values[M12] + values[M42] * b.values[M22] + values[M43] * b.values[M32] + values[M44] * b.values[M42],
+				values[M41] * b.values[M13] + values[M42] * b.values[M23] + values[M43] * b.values[M33] + values[M44] * b.values[M43],
+				values[M41] * b.values[M14] + values[M42] * b.values[M24] + values[M43] * b.values[M34] + values[M44] * b.values[M44]);
+	}
+
+	/**
+	 * Multipliziert diese Matrix mit einer zweiten
+	 *
+	 * @param b Die zweite Matrix
+	 * @return Diese Instanz für Method Chaining
+	 * @see #mul(Matrix4)
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public final Matrix4 mulInPlace(@NotNull final Matrix4 b) {
+		return set(
 
 				values[M11] * b.values[M11] + values[M12] * b.values[M21] + values[M13] * b.values[M31] + values[M14] * b.values[M41],
 				values[M11] * b.values[M12] + values[M12] * b.values[M22] + values[M13] * b.values[M32] + values[M14] * b.values[M42],
