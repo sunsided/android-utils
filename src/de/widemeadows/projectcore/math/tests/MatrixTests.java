@@ -225,4 +225,38 @@ public class MatrixTests {
 				150, 332, 236, 438,
 				Epsilon));
 	}
+
+	/**
+	 * Testet das Multiplizieren zweier Matrizen
+	 */
+	@Test
+	public void multiplyMatrixVector() {
+
+		// Testet die Multiplikation mit der Einheitsmatrix
+		Matrix4 result = Matrix4.UNIT.mul(2);
+		assertTrue(result.equals(
+				2, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, 2, 0,
+				0, 0, 0, 2,
+				ZeroEpsilon));
+
+		// Test einer vollen Matrix
+		result = Matrix4.MAGIC.mul(2);
+		assertTrue(result.equals(
+				32,  4,  6, 26,
+				10, 22, 20, 16,
+				18, 14, 12, 24,
+				 8, 28, 30,  2,
+				Epsilon));
+
+		// Test einer vollen Matrix
+		result = Matrix4.MAGIC.clone().mulInPlace(2);
+		assertTrue(result.equals(
+				32, 4, 6, 26,
+				10, 22, 20, 16,
+				18, 14, 12, 24,
+				8, 28, 30, 2,
+				Epsilon));
+	}
 }
