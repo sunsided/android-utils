@@ -160,7 +160,7 @@ public final class Vector3 {
 	 * @return Diese Instanz für Method chaining
 	 */
 	@NotNull
-	public Vector3 set(float x, float y, float z) {
+	public Vector3 set(final float x, final float y, final float z) {
 		this.x = x; this.y = y; this.z = z;
 		return this;
 	}
@@ -191,7 +191,7 @@ public final class Vector3 {
 	 * @param z Z-Koordinate
 	 * @see #createNew()
 	 */
-	private Vector3(float x, float y, float z) {
+	private Vector3(final float x, final float y, final float z) {
 		set(x, y, z);
 	}
 	
@@ -223,10 +223,10 @@ public final class Vector3 {
 	 * @return Die Distanz zwischen den Vektoren
 	 * @see Vector3#getDistanceSquared
 	 */
-	public float getDistance(Vector3 from) {
-		float dx = from.x - x;
-		float dy = from.y - y;
-		float dz = from.z - z;
+	public float getDistance(@NotNull final Vector3 from) {
+		final float dx = from.x - x;
+		final float dy = from.y - y;
+		final float dz = from.z - z;
 		return FloatMath.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 	
@@ -238,10 +238,10 @@ public final class Vector3 {
 	 * @return Die quadrierte Distanz
 	 * @see Vector3#getDistance
 	 */
-	public float getDistanceSquared(Vector3 from) {
-		float dx = from.x - x;
-		float dy = from.y - y;
-		float dz = from.z - z;
+	public float getDistanceSquared(@NotNull final Vector3 from) {
+		final float dx = from.x - x;
+		final float dy = from.y - y;
+		final float dz = from.z - z;
 		return dx*dx + dy*dy + dz*dz;
 	}
 	
@@ -253,7 +253,7 @@ public final class Vector3 {
 	@NotNull
 	@ReturnsCachedValue
 	public Vector3 getNormalized() {
-		float invLength = 1.0f / getLength();
+		final float invLength = 1.0f / getLength();
 		return createNew().set(x*invLength, y*invLength, z*invLength);
 	}
 	
@@ -261,7 +261,7 @@ public final class Vector3 {
 	 * Normalisiert diesen Vektor
 	 */
 	public void normalize() {
-		float invLength = 1.0f / getLength();
+		final float invLength = 1.0f / getLength();
 		x *= invLength;
 		y *= invLength;
 		z *= invLength;
@@ -276,7 +276,7 @@ public final class Vector3 {
 	 * @see Vector3#addInPlace(Vector3)
 	 */
 	@ReturnsCachedValue
-	public Vector3 add(@NotNull Vector3 b) {
+	public Vector3 add(@NotNull final Vector3 b) {
 		return createNew().set(x+b.x, y+b.y, z+b.z);
 	}
 	
@@ -284,10 +284,11 @@ public final class Vector3 {
 	 * Addiert einen Vektor auf diesen Vektor
 	 *
 	 * @param b Der zu addierende Vektor
+	 * @return Dieselbe Instanz für Method chaining
 	 * @see Vector3#add(Vector3)
 	 */
 	@NotNull
-	public Vector3 addInPlace(@NotNull Vector3 b) {
+	public Vector3 addInPlace(@NotNull final Vector3 b) {
 		x += b.x;
 		y += b.y;
 		z += b.z;
@@ -300,10 +301,11 @@ public final class Vector3 {
 	 * @param x Der zu addierende X-Wert
 	 * @param y Der zu addierende Y-Wert
 	 * @param z Der zu addierende Z-Wert
+	 * @return Dieselbe Instanz für method chaining
 	 * @see Vector3#add(Vector3)
 	 */
 	@NotNull
-	public Vector3 addInPlace(float x, float y, float z) {
+	public Vector3 addInPlace(final float x, final float y, final float z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
@@ -319,7 +321,7 @@ public final class Vector3 {
 	 * @see Vector3#subInPlace(Vector3)
 	 */
 	@ReturnsCachedValue
-	public Vector3 sub(@NotNull Vector3 b) {
+	public Vector3 sub(@NotNull final Vector3 b) {
 		return createNew().set(x-b.x, y-b.y, z-b.z);
 	}
 	
@@ -327,10 +329,11 @@ public final class Vector3 {
 	 * Subtrahiert einen Vektor von diesem Vektor
 	 *
 	 * @param b Der zu subtrahierende Vektor
+	 * @return Dieselbe Instanz für Method chaining
 	 * @see Vector3#sub(Vector3)
 	 */
 	@NotNull
-	public Vector3 subInPlace(@NotNull Vector3 b) {
+	public Vector3 subInPlace(@NotNull final Vector3 b) {
 		x -= b.x;
 		y -= b.y;
 		z -= b.z;
@@ -343,10 +346,11 @@ public final class Vector3 {
 	 * @param x Zu subtrahierende X-Komponente
 	 * @param y Zu subtrahierende Y-Komponente
 	 * @param z Zu subtrahierende Z-Komponente
+	 * @return Dieselbe Instanz für method chaining
 	 * @see Vector3#sub(Vector3)
 	 */
 	@NotNull
-	public Vector3 subInPlace(float x, float y, float z) {
+	public Vector3 subInPlace(final float x, final float y, final float z) {
 		this.x -= x;
 		this.y -= y;
 		this.z -= z;
@@ -363,7 +367,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Vector3 mul(float f) {
+	public Vector3 mul(final float f) {
 		return createNew().set(x*f, y*f, z*f);
 	}
 	
@@ -371,10 +375,11 @@ public final class Vector3 {
 	 * Skaliert einen Vektor
 	 *
 	 * @param f Skalierungsfaktor
+	 * @return Dieselbe Instanz für method chaining
 	 * @see Vector3#mul(float)
 	 */
 	@NotNull
-	public Vector3 mulInPlace(float f) {
+	public Vector3 mulInPlace(final float f) {
 		x *= f;
 		y *= f;
 		z *= f;
@@ -387,7 +392,7 @@ public final class Vector3 {
 	 * @param b Der zweite Vektor
 	 * @return Punktprodukt der Vektoren
 	 */
-	public float dot(@NotNull Vector3 b) {
+	public float dot(@NotNull final Vector3 b) {
 		return x*b.x + y*b.y + z*b.z;
 	}
 	
@@ -400,7 +405,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Vector3 cross(@NotNull Vector3 b) {
+	public Vector3 cross(@NotNull final Vector3 b) {
 		float nx = y*b.z - z*b.y;
 		float ny = z*b.x - x*b.z;
 		float nz = x*b.y - y*b.x;
@@ -411,10 +416,11 @@ public final class Vector3 {
 	 * Berechnet das Kreuzprodukt zweier Vektoren
 	 * 
 	 * @param b Der zweite Vektor
+	 * @return Dieselbe Instanz für method chaining
 	 * @see Vector3#cross(Vector3)
 	 */
 	@NotNull
-	public Vector3 crossInPlace(@NotNull Vector3 b) {
+	public Vector3 crossInPlace(@NotNull final Vector3 b) {
 		float nx = y*b.z - z*b.y;
 		float ny = z*b.x - x*b.z;
 			   z = x*b.y - y*b.x;
@@ -438,29 +444,18 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Vector3 getInverted() {
+	public final Vector3 getInverted() {
 		return createNew().set(-x, -y, -z);
 	}
 
 	/**
 	 * Invertiert diesen Vektor
 	 */
-	public void invert() {
+	public final void invert() {
 		x = -x;
 		y = -y;
 		z = -z;
 	}
-
-    /**
-	 * Multipliziert die Werte des Vectors mit einem bestimmten Faktor, ohne einen neuen Vektor generierne zu müssen
-	 */
-	public void multiplyByFactor(float factor) {
-		x *= factor;
-		y *= factor;
-		z *= factor;
-	}
-
-
 
 	/**
 	 * Erzeugt eine identische Kopie
@@ -468,7 +463,7 @@ public final class Vector3 {
 	 */
 	@NotNull @Override
 	@ReturnsCachedValue
-	public Vector3 clone() {
+	public final Vector3 clone() {
 		return createNew().set(x, y, z);
 	}
 
@@ -479,7 +474,7 @@ public final class Vector3 {
 	 * @return <code>true</code>, wenn beide Elemente identisch sind
 	 */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Vector3)) return false;
 
@@ -496,7 +491,7 @@ public final class Vector3 {
 	 * @param other Der Vergleichsvektor
 	 * @return <code>true</code>, wenn beide Vektoren identisch sind
 	 */
-	public boolean equals(@NotNull Vector3 other) {
+	public boolean equals(@NotNull final Vector3 other) {
 		return equals(other, EPSILON);
 	}
 
@@ -508,7 +503,7 @@ public final class Vector3 {
 	 * @param z Der Vergleichsvektor (Z-Komponente)
 	 * @return <code>true</code>, wenn beide Vektoren identisch sind
 	 */
-	public boolean equals(float x, float y, float z) {
+	public boolean equals(final float x, final float y, final float z) {
 		return equals(x, y, z, EPSILON);
 	}
 
@@ -519,7 +514,7 @@ public final class Vector3 {
 	 * @param epsilon Der zu verwendende Deltawert
 	 * @return <code>true</code>, wenn beide Vektoren identisch sind
 	 */
-	public boolean equals(Vector3 other, float epsilon) {
+	public boolean equals(@NotNull final Vector3 other, final float epsilon) {
 		return this == other ||
 				(Math.abs(other.x - x) <= epsilon &&
 				Math.abs(other.y - y) <= epsilon &&
@@ -535,7 +530,7 @@ public final class Vector3 {
 	 * @param epsilon Der Deltawert
 	 * @return <code>true</code>, wenn beide Vektoren identisch sind
 	 */
-	public boolean equals(float x, float y, float z, float epsilon) {
+	public boolean equals(final float x, final float y, final float z, final float epsilon) {
 		return (Math.abs(x - this.x) <= epsilon &&
 				Math.abs(y - this.y) <= epsilon &&
 				Math.abs(z - this.z) <= epsilon);
@@ -566,7 +561,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 max(@NotNull Vector3 a, @NotNull Vector3 b) {
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b) {
 		float x = Math.max(a.x, b.x);
 		float y = Math.max(a.y, b.y);
 		float z = Math.max(a.z, b.z);
@@ -583,7 +578,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 max(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
 		float x = Math.max(Math.max(a.x, b.x), c.x);
 		float y = Math.max(Math.max(a.y, b.y), c.y);
 		float z = Math.max(Math.max(a.z, b.z), c.z);
@@ -603,7 +598,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 max(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c, @NotNull Vector3 d, @NotNull Vector3 e, @NotNull Vector3 f) {
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
 		float x = Math.max(Math.max(Math.max(Math.max(Math.max(a.x, b.x), c.x), d.x), e.x), f.x);
 		float y = Math.max(Math.max(Math.max(Math.max(Math.max(a.y, b.y), c.y), d.y), e.y), f.y);
 		float z = Math.max(Math.max(Math.max(Math.max(Math.max(a.z, b.z), c.z), d.z), e.z), f.z);
@@ -619,7 +614,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 min(@NotNull Vector3 a, @NotNull Vector3 b) {
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b) {
 		float x = Math.min(a.x, b.x);
 		float y = Math.min(a.y, b.y);
 		float z = Math.min(a.z, b.z);
@@ -636,7 +631,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 min(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
 		float x = Math.min(Math.min(a.x, b.x), c.x);
 		float y = Math.min(Math.min(a.y, b.y), c.y);
 		float z = Math.min(Math.min(a.z, b.z), c.z);
@@ -656,7 +651,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Vector3 min(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c, @NotNull Vector3 d, @NotNull Vector3 e, @NotNull Vector3 f) {
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
 		float x = Math.min(Math.min(Math.min(Math.min(Math.min(a.x, b.x), c.x), d.x),e.x),f.x);
 		float y = Math.min(Math.min(Math.min(Math.min(Math.min(a.y, b.y), c.y), d.y),e.y),f.y);
 		float z = Math.min(Math.min(Math.min(Math.min(Math.min(a.z, b.z), c.z), d.z),e.z),f.z);
