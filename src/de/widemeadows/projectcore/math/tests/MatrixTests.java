@@ -336,15 +336,25 @@ public class MatrixTests {
 		assertEquals(a.z, result.z, Epsilon);
 
 		// Test mit der magischen Matrix (w=0)
-		result = Matrix4.MAGIC.transform(a, 0).getNormalized();
-		assertEquals(0.38174f, result.x, Epsilon);
-		assertEquals(0.75032f, result.y, Epsilon);
-		assertEquals(0.53971f, result.z, Epsilon);
+
+		// MATLAB:
+		//  v = magic(4)'*[1 2 3 0]'
+		//  v/v(4)
+
+		result = Matrix4.MAGIC.transform(a, 0);
+		assertEquals(0.81538f, result.x, Epsilon);
+		assertEquals(0.69231f, result.y, Epsilon);
+		assertEquals(0.63077f, result.z, Epsilon);
 
 		// Test mit der magischen Matrix (w=0)
+
+		// MATLAB:
+		//  v = magic(4)'*[1 2 3 1]'
+		//  v/v(4)
+
 		result = Matrix4.MAGIC.transform(a, 1);
-		assertEquals(0.53846f, result.x, Epsilon);
-		assertEquals(0.83333f, result.y, Epsilon);
-		assertEquals(0.67949f, result.z, Epsilon);
+		assertEquals(0.86364f, result.x, Epsilon);
+		assertEquals(0.89394f, result.y, Epsilon);
+		assertEquals(0.84848f, result.z, Epsilon);
 	}
 }

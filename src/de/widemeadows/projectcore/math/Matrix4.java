@@ -1018,7 +1018,7 @@ public final class Matrix4 {
 		values[M31] = 0f; values[M32] = 0f; values[M33] = s;  values[M34] = 0f;
 		values[M41] = 0f; values[M42] = 0f; values[M43] = 0f; values[M44] = 1f;
 	}
-	
+
 	/**
 	 * Transformiert einen Vektor mittels dieser Matrix
 	 *
@@ -1044,50 +1044,96 @@ public final class Matrix4 {
     public final void transformInPlace(@NotNull Vector3 vector, float w) {
 
 	    if (w != 0) {
-			final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z) + (getAt(0, 3) * w);
-		    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z) + (getAt(1, 3) * w);
-		    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(2, 3) * w);
-		    final float w2 = (getAt(3, 0) * vector.x) + (getAt(3, 1) * vector.y) + (getAt(3, 2) * vector.z) + (getAt(3, 3) * w);
-
-			vector.set(x / w2, y / w2, z / w2);
+		    final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0) * w);
+		    final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1) * w);
+		    final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2) * w);
+		    final float w2 = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3) * w);
+		    final float invW = MathUtils.isZero(w2, MathUtils.DEFAULT_EPSILON) ? 1.0f : 1.0f / w2;
+		    vector.set(x * invW, y * invW, z * invW);
 	    }
 	    else {
-		    final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z);
-		    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z);
-		    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z);
-
-		    vector.set(x, y, z);
+		    transformVectorInPlace(vector);
 	    }
     }
 	
 	/**
-	 * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
+	 * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0.
+	 *
+	 * <h2>Besonderheiten</h2>
+	 * Bei dieser Form der Transformation wirken Translationen nicht auf den Vektor; Er wird also
+	 * lediglich in Richtung und Länge verändert.
 	 * 
+	 * @param vector Der zu transformierende Vektor
+	 * @return Der transformierte Vektor
+	 * @see #transformPoint(Vector3)
+	 */
+	@ReturnsCachedValue
+	public final Vector3 transformVector(final @NotNull Vector3 vector) {
+        Vector3 v = vector.clone();
+        transformVectorInPlace(v);
+		return v;
+	}
+
+	/**
+	 * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
+	 *
+	 * <h2>Besonderheiten</h2>
+	 * Bei dieser Form der Transformation wirken Translationen auf den Vektor; Er wird also
+	 * in Richtung, Länge und Ursprung verändert.
+	 *
+	 * @param vector Der zu transformierende Vektor
+	 * @return Der transformierte Vektor
+	 * @see #transformVector(Vector3)
+	 */
+	@ReturnsCachedValue
+	public final Vector3 transformPoint(final @NotNull Vector3 vector) {
+		Vector3 v = vector.clone();
+		transformPointInPlace(v);
+		return v;
+	}
+
+	/**
+	 * Alias für {@link #transformPoint(Vector3)}
+	 *
 	 * @param vector Der zu transformierende Vektor
 	 * @return Der transformierte Vektor
 	 * @see Matrix4#transform(Vector3, float)
 	 */
 	@ReturnsCachedValue
 	public final Vector3 transform(final @NotNull Vector3 vector) {
-        Vector3 v = vector.clone();
-        transformInPlace(v);
-		return v;
+		return transformPoint(vector);
 	}
 
     /**
-     * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=1
+     * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
      *
      * @param vector Der zu transformierende Vektor
      * @see Matrix4#transform(Vector3, float)
      */
-    public final void transformInPlace(@NotNull Vector3 vector) {
-	    final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z) + (getAt(0, 3));
-	    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z) + (getAt(1, 3));
-	    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(2, 3));
-	    final float w = (getAt(3, 0) * vector.x) + (getAt(3, 1) * vector.y) + (getAt(3, 2) * vector.z) + (getAt(3, 3));
-
-        vector.set(x / w, y / w, z / w);
+    public final void transformVectorInPlace(@NotNull Vector3 vector) {
+	    final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z);
+	    final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z);
+	    final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z);
+	    final float w = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z);
+	    final float invW = MathUtils.isZero(w, MathUtils.DEFAULT_EPSILON) ? 1.0f : 1.0f / w;
+	    vector.set(x * invW, y * invW, z * invW);
     }
+
+	/**
+	 * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=1
+	 *
+	 * @param vector Der zu transformierende Vektor
+	 * @see Matrix4#transform(Vector3, float)
+	 */
+	public final void transformPointInPlace(@NotNull Vector3 vector) {
+		final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0));
+		final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1));
+		final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2));
+		final float w = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3));
+		final float invW = 1.0f / w;
+
+		vector.set(x * invW, y * invW, z * invW);
+	}
 
 	/**
 	 * Ermittelt, ob diese Matrix gleich einer anderen unter Beachtung des Vorgabe-Deltawertes {@link MathUtils#DEFAULT_EPSILON} ist

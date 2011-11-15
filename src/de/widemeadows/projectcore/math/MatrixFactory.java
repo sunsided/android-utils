@@ -435,12 +435,26 @@ public class MatrixFactory {
 	@NotNull
 	@ReturnsCachedValue
 	public static Matrix4 getTranslation(@NotNull Vector3 translation) {
+		return getTranslation(translation.x, translation.y, translation.z);
+	}
+
+	/**
+	 * Bezieht eine Translationsmatrix
+	 *
+	 * @param x Der Translationsvektor (X-Komponente)
+	 * @param y Der Translationsvektor (Y-Komponente)
+	 * @param z Der Translationsvektor (Z-Komponente)
+	 * @return Die Transformationsmatrix
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Matrix4 getTranslation(float x, float y, float z) {
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
-				translation.x, translation.y, translation.z, 1f
+				x, y, z, 1f
 		);
-	}	
-	
+	}
+
 }
