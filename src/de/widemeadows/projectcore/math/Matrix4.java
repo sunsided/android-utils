@@ -209,7 +209,7 @@ public final class Matrix4 {
 	 * @param index Der Feldindex (0..14)
 	 * @return Der Wert
 	 */
-	public float getAt(int index) {
+	public final float getAt(int index) {
 		assert index >= 0 && index <= 15;
 		return values[index];
 	}
@@ -221,7 +221,7 @@ public final class Matrix4 {
 	 * @param column Die Spalte (nullbasiert!)
 	 * @return Der Wert
 	 */
-	public float getAt(int row, int column) {
+	public final float getAt(int row, int column) {
 		assert row >= 0 && row < 4 && column >= 0 && column < 4;
 		return values[row * 4 + column];
 	}
@@ -232,7 +232,7 @@ public final class Matrix4 {
 	 * @param index Der Feldindex (0..15)
 	 * @param value Der Wert
 	 */
-	public void setAt(int index, float value) {
+	public final void setAt(int index, float value) {
 		assert index >= 0 && index <= 15;
 		values[index] = value;
 	}
@@ -244,7 +244,7 @@ public final class Matrix4 {
 	 * @param column Die Spalte (nullbasiert!)
 	 * @param value Der Wert
 	 */
-	public void setAt(int row, int column, float value) {
+	public final void setAt(int row, int column, float value) {
 		assert row >= 0 && row < 4 && column >= 0 && column < 4;
 		values[row * 4 + column] = value;
 	}
@@ -271,7 +271,7 @@ public final class Matrix4 {
 	 *
 	 * @return Dieselbe Instanz für method chaining
 	 */
-	public Matrix4 set(float m11, float m12, float m13, float m14,
+	public final Matrix4 set(float m11, float m12, float m13, float m14,
 					float m21, float m22, float m23, float m24,
 					float m31, float m32, float m33, float m34,
 					float m41, float m42, float m43, float m44
@@ -285,10 +285,18 @@ public final class Matrix4 {
 	}
 
 	/**
+	 * Wandelt die Matrix in die Einheitsmatrix um. (Alias für {@link #toUnit()}
+	 * @return Dieselbe Instanz für method chaining
+	 */
+	public final Matrix4 toIdentity() {
+		return toUnit();
+	}
+
+	/**
 	 * Wandelt die Matrix in die Einheitsmatrix um
      * @return Dieselbe Instanz für method chaining
 	 */
-	public Matrix4 toUnit() {
+	public final Matrix4 toUnit() {
 		values[ 0] = 1.0f;	values[ 1] = 0.0f;	values[ 2] = 0.0f;	values[ 3] = 0.0f;
 		values[ 4] = 0.0f;	values[ 5] = 1.0f;	values[ 6] = 0.0f;	values[ 7] = 0.0f;
 		values[ 8] = 0.0f;	values[ 9] = 0.0f;	values[10] = 1.0f;	values[11] = 0.0f;
@@ -305,7 +313,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Matrix4 mul(final float f) {
+	public final Matrix4 mul(final float f) {
 		return createNew().set(f * values[0], f * values[1], f * values[2], f * values[3], f * values[4], f * values[5], f * values[6], f * values[7], f * values[8], f * values[9], f * values[10], f * values[11], f * values[12], f * values[13], f * values[14], f * values[15]);
 	}
 
@@ -316,7 +324,7 @@ public final class Matrix4 {
 	 * @see Matrix4#mul(float) 
 	 */
 	@NotNull
-	public Matrix4 mulInPlace(float f) {
+	public final Matrix4 mulInPlace(float f) {
 		values[ 0] *= f;	values[ 1] *= f;	values[ 2] *= f;	values[ 3] *= f;
 		values[ 4] *= f;	values[ 5] *= f;	values[ 6] *= f;	values[ 7] *= f;
 		values[ 8] *= f;	values[ 9] *= f;	values[10] *= f;	values[11] *= f;
@@ -333,7 +341,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Matrix4 mul(@NotNull final Matrix4 b) {
+	public final Matrix4 mul(@NotNull final Matrix4 b) {
 		return createNew().set(
 
 				values[M11] * b.values[M11] + values[M12] * b.values[M21] + values[M13] * b.values[M31] + values[M14] * b.values[M41],
@@ -364,7 +372,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Matrix4 clone() {
+	public final Matrix4 clone() {
 		return createNew().set(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15]);
 	}
 	
@@ -375,7 +383,7 @@ public final class Matrix4 {
 	 *
 	 * @see Matrix4#getSubDeterminant(int, int)
 	 */
-	public float getDeterminant() {
+	public final float getDeterminant() {
 		/*
 		return
 			Cell[0, 0]*GetSubDeterminant(0, 0) -
@@ -465,7 +473,7 @@ public final class Matrix4 {
 	 *
 	 * @see Matrix4#getDeterminant()
 	 */
-	public float getSubDeterminant(int row, int column) {
+	public final float getSubDeterminant(int row, int column) {
 		assert row >= 0 && row < 4;
 		assert column >= 0 && column < 4;
 
@@ -516,7 +524,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public Matrix4 getAdjoint() {
+	public final Matrix4 getAdjoint() {
 		/*
 		return new Matrix4D(
 			+GetSubDeterminant(0, 0), -GetSubDeterminant(0, 1), +GetSubDeterminant(0, 2), -GetSubDeterminant(0, 3),
@@ -760,7 +768,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getInvertedNoThrow()
 	 */
 	@NotNull
-	public Matrix4 getInverted() throws MatrixException {
+	public final Matrix4 getInverted() throws MatrixException {
 		float invDeterminant = 1.0f/getDeterminant();
 		if (Float.isInfinite(invDeterminant)) throw new MatrixException("Matrix cannot be inverted.");
 		return getAdjoint().mul(invDeterminant);
@@ -775,7 +783,7 @@ public final class Matrix4 {
 	 */
 	@Nullable
 	@ReturnsCachedValue
-	public Matrix4 getInvertedNoThrow() {
+	public final Matrix4 getInvertedNoThrow() {
 		float invDeterminant = 1.0f / getDeterminant();
 		if (Float.isInfinite(invDeterminant)) return null;
 		return getAdjoint().mulInPlace(invDeterminant);
@@ -798,7 +806,7 @@ public final class Matrix4 {
 	 *
 	 * @see Matrix4#toTranslation(float, float, float)
 	 */
-	public void toTranslation(@NotNull final Vector3 translation) {
+	public final void toTranslation(@NotNull final Vector3 translation) {
 		values[M11] = 1f; values[M12] = 0f; values[M13] = 0f; values[M14] = 0f;
 		values[M21] = 0f; values[M22] = 1f; values[M23] = 0f; values[M24] = 0f;
 		values[M31] = 0f; values[M32] = 0f; values[M33] = 1f; values[M34] = 0f;
@@ -828,7 +836,7 @@ public final class Matrix4 {
 	 *
 	 * @see Matrix4#toTranslation(Vector3)
 	 */
-	public void toTranslation(float x, float y, float z) {
+	public final void toTranslation(float x, float y, float z) {
 		values[M11] = 1f; values[M12] = 0f; values[M13] = 0f; values[M14] = 0f;
 		values[M21] = 0f; values[M22] = 1f; values[M23] = 0f; values[M24] = 0f;
 		values[M31] = 0f; values[M32] = 0f; values[M33] = 1f; values[M34] = 0f;
@@ -854,7 +862,7 @@ public final class Matrix4 {
 	 * @see Matrix4#toScaling(float, float, float)
 	 * @see Matrix4#toScaling(float)
 	 */
-	public void toScaling(@NotNull final Vector3 factors) {
+	public final void toScaling(@NotNull final Vector3 factors) {
 		values[M11] = factors.x; values[M12] = 0f; values[M13] = 0f; values[M14] = 0f;
 		values[M21] = 0f; values[M22] = factors.y; values[M23] = 0f; values[M24] = 0f;
 		values[M31] = 0f; values[M32] = 0f; values[M33] = factors.z; values[M34] = 0f;
@@ -882,7 +890,7 @@ public final class Matrix4 {
 	 * @see Matrix4#toScaling(Vector3)
 	 * @see Matrix4#toScaling(float)
 	 */
-	public void toScaling(float x, float y, float z) {
+	public final void toScaling(float x, float y, float z) {
 		values[M11] = x;  values[M12] = 0f; values[M13] = 0f; values[M14] = 0f;
 		values[M21] = 0f; values[M22] = y;  values[M23] = 0f; values[M24] = 0f;
 		values[M31] = 0f; values[M32] = 0f; values[M33] = z;  values[M34] = 0f;
@@ -905,7 +913,7 @@ public final class Matrix4 {
 	 * @param s Der Skalierungsfaktor
 	 * @see Matrix4#toScaling(float)
 	 */
-	public void toScaling(float s) {
+	public final void toScaling(float s) {
 		values[M11] = s;  values[M12] = 0f; values[M13] = 0f; values[M14] = 0f;
 		values[M21] = 0f; values[M22] = s;  values[M23] = 0f; values[M24] = 0f;
 		values[M31] = 0f; values[M32] = 0f; values[M33] = s;  values[M34] = 0f;
@@ -921,7 +929,7 @@ public final class Matrix4 {
 	 * @see Matrix4#transform(Vector3)
 	 */
 	@NotNull
-	public Vector3 transform(@NotNull final Vector3 vector, float w) {
+	public final Vector3 transform(@NotNull final Vector3 vector, float w) {
         Vector3 v = vector.clone();
         transformInPlace(v, w);
         return v;
@@ -934,7 +942,7 @@ public final class Matrix4 {
      * @param w      Der 4-dimensionale Überhang
      * @see Matrix4#transform(Vector3)
      */
-    public void transformInPlace(@NotNull Vector3 vector, float w) {
+    public final void transformInPlace(@NotNull Vector3 vector, float w) {
         float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0) * w);
         float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1) * w);
         float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2) * w);
@@ -951,7 +959,7 @@ public final class Matrix4 {
 	 * @see Matrix4#transform(Vector3, float)
 	 */
 	@ReturnsCachedValue
-	public Vector3 transform(final @NotNull Vector3 vector) {
+	public final Vector3 transform(final @NotNull Vector3 vector) {
         Vector3 v = vector.clone();
         transformInPlace(v);
 		return v;
@@ -963,7 +971,7 @@ public final class Matrix4 {
      * @param vector Der zu transformierende Vektor
      * @see Matrix4#transform(Vector3, float)
      */
-    public void transformInPlace(@NotNull Vector3 vector) {
+    public final void transformInPlace(@NotNull Vector3 vector) {
         float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0));
         float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1));
         float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2));
