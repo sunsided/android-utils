@@ -201,7 +201,7 @@ public final class Vector3 {
 	 * @see Vector3#getLengthSquared
 	 */
 	public float getLength() {
-		return (float)Math.sqrt(x*x + y*y + z*z);
+		return (float)Math.sqrt(x*x + y*y + z*z); // TODO: FLoatMath verwenden
 	}
 	
 	/**
@@ -226,7 +226,7 @@ public final class Vector3 {
 		float dx = from.x - x;
 		float dy = from.y - y;
 		float dz = from.z - z;
-		return (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
+		return (float)Math.sqrt(dx*dx + dy*dy + dz*dz); // TODO: FLoatMath verwenden
 	}
 	
 	/**

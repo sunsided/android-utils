@@ -336,9 +336,15 @@ public class MatrixTests {
 		assertEquals(a.z, result.z, Epsilon);
 
 		// Test mit der magischen Matrix (w=0)
+		result = Matrix4.MAGIC.transform(a, 0).getNormalized();
+		assertEquals(0.38174f, result.x, Epsilon);
+		assertEquals(0.75032f, result.y, Epsilon);
+		assertEquals(0.53971f, result.z, Epsilon);
+
+		// Test mit der magischen Matrix (w=0)
 		result = Matrix4.MAGIC.transform(a, 1);
-		assertEquals(29, result.x, Epsilon);
-		assertEquals(57, result.y, Epsilon);
-		assertEquals(41, result.z, Epsilon);
+		assertEquals(0.53846f, result.x, Epsilon);
+		assertEquals(0.83333f, result.y, Epsilon);
+		assertEquals(0.67949f, result.z, Epsilon);
 	}
 }
