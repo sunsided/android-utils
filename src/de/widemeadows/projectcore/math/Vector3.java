@@ -39,7 +39,7 @@ public final class Vector3 {
 	 * @see #Recycling
 	 */
 	@NotNull
-	public static Vector3 createNew(float x, float y, float z) {
+	public static Vector3 createNew(final float x, final float y, final float z) {
 		return Recycling.getOrCreate().set(x, y, z);
 	}
 
@@ -53,7 +53,7 @@ public final class Vector3 {
 	 * @return Der neue oder aufbereitete Vektor
 	 * @see #Recycling
 	 */
-    public static Vector3 createNew(Vector3 other) {
+    public static Vector3 createNew(@NotNull final Vector3 other) {
         return Recycling.getOrCreate().set(other);
     }
 
@@ -78,7 +78,7 @@ public final class Vector3 {
 	 * @see #Recycling
      * @see Vector3#recycle()
 	 */
-	public static void recycle(@NotNull Vector3 vector) {
+	public static void recycle(@NotNull final Vector3 vector) {
 		Recycling.registerElement(vector);
 	}
 
