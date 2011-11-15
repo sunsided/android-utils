@@ -1,272 +1,225 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.cache.ObjectCache;
+import de.widemeadows.projectcore.cache.ObjectFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Basisklasse für Boxen (AABB, OBB, ...)
+ * Symmetrische Box
  */
-public abstract class Box implements IBoundsTestable {
+public final class Box {
 
 	/**
-	 * Gibt an, ob diese Box vektorbasiert ist
-	 *
-	 * @return
+	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public abstract boolean isVectorBased();
+	public static final ObjectCache<Box> Recycling = new ObjectCache<Box>(new ObjectFactory<Box>() {
+		@NotNull
+		@Override
+		public Box createNew() {
+			return new Box();
+		}
+	});
 
 	/**
-	 * Gibt an, ob diese Box ebenenbasiert ist
+	 * Erzeugt eine neue Vektor-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
+	 * </p>
 	 *
-	 * @return
-	 */
-	public abstract boolean isPlaneBased();
-
-	/**
-	 * Setzt die Größe des Quaders
-	 *
-	 * @param width  Breite
-	 * @param height Höhe
-	 * @param depth  Tiefe
-	 * @see #setExtent(float, float, float)
-	 */
-	public abstract void setSize(float width, float height, float depth);
-
-	/**
-	 * Setzt die Größe des Quaders
-	 *
-	 * @param width  Breite
-	 * @param height Höhe
-	 * @param depth  Tiefe
+	 * @param centerX Die Position (X-Komponente)
+	 * @param centerY Die Position (Y-Komponente)
+	 * @param centerZ Die Position (Z-Komponente)
+	 * @param extentX Der Maximalvektor (X-Komponente)
+	 * @param extentY Der Maximalvektor (Y-Komponente)
+	 * @param extentZ Der Maximalvektor (Z-Komponente)
+	 * @return Der neue oder aufbereitete Vektor
+	 * @see #Recycling
 	 */
 	@NotNull
-	public abstract Box setExtent(float width, float height, float depth);
-
-	/**
-	 * Setzt die Breite der Box
-	 * @param width Die Breite
-	 */
-	public abstract void setWidth(float width);
-
-	/**
-	 * Setzt die Höhe der Box
-	 * @param height Die Höhe
-	 */
-	public abstract void setHeight(float height);
-
-	/**
-	 * Setzt die Tiefe der Box
-	 * @param depth Die Tiefe
-	 */
-	public abstract void setDepth(float depth);
-
-	/**
-	 * Bezieht die Breite der Box
-	 * @return Die Breite
-	 */
-	public abstract float getWidth();
-
-	/**
-	 * Bezieht die Höhe der Box
-	 * @return Die Höhe
-	 */
-	public abstract float getHeight();
-
-	/**
-	 * Bezieht die Tiefe der Box
-	 * @return Die Tiefe
-	 */
-	public abstract float getDepth();
-
-	/**
-	 * Setzt die Ausdehnung der Box
-	 *
-	 * @param extent Die Ausdehnung
-	 * @return Diese Instanz für method chaining
-	 * @see #getExtent()
-	 */
-	@NotNull
-	public abstract Box setExtent(@NotNull Vector3 extent);
-
-	/**
-	 * Bezieht die Ausdehnung der Box
-	 *
-	 * @return Die Ausdehnung des Quaders
-	 * @see #setExtent(Vector3)
-	 */
-	@NotNull
-	public abstract Vector3 getExtent();
-
-	/**
-	 * Setzt die Position der Box
-	 *
-	 * @param x X-Koordinate
-	 * @param y Y-Koordinate
-	 * @param z Z-Koordinate
-	 * @return Diese Instanz für method chaining
-	 */
-	@NotNull
-	public abstract Box setPosition(float x, float y, float z);
-
-	/**
-	 * Setzt die Position der Box
-	 *
-	 * @param position Die Position
-	 * @return Diese Instanz für method chaining
-	 */
-	@NotNull
-	public abstract Box setPosition(@NotNull Vector3 position);
-
-	/**
-	 * Bezieht die Position der Box
-	 * @return Die Position des Quaders
-	 */
-	@NotNull
-	public abstract Vector3 getPosition();
-
-	/**
-	 * Bezieht die X-Koordinate der Box
-	 * @return X-Koordinate
-	 */
-	public abstract float getX();
-
-	/**
-	 * Bezieht die Y-Koordinate der Box
-	 * @return Y-Koordinate
-	 */
-	public abstract float getY();
-
-	/**
-	 * Bezieht die Z-Koordinate der Box
-	 * @return Z-Koordinate
-	 */
-	public abstract float getZ();
-
-	/**
-	 * Überprüft, ob sich ein Punkt innerhalb der Box befindet
-	 * @param point Die zu testende Position
-	 * @return <code>true</code>, wenn sich der Punkt innerhalb des Quaders befindet
-	 */
-	@Override
-	public abstract boolean containsPoint(@NotNull final Vector3 point);
-
-	/**
-	 * Erzeugt eine optimale Bounding Box aus einer Punktwolke
-	 *
-	 * @param points    Die Punkte
-	 * @return Die Bounding Sphere
-	 * @see BoxWithVectors#createFrom(float, Vector3...)
-	 */
-	@NotNull
-	public final Box createFrom(@NotNull final Vector3... points) {
-		return createFrom(0.01f, points);
+	public static Box createNew(final float centerX, final float centerY, final float centerZ,
+	                            final float extentX, final float extentY, final float extentZ) {
+		return Recycling.getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
 	}
 
 	/**
-	 * Erzeugt eine optimale Bounding Box aus einer Punktwolke
+	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
+	 * </p>
 	 *
-	 * @param minSize   Die minimale Größe
-	 * @param points    Die Punkte
-	 * @return Die Bounding Sphere
-	 * @see BoxWithVectors#createFrom(Vector3...)
+	 * @param other Die zu kopierende Box
+	 * @return Die neue oder aufbereitete Box
+	 * @see #Recycling
+	 */
+	public static Box createNew(@NotNull final Box other) {
+		return Recycling.getOrCreate().set(other);
+	}
+
+	/**
+	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
+	 * </p>
+	 *
+	 * @param center Der Mittelpunkt der Box
+	 * @param extent Der Maximalvektor der Box   
+	 * @return Die neue oder aufbereitete Box
+	 * @see #Recycling
+	 */
+	public static Box createNew(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+		return Recycling.getOrCreate().set(center, extent);
+	}
+
+	/**
+	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Box kann korrupt sein!
+	 * </p>
+	 *
+	 * @return Der neue oder aufbereitete Vektor
+	 * @see #Recycling
 	 */
 	@NotNull
-	public final Box createFrom(float minSize, @NotNull final Vector3... points) {
-		assert minSize > 0;
-		assert points.length > 0;
+	public static Box createNew() {
+		return Recycling.getOrCreate();
+	}
 
-		assert minSize > 0;
-		assert points.length > 0;
+	/**
+	 * Recyclet eine Box
+	 *
+	 * @param box Die zu recyclende Box
+	 * @see #Recycling
+	 * @see Box#recycle()
+	 */
+	public static void recycle(@NotNull final Box box) {
+		Recycling.registerElement(box);
+	}
 
-		// Minimal- und Maximalwerte finden
-		float xmin = points[0].x;
-		float xmax = points[0].x;
-		float ymin = points[0].y;
-		float ymax = points[0].y;
-		float zmin = points[0].z;
-		float zmax = points[0].z;
+	/**
+	 * Registriert diesen Vektor für das spätere Recycling
+	 *
+	 * @see #Recycling
+	 * @see Vector3#recycle(Vector3)
+	 */
+	public void recycle() {
+		Recycling.registerElement(this);
+	}
 
-		// Mittelwert der Vektoren bilden, um Position zu finden
-		Vector3 mean = Vector3.createNew().set(xmin, ymin, zmin);
-		for (int i = 1; i < points.length; ++i) {
-			xmax = Math.max(xmax, points[i].x);
-			xmin = Math.min(xmin, points[i].x);
-			ymax = Math.max(ymax, points[i].y);
-			ymin = Math.min(ymin, points[i].y);
-			zmax = Math.max(zmax, points[i].z);
-			zmin = Math.min(zmin, points[i].z);
+	/**
+	 * Der Mittelpunkt der Box
+	 */
+	@NotNull
+	public final Vector3 center = Vector3.createNew();
 
-			// aufaddieren
-			mean.addInPlace(points[i]);
-		}
-		mean.mulInPlace(1.0f / points.length);
+	/**
+	 * Der Der Maximalvektor der Box
+	 */
+	@NotNull
+	public final Vector3 extent = Vector3.createNew();
 
-		// Dimensionen berechnen
-		float width = Math.abs(xmax - xmin);
-		float height = Math.abs(ymax - ymin);
-		float depth = Math.abs(zmax - zmin);
+	/**
+	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
+	 */
+	private Box() {
+	}
 
-		// Position berechnen
-		float posX = mean.x;
-		float posY = mean.y;
-		float posZ = mean.z;
-		Vector3.recycle(mean);
+	/**
+	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
+	 *
+	 * @param center Der Mittelpunkt der Box
+	 * @param extent Der Maximalvektor der Box
+	 */
+	private Box(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+		this();
+		this.center.set(center);
+		this.extent.set(extent);
+	}
 
-		setPosition(posX, posY, posZ);
-		setExtent(width, height, depth);
+	/**
+	 * Setzt Mittelpunkt und Dimensionen der Box
+	 *
+	 * @param other Die zu kopierende Box
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box set(@NotNull final Box other) {
+		return set(other.center, other.extent);
+	}
+
+	/**
+	 * Setzt Mittelpunkt und Dimensionen der Box
+	 *
+	 * @param center Der Mittelpunkt
+	 * @param extent Die Dimensionen
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box set(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+		setCenter(center);
+		setExtent(extent);
 		return this;
 	}
 
 	/**
-	 * Bezieht einen gecachten Vektor, der den Minimalpunkt der Box repräsentiert
-	 * @return Minimaler Punkt (cached)
-	 */
-	@NotNull
-	@ReturnsCachedValue
-	public abstract Vector3 getMinPoint();
-
-	/**
-	 * Bezieht einen gecachten Vektor, der den Maximalpunkt der Box repräsentiert
+	 * Setzt Mittelpunkt und Dimensionen der Box
 	 *
-	 * @return Maximaler Punkt (cached)
+	 * @param centerX Die Position (X-Komponente)
+	 * @param centerY Die Position (Y-Komponente)
+	 * @param centerZ Die Position (Z-Komponente)
+	 * @param extentX Der Maximalvektor (X-Komponente)
+	 * @param extentY Der Maximalvektor (Y-Komponente)
+	 * @param extentZ Der Maximalvektor (Z-Komponente)
+	 * @return Diese Instanz für method chaining
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public abstract Vector3 getMaxPoint();
-
-	/**
-	 * Wandelt diese Box in eine vektorbasierte Box um.
-	 * <p><b>Ist diese Box bereits vektorbasiert, wird dieselbe Instanz zurückgegeben!</b></p>
-	 *
-	 * @return Vektorbasierte Box
-	 */
-	@NotNull
-	public final BoxWithVectors toVectorBasedBox() {
-		if (isVectorBased()) return (BoxWithVectors) this;
-
-		Vector3 extents = getExtent();
-		try {
-			return new BoxWithVectors(extents.x, extents.y, extents.z).setPosition(getPosition());
-		} finally {
-			extents.recycle();
-		}
+	public final Box set(final float centerX, final float centerY, final float centerZ, final float extentX, final float extentY, final float extentZ) {
+		setCenter(centerX, centerY, centerZ);
+		setExtent(extentX, extentY, extentZ);
+		return this;
 	}
 
 	/**
-	 * Wandelt diese Box in eine Plane-basierte Box um.
-	 * <p><b>Ist diese Box bereits planebasiert, wird dieselbe Instanz zurückgegeben!</b></p>
-	 *
-	 * @return Planebasierte Box
-	 */
-	@NotNull
-	public final BoxWithPlanes toPlaneBasedBox() {
-		if (isPlaneBased()) return (BoxWithPlanes)this;
+	 * Setzt die Dimensionen der Box
 
-		Vector3 extents = getExtent();
-		try {
-			return new BoxWithPlanes().setPosition(getPosition()).setExtent(extents.x, extents.y, extents.z);
-		} finally {
-			extents.recycle();
-		}
+	 * @param extent Der Maximalvektor
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box setExtent(@NotNull final Vector3 extent) {
+		this.extent.set(extent);
+		return this;
+	}
+
+	/**
+	 * Setzt die Dimensionen der Box
+	 *
+	 * @param x Der Maximalvektor (X-Komponente)
+	 * @param y Der Maximalvektor (Y-Komponente)
+	 * @param z Der Maximalvektor (Z-Komponente)
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box setExtent(final float x, final float y, final float z) {
+		this.extent.set(x, y, z);
+		return this;
+	}
+
+	/**
+	 * Setzt die Position der Box
+	 *
+	 * @param center Die Position
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box setCenter(@NotNull final Vector3 center) {
+		this.center.set(center);
+		return this;
+	}
+
+	/**
+	 * Setzt die Position der Box
+	 *
+	 * @param x Die Position (X-Komponente)
+	 * @param y Die Position (Y-Komponente)
+	 * @param z Die Position (Z-Komponente)
+	 * @return Diese Instanz für method chaining
+	 */
+	public final Box setCenter(final float x, final float y, final float z) {
+		this.center.set(x, y, z);
+		return this;
 	}
 }

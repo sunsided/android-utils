@@ -1,9 +1,10 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
-import org.jetbrains.annotations.NotNull;
 import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.math.mock.FloatMath; // TODO: Ersetzen mit android.util.FloatMath wenn nicht in Test
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 3D-Vektor
@@ -201,7 +202,7 @@ public final class Vector3 {
 	 * @see Vector3#getLengthSquared
 	 */
 	public float getLength() {
-		return (float)Math.sqrt(x*x + y*y + z*z); // TODO: FLoatMath verwenden
+		return FloatMath.sqrt(x*x + y*y + z*z);
 	}
 	
 	/**
@@ -226,7 +227,7 @@ public final class Vector3 {
 		float dx = from.x - x;
 		float dy = from.y - y;
 		float dz = from.z - z;
-		return (float)Math.sqrt(dx*dx + dy*dy + dz*dz); // TODO: FLoatMath verwenden
+		return FloatMath.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 	
 	/**
