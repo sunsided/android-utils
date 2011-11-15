@@ -1216,6 +1216,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getProgressiveRotation(float, float, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationX(float theta) {
 		float cos = (float)Math.cos(theta);
 		float sin = (float)Math.sin(theta);
@@ -1236,6 +1237,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationX(float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationX(float cosTheta, float sinTheta) {
 		return createNew().set(
 			1.0f, 0.0f, 0.0f, 0.0f,
@@ -1259,6 +1261,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getProgressiveRotation(float, float, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationY(float theta) {
 		float cos = (float)Math.cos(theta);
 		float sin = (float)Math.sin(theta);
@@ -1279,6 +1282,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationY(float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationY(float cosTheta, float sinTheta) {
 		return createNew().set(
 			cosTheta, 0.0f, -sinTheta, 0.0f,
@@ -1302,6 +1306,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getProgressiveRotation(float, float, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationZ(float theta) {
 		float cos = (float)Math.cos(theta);
 		float sin = (float)Math.sin(theta);
@@ -1322,6 +1327,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationZ(float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationZ(float cosTheta, float sinTheta) {
 		return createNew().set(
 			cosTheta, sinTheta, 0.0f, 0.0f,
@@ -1345,6 +1351,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getProgressiveRotation(float, float, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationAxisAngle(@NotNull Vector3 axis, float theta) {
 		float cos = (float)Math.cos(theta);
 		float sin = (float)Math.sin(theta);
@@ -1362,6 +1369,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationAxisAngle(Vector3, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationAxisAngle(@NotNull Vector3 axis, float cosTheta, float sinTheta) {
 		// pre-calculate squared
 		float xx = axis.x * axis.x;
@@ -1412,6 +1420,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationAxisAngle(Vector3, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getProgressiveRotation(float deltaX, float deltaY, float deltaZ) {
 		return createNew().set(
 			0.0f, -deltaZ, deltaY, 0.0f,
@@ -1437,6 +1446,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationAxisAngle(Vector3, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationEulerZXZ(float z, float x1, float z2) {
 		float cz = (float)Math.cos(z);
 		float sz = (float)Math.sin(z);
@@ -1473,6 +1483,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationAxisAngle(Vector3, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationEulerZYZ(float z, float y1, float z2) {
 		float cz = (float)Math.cos(z);
 		float sz = (float)Math.sin(z);
@@ -1509,6 +1520,7 @@ public final class Matrix4 {
 	 * @see Matrix4#getRotationAxisAngle(Vector3, float)
 	 */
 	@NotNull
+	@ReturnsCachedValue
 	public static Matrix4 getRotationEulerRPY(float rollX, float pitchY, float yawZ) {
 		float cr = (float)Math.cos(rollX); // Φ
 		float sr = (float)Math.sin(rollX);
@@ -1536,7 +1548,9 @@ public final class Matrix4 {
 	 * @param translation Der translationsvektor
 	 * @return Die Transformationsmatrix
 	 */
-	public static Matrix4 getTransformation(Vector3 scaling, Vector3 rotation, Vector3 translation) {
+	@NotNull
+	@ReturnsCachedValue
+	public static Matrix4 getTransformation(@NotNull Vector3 scaling, @NotNull Vector3 rotation, @NotNull Vector3 translation) {
 		float cr = (float)Math.cos(rotation.x); // Φ
 		float sr = (float)Math.sin(rotation.x);
 		
@@ -1563,7 +1577,9 @@ public final class Matrix4 {
 	 * @param translation Der translationsvektor
 	 * @return Die Transformationsmatrix
 	 */
-	public static Matrix4 getTransformation(float scaling, Vector3 rotation, Vector3 translation) {
+	@NotNull
+	@ReturnsCachedValue
+	public static Matrix4 getTransformation(float scaling, @NotNull Vector3 rotation, @NotNull Vector3 translation) {
 		float cr = (float)Math.cos(rotation.x); // Φ
 		float sr = (float)Math.sin(rotation.x);
 		
@@ -1589,7 +1605,9 @@ public final class Matrix4 {
 	 * @param translation Der translationsvektor
 	 * @return Die Transformationsmatrix
 	 */
-	public static Matrix4 getTransformation(Vector3 rotation, Vector3 translation) {
+	@NotNull
+	@ReturnsCachedValue
+	public static Matrix4 getTransformation(@NotNull Vector3 rotation, @NotNull Vector3 translation) {
 		float cr = (float)Math.cos(rotation.x); // Φ
 		float sr = (float)Math.sin(rotation.x);
 		
@@ -1604,6 +1622,22 @@ public final class Matrix4 {
 				-(sr*sp*cy - cr*sy), 	(sr*sp*sy + cr*cy), 	sr*cp, 			0f,
 				(cr*sp*cy + sr*sy), 	(cr*sp*sy - sr*cy), 	cr*cp, 			0f,
 				translation.x, 			translation.y, 			translation.z, 	1f
+		);
+	}
+
+	/**
+	 * Bezieht eine Translationsmatrix
+	 *
+	 * @param translation Der translationsvektor
+	 * @return Die Transformationsmatrix
+	 */
+	@NotNull @ReturnsCachedValue
+	public static Matrix4 getTranslation(@NotNull Vector3 translation) {
+		return createNew().set(
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				translation.x, translation.y, translation.z, 1f
 		);
 	}
 }
