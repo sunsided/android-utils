@@ -28,16 +28,68 @@ public final class Matrix4 {
 	});
 
 	/**
-	 * Erzeugt eine neue Matrix-Instanz.
-	 * <p>
-	 *     <strong>Hinweis:</strong> Der Zustand der Matrix kann korrupt sein!
-	 * </p>
+	 * Erzeugt eine neue Matrix-Instanz und initialisiert sie auf die Einheitsmatrix
+	 *
 	 * @return Die neue oder aufbereitete Matrix
 	 * @see #Recycling
+	 * @see #createNew(boolean) 
+	 * @see #createNew(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)
 	 */
 	@NotNull
 	public static Matrix4 createNew() {
         return Recycling.getOrCreate().toUnit();
+	}
+
+	/**
+	 * Erzeugt eine neue Matrix-Instanz.
+	 *
+	 * @param makeUnit Gibt an, ob eine Einheitsmatrix erstellt werden soll. Ist dieser Wert false, bleibt die Matrix uninitialisiert.
+	 * @return Die neue oder aufbereitete Matrix
+	 * @see #Recycling
+	 * @see #createNew()
+	 * @see #createNew(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)
+	 */
+	@NotNull
+	public static Matrix4 createNew(boolean makeUnit) {
+		return makeUnit ? Recycling.getOrCreate().toUnit() : Recycling.getOrCreate();
+	}
+
+	/**
+	 * Erzeugt eine neue Matrix-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Matrix kann korrupt sein!
+	 * </p>
+	 *
+	 * @param m11 Zeile 1, Spalte 1
+	 * @param m12 Zeile 1, Spalte 2
+	 * @param m13 Zeile 1, Spalte 3
+	 * @param m14 Zeile 1, Spalte 4
+	 * @param m21 Zeile 2, Spalte 1
+	 * @param m22 Zeile 2, Spalte 2
+	 * @param m23 Zeile 2, Spalte 3
+	 * @param m24 Zeile 2, Spalte 4
+	 * @param m31 Zeile 3, Spalte 1
+	 * @param m32 Zeile 3, Spalte 2
+	 * @param m33 Zeile 3, Spalte 3
+	 * @param m34 Zeile 3, Spalte 4
+	 * @param m41 Zeile 4, Spalte 1
+	 * @param m42 Zeile 4, Spalte 2
+	 * @param m43 Zeile 4, Spalte 3
+	 * @param m44 Zeile 4, Spalte 4
+	 *
+	 * @return Die neue oder aufbereitete Matrix
+	 * @see #Recycling
+	 */
+	@NotNull
+	public static Matrix4 createNew(float m11, float m12, float m13, float m14,
+	                                float m21, float m22, float m23, float m24,
+	                                float m31, float m32, float m33, float m34,
+	                                float m41, float m42, float m43, float m44) {
+		return Recycling.getOrCreate().set(
+				m11, m12, m13, m14,
+				m21, m22, m23, m24,
+				m31, m32, m33, m34,
+				m41, m42, m43, m44);
 	}
 
 	/**
