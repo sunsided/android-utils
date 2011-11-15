@@ -64,19 +64,25 @@ public class MatrixFactoryTests {
 	@Test
 	public void rotateVector() {
 
-		Vector3 a = Vector3.createNew(1, 2, 3);
+		Vector3 a = Vector3.createNew(1, 2, 3); // NOTE: OpenGL: +z ist zum Betrachter
+
+		//     |+2
+		//     |
+		//     |____+1
+		//    /
+		//  /+3
 
 		// Testet die Rotation um die X-Achse
 		{
 			Matrix4 rotation = MatrixFactory.getRotationX(MathUtils.deg2Rad(90));
 			Vector3 result = rotation.transformPoint(a);
 			assertEquals(a.x, result.x, MathUtils.DEFAULT_EPSILON);
-			assertEquals(-a.z, result.y, MathUtils.DEFAULT_EPSILON); // NOTE: OpenGL: +z ist zum Betrachter
+			assertEquals(-a.z, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.z, MathUtils.DEFAULT_EPSILON);
 
 			result = rotation.transformVector(a);
 			assertEquals(a.x, result.x, MathUtils.DEFAULT_EPSILON);
-			assertEquals(-a.z, result.y, MathUtils.DEFAULT_EPSILON); // NOTE: OpenGL: +z ist zum Betrachter
+			assertEquals(-a.z, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.z, MathUtils.DEFAULT_EPSILON);
 		}
 
@@ -85,7 +91,7 @@ public class MatrixFactoryTests {
 			Matrix4 rotation = MatrixFactory.getRotationY(MathUtils.deg2Rad(90));
 			Vector3 result = rotation.transformPoint(a);
 			assertEquals(-a.z, result.x, MathUtils.DEFAULT_EPSILON);
-			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON); // NOTE: OpenGL: +z ist zum Betrachter
+			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.x, result.z, MathUtils.DEFAULT_EPSILON);
 
 			result = rotation.transformVector(a);
@@ -99,7 +105,7 @@ public class MatrixFactoryTests {
 			Matrix4 rotation = MatrixFactory.getRotationZ(MathUtils.deg2Rad(90));
 			Vector3 result = rotation.transformPoint(a);
 			assertEquals(-a.y, result.x, MathUtils.DEFAULT_EPSILON);
-			assertEquals(a.x, result.y, MathUtils.DEFAULT_EPSILON); // NOTE: OpenGL: +z ist zum Betrachter
+			assertEquals(a.x, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.z, result.z, MathUtils.DEFAULT_EPSILON);
 
 			result = rotation.transformVector(a);
@@ -107,6 +113,33 @@ public class MatrixFactoryTests {
 			assertEquals(a.x, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.z, result.z, MathUtils.DEFAULT_EPSILON);
 		}
+	}
+
+	/**
+	 * Trestet kombinierte Translation udn Rotation
+	 */
+	@Test
+	public void translateRotate() {
+
+		Vector3 translate = Vector3.createNew(10, 20, 30);
+		Matrix4 transform = MatrixFactory.getTransformation(
+				Vector3.createNew(MathUtils.deg2Rad(90), 0, 0), // 90° um die X-Achse
+				translate);
+
+		Vector3 a = Vector3.createNew(1, 2, 3);
+
+		Vector3 pointResult = transform.transformPoint(a);
+		Vector3 vectorResult = transform.transformVector(a);
+
+		// Punkt wurde gedreht und verschoben
+		assertEquals(translate.x + (a.x), pointResult.x, MathUtils.DEFAULT_EPSILON);
+		assertEquals(translate.y + (-a.z), pointResult.y, MathUtils.DEFAULT_EPSILON);
+		assertEquals(translate.z + (a.y), pointResult.z, MathUtils.DEFAULT_EPSILON);
+
+		// Vektor wurde gedreht, aber nicht verschoben
+		assertEquals((a.x), vectorResult.x, MathUtils.DEFAULT_EPSILON);
+		assertEquals((-a.z), vectorResult.y, MathUtils.DEFAULT_EPSILON);
+		assertEquals((a.y), vectorResult.z, MathUtils.DEFAULT_EPSILON);
 	}
 
 }
