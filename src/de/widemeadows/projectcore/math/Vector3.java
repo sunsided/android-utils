@@ -474,8 +474,8 @@ public final class Vector3 {
     /**
 	 * Vergleicht dieses Objekt mit einem anderen. TODO: Delta!?
      *
-	 * @param o
-	 * @return
+	 * @param o Das Vergleichsobjekt
+	 * @return <code>true</code>, wenn beide Elemente identisch sind
 	 */
     @Override
     public boolean equals(Object o) {
@@ -484,12 +484,61 @@ public final class Vector3 {
 
         Vector3 vector3 = (Vector3) o;
 
-        if(Math.abs(vector3.x-x)>EPSILON) return false;
-        if(Math.abs(vector3.y-y)>EPSILON) return false;
-        if(Math.abs(vector3.z-z)>EPSILON) return false;
-
-        return true;
+	    return (Math.abs(vector3.x - x) <= EPSILON &&
+				Math.abs(vector3.y - y) <= EPSILON &&
+				Math.abs(vector3.z - z) <= EPSILON);
     }
+
+	/**
+	 * Vergleicht dieses Objekt mit einem anderen.
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return <code>true</code>, wenn beide Vektoren identisch sind
+	 */
+	public boolean equals(@NotNull Vector3 other) {
+		return equals(other, EPSILON);
+	}
+
+	/**
+	 * Vergleicht dieses Objekt mit einem anderen.
+	 *
+	 * @param x Der Vergleichsvektor (X-Komponente)
+	 * @param y Der Vergleichsvektor (Y-Komponente)
+	 * @param z Der Vergleichsvektor (Z-Komponente)
+	 * @return <code>true</code>, wenn beide Vektoren identisch sind
+	 */
+	public boolean equals(float x, float y, float z) {
+		return equals(x, y, z, EPSILON);
+	}
+
+	/**
+	 * Vergleicht dieses Objekt mit einem anderen.
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @param epsilon Der zu verwendende Deltawert
+	 * @return <code>true</code>, wenn beide Vektoren identisch sind
+	 */
+	public boolean equals(Vector3 other, float epsilon) {
+		return this == other ||
+				(Math.abs(other.x - x) <= epsilon &&
+				Math.abs(other.y - y) <= epsilon &&
+				Math.abs(other.z - z) <= epsilon);
+	}
+
+	/**
+	 * Vergleicht dieses Objekt mit einem anderen.
+	 *
+	 * @param x Der Vergleichsvektor (X-Komponente)
+	 * @param y Der Vergleichsvektor (Y-Komponente)
+	 * @param z Der Vergleichsvektor (Z-Komponente)
+	 * @param epsilon Der Deltawert
+	 * @return <code>true</code>, wenn beide Vektoren identisch sind
+	 */
+	public boolean equals(float x, float y, float z, float epsilon) {
+		return (Math.abs(x - this.x) <= epsilon &&
+				Math.abs(y - this.y) <= epsilon &&
+				Math.abs(z - this.z) <= epsilon);
+	}
 
     @Override
     public int hashCode() {
