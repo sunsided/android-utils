@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math.tests;
 
 import de.widemeadows.projectcore.math.MathUtils;
 import de.widemeadows.projectcore.math.Matrix4;
+import de.widemeadows.projectcore.math.Vector3;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -312,5 +313,38 @@ public class MatrixTests {
 	public void inverseNotPossible() throws MatrixException {
 		// Invertieren der magischen Matrix --> Fehler
 		Matrix4.MAGIC.getInverted();
+	}
+
+	/**
+	 * Multiplikation eines Vektors
+	 */
+	@Test
+	public void multiplyVector() {
+
+		// Test mit der Einheitsmatrix (w=0)
+		Vector3 a = Vector3.createNew(1, 2, 3);
+		Vector3 result = Matrix4.UNIT.transform(a, 0);
+		assertEquals(a.x, result.x, Epsilon);
+		assertEquals(a.y, result.y, Epsilon);
+		assertEquals(a.z, result.z, Epsilon);
+
+		// Test mit der Einheitsmatrix (w=1)
+		a = Vector3.createNew(1, 2, 3);
+		result = Matrix4.UNIT.transform(a, 1);
+		assertEquals(a.x, result.x, Epsilon);
+		assertEquals(a.y, result.y, Epsilon);
+		assertEquals(a.z, result.z, Epsilon);
+
+		// Test mit der magischen Matrix (w=0)
+		result = Matrix4.MAGIC.transform(a, 0).getNormalized();
+		assertEquals(0.38174f, result.x, Epsilon);
+		assertEquals(0.75032f, result.y, Epsilon);
+		assertEquals(0.53971f, result.z, Epsilon);
+
+		// Test mit der magischen Matrix (w=0)
+		result = Matrix4.MAGIC.transform(a, 1);
+		assertEquals(0.53846f, result.x, Epsilon);
+		assertEquals(0.83333f, result.y, Epsilon);
+		assertEquals(0.67949f, result.z, Epsilon);
 	}
 }

@@ -1,11 +1,11 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.ObjectCache;
+import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import de.widemeadows.projectcore.cache.ObjectCache;
-import de.widemeadows.projectcore.cache.ObjectFactory;
 
 /**
  * 4D-Matrix.
@@ -1042,12 +1042,22 @@ public final class Matrix4 {
      * @see Matrix4#transform(Vector3)
      */
     public final void transformInPlace(@NotNull Vector3 vector, float w) {
-        float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0) * w);
-        float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1) * w);
-        float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2) * w);
-        float w2 = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3) * w);
 
-        vector.set(x / w2, y / w2, z / w2);
+	    if (w != 0) {
+			final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z) + (getAt(0, 3) * w);
+		    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z) + (getAt(1, 3) * w);
+		    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(2, 3) * w);
+		    final float w2 = (getAt(3, 0) * vector.x) + (getAt(3, 1) * vector.y) + (getAt(3, 2) * vector.z) + (getAt(3, 3) * w);
+
+			vector.set(x / w2, y / w2, z / w2);
+	    }
+	    else {
+		    final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z);
+		    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z);
+		    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z);
+
+		    vector.set(x, y, z);
+	    }
     }
 	
 	/**
@@ -1065,16 +1075,16 @@ public final class Matrix4 {
 	}
 
     /**
-     * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
+     * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=1
      *
      * @param vector Der zu transformierende Vektor
      * @see Matrix4#transform(Vector3, float)
      */
     public final void transformInPlace(@NotNull Vector3 vector) {
-        float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z) + (getAt(3, 0));
-        float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z) + (getAt(3, 1));
-        float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(3, 2));
-        float w = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z) + (getAt(3, 3));
+	    final float x = (getAt(0, 0) * vector.x) + (getAt(0, 1) * vector.y) + (getAt(0, 2) * vector.z) + (getAt(0, 3));
+	    final float y = (getAt(1, 0) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(1, 2) * vector.z) + (getAt(1, 3));
+	    final float z = (getAt(2, 0) * vector.x) + (getAt(2, 1) * vector.y) + (getAt(2, 2) * vector.z) + (getAt(2, 3));
+	    final float w = (getAt(3, 0) * vector.x) + (getAt(3, 1) * vector.y) + (getAt(3, 2) * vector.z) + (getAt(3, 3));
 
         vector.set(x / w, y / w, z / w);
     }
