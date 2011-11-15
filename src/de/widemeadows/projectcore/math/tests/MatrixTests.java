@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math.tests;
 
 import de.widemeadows.projectcore.math.MathUtils;
 import de.widemeadows.projectcore.math.Matrix4;
+import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -274,5 +275,42 @@ public class MatrixTests {
 				 9, 20, 11, 12,
 				13, 14, 15, 16);
 		assertEquals(640, a.getDeterminant(), Epsilon);
+	}
+
+	/**
+	 * Testet das Invertieren einer Matrix
+	 */
+	@Test
+	public void inverse() {
+		// Invertieren der Einheitsmatrix --> Einheitsmatrix
+		Matrix4 a = Matrix4.UNIT.getInverted();
+		assertTrue(a.equals(Matrix4.UNIT, Epsilon));
+
+		// Invertieren der magischen Matrix --> Fehler
+		assertNull(Matrix4.MAGIC.getInvertedNoThrow());
+
+		// Beliebige Matrix invertieren
+		a = Matrix4.createNew(
+				 9,  2,  3,  4,
+				 5,  6,  7,  8,
+				 9, 20, 11, 12,
+				13, 14, 15, 16);
+		a = a.getInverted();
+		assertTrue(a.equals(
+				 0.125f,      -0.1875f, -3.296e-017f,  0.0625f,
+				-2.949e-017f, -0.05f,    0.1f,        -0.05f,
+				-0.375f,      -1.3375f, -0.2f,         0.9125f,
+				 0.25f,        1.45f,    0.1f,        -0.8f,
+				Epsilon));
+	}
+
+	/**
+	 * Testet, ob beim Invertieren einer nicht invertierbaren Matrix ein Fehler auftritt
+	 * @throws MatrixException Die Matrix ist nicht invertierbar
+	 */
+	@Test(expected = MatrixException.class)
+	public void inverseNotPossible() throws MatrixException {
+		// Invertieren der magischen Matrix --> Fehler
+		Matrix4.MAGIC.getInverted();
 	}
 }
