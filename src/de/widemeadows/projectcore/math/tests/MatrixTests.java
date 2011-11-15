@@ -154,5 +154,12 @@ public class MatrixTests {
 				assertEquals(Matrix4.MAGIC.getAt(c, r), a.getAt(r, c), ZeroEpsilon);
 			}
 		}
+
+		a = Matrix4.MAGIC.clone().transposeInPlace();
+		for (int r = 0; r < 4; ++r) {
+			for (int c = 0; c < 4; ++c) {
+				assertEquals(Matrix4.MAGIC.getAt(c, r), a.getAt(r, c), ZeroEpsilon);
+			}
+		}
 	}
 }
