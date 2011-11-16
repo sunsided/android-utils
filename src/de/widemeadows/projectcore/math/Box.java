@@ -222,4 +222,37 @@ public final class Box {
 		this.center.set(x, y, z);
 		return this;
 	}
+
+	/**
+	 * Ermittelt, ob ein Punkt auf oder in der Box liegt
+	 * @param vector Der zu prüfende Vektor
+	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
+	 */
+	public final boolean intersects(@NotNull final Vector3 vector) {
+		return intersects(vector.x, vector.y, vector.z);
+	}
+
+	/**
+	 * Ermittelt, ob ein Punkt auf oder in der Box liegt
+	 *
+	 * @param x Der zu prüfende Vektor (X-Komponente)
+	 * @param y Der zu prüfende Vektor (Y-Komponente)
+	 * @param z Der zu prüfende Vektor (Z-Komponente)
+	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
+	 */
+	public final boolean intersects(final float x, final float y, final float z) {
+		final float extentX = Math.abs(extent.x);
+		final float extentY = Math.abs(extent.y);
+		final float extentZ = Math.abs(extent.z);
+		final float minX = center.x - extentX;
+		final float minY = center.y - extentY;
+		final float minZ = center.z - extentZ;
+		final float maxX = center.x + extentX;
+		final float maxY = center.y + extentY;
+		final float maxZ = center.z + extentZ;
+
+		return  x >= minX && x <= maxX &&
+				y >= minY && y <= maxY &&
+				z >= minZ && z <= maxZ;
+	}
 }
