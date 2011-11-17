@@ -90,55 +90,55 @@ public class BoxTests {
 		// Alle Komponenten positiv
 		Box box = Box.createNew(
 				0, 0, 0,
-				1, 1, 1
+				1, 2, 3
 		);
 
 		// vorne unten links
 		Vector3 point = box.getCornerPoint(Box.Point.FrontBottomLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
-		assertEquals(-1, point.y, DEFAULT_EPSILON);
-		assertEquals(+1, point.z, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne unten rechts
 		point = box.getCornerPoint(Box.Point.FrontBottomRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
-		assertEquals(-1, point.y, DEFAULT_EPSILON);
-		assertEquals(+1, point.z, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne oben links
 		point = box.getCornerPoint(Box.Point.FrontTopLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
-		assertEquals(+1, point.y, DEFAULT_EPSILON);
-		assertEquals(+1, point.z, DEFAULT_EPSILON);
+		assertEquals(+2, point.y, DEFAULT_EPSILON);
+		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne oben rechts
 		point = box.getCornerPoint(Box.Point.FrontTopRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
-		assertEquals(+1, point.y, DEFAULT_EPSILON);
-		assertEquals(+1, point.z, DEFAULT_EPSILON);
+		assertEquals(+2, point.y, DEFAULT_EPSILON);
+		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// hinten unten links
 		point = box.getCornerPoint(Box.Point.BackBottomLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
-		assertEquals(-1, point.y, DEFAULT_EPSILON);
-		assertEquals(-1, point.z, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten unten rechts
 		point = box.getCornerPoint(Box.Point.BackBottomRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
-		assertEquals(-1, point.y, DEFAULT_EPSILON);
-		assertEquals(-1, point.z, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten oben links
 		point = box.getCornerPoint(Box.Point.BackTopLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
-		assertEquals(+1, point.y, DEFAULT_EPSILON);
-		assertEquals(-1, point.z, DEFAULT_EPSILON);
+		assertEquals(+2, point.y, DEFAULT_EPSILON);
+		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten oben rechts
 		point = box.getCornerPoint(Box.Point.BackTopRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
-		assertEquals(+1, point.y, DEFAULT_EPSILON);
-		assertEquals(-1, point.z, DEFAULT_EPSILON);
+		assertEquals(+2, point.y, DEFAULT_EPSILON);
+		assertEquals(-3, point.z, DEFAULT_EPSILON);
 	}
 }
