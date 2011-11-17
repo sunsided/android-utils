@@ -301,4 +301,55 @@ public final class AxisAlignedBox {
 				y >= minY && y <= maxY &&
 				z >= minZ && z <= maxZ;
 	}
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet
+	 *
+	 * @param ray Der Strahl
+	 * @param nearBound Der nähste, gültige Punkt
+	 * @param farBound Der weiteste, gültige Punkt
+	 * @return <code>true</code>, wenn der Strahl die Box schneidet
+	 */
+	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+		float tmin, tmax, tymin, tymax, tzmin, tzmax;
+		
+		final Vector3 min = center.sub(extent);
+		final Vector3 max = center.add(extent);
+		
+		if (ray.direction.x >= 0) {
+			tmin = (min.x - ray.origin.x) / ray.direction.x;
+			tmax = (max.x - ray.origin.x) / ray.direction.x;
+		} else {
+			tmin = (max.x - ray.origin.x) / ray.direction.x;
+			tmax = (min.x - ray.origin.x) / ray.direction.x;
+		}
+		if (ray.direction.y >= 0) {
+			tymin = (min.y - ray.origin.y) / ray.direction.y;
+			tymax = (max.y - ray.origin.y) / ray.direction.y;
+		} else {
+			tymin = (max.y - ray.origin.y) / ray.direction.y;
+			tymax = (min.y - ray.origin.y) / ray.direction.y;
+		}
+		if ((tmin > tymax) || (tymin > tmax))
+			return false;
+
+		if (tymin > tmin)
+			tmin = tymin;
+		if (tymax < tmax)
+			tmax = tymax;
+		if (ray.direction.z >= 0) {
+			tzmin = (min.z - ray.origin.z) / ray.direction.z;
+			tzmax = (max.z - ray.origin.z) / ray.direction.z;
+		} else {
+			tzmin = (max.z - ray.origin.z) / ray.direction.z;
+			tzmax = (min.z - ray.origin.z) / ray.direction.z;
+		}
+		if ((tmin > tzmax) || (tzmin > tmax))
+			return false;
+		if (tzmin > tmin)
+			tmin = tzmin;
+		if (tzmax < tmax)
+			tmax = tzmax;
+		return ((tmin >= nearBound) && (tmax <= farBound));
+	}
 }

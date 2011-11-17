@@ -1,8 +1,6 @@
 package de.widemeadows.projectcore.math.tests;
 
-import de.widemeadows.projectcore.math.AxisAlignedBox;
-import de.widemeadows.projectcore.math.BoxPoint;
-import de.widemeadows.projectcore.math.Vector3;
+import de.widemeadows.projectcore.math.*;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
@@ -194,5 +192,19 @@ public class BoxTests {
 		point = Vector3.createNew(1.01f, 10000, -3000);
 		assertFalse(box.intersects(point));
 		assertFalse(box.intersects(point.x, point.y, point.z));
+	}
+
+	/**
+	 * Schnitt von {@link AxisAlignedBox} und {@link Ray3}
+	 */
+	@Test
+	public void rayBoxIntersection() {
+		AxisAlignedBox box = AxisAlignedBox.createNew(
+				0, 0, 0,
+				0.5f, 0.5f, 0.5f
+		);
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 0, 0), Vector3.createNew(10, 0, 0)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 10, 0), Vector3.createNew(10, 10, 0)), 0, 100));
 	}
 }
