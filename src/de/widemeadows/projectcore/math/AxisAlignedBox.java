@@ -296,7 +296,6 @@ public final class AxisAlignedBox {
 		final float minZ = -maxZ;
 
 		// Test durchführen
-		// TODO: Subtrahieren und Test auf null durchführen -- schneller?
 		return  x >= minX && x <= maxX &&
 				y >= minY && y <= maxY &&
 				z >= minZ && z <= maxZ;
