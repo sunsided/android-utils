@@ -45,6 +45,20 @@ public final class Ray3 {
 	}
 
 	/**
+	 * Setzt den Ursprung des Strahls
+	 *
+	 * @param originX Der Ursprung (X-Komponente)
+	 * @param originY Der Ursprung (Y-Komponente)
+	 * @param originZ Der Ursprung (Z-Komponente)
+	 * @return Dieselbe Instanz für method chaining
+	 */
+	@NotNull
+	public Ray3 setOrigin(final float originX, final float originY, final float originZ) {
+		this.origin.set(originX, originY, originZ);
+		return this;
+	}
+
+	/**
 	 * Setzt die Richtung des Strahls
 	 *
 	 * @param direction Die Richtung
@@ -53,6 +67,20 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 setDirection(@NotNull final Vector3 direction) {
 		this.direction.set(direction);
+		return this;
+	}
+
+	/**
+	 * Setzt die Richtung des Strahls
+	 *
+	 * @param directionX Die Richtung (X-Komponente)
+	 * @param directionY Die Richtung (Y-Komponente)
+	 * @param directionZ Die Richtung (Z-Komponente)
+	 * @return Dieselbe Instanz für method chaining
+	 */
+	@NotNull
+	public Ray3 setDirection(final float directionX, final float directionY, final float directionZ) {
+		this.direction.set(directionX, directionY, directionZ);
 		return this;
 	}
 
@@ -66,6 +94,27 @@ public final class Ray3 {
 	public Ray3 set(@NotNull final Vector3 origin, @NotNull final Vector3 direction) {
 		this.origin.set(origin);
 		this.direction.set(direction);
+		return this;
+	}
+
+	/**
+	 * Setzt Ursprung und Richtung des Strahls
+	 *
+	 * @param originX Der Ursprung (X-Komponente)
+	 * @param originY Der Ursprung (Y-Komponente)
+	 * @param originZ Der Ursprung (Z-Komponente)
+	 * @param directionX Die Richtung (X-Komponente)
+	 * @param directionY Die Richtung (Y-Komponente)
+	 * @param directionZ Die Richtung (Z-Komponente)
+	 * @return Dieselbe Instanz für method chaining
+	 */
+	@NotNull
+	public Ray3 set(
+			final float originX, final float originY, final float originZ,
+			final float directionX, final float directionY, final float directionZ
+	) {
+		this.origin.set(originX, originY, originZ);
+		this.direction.set(directionX, directionY, directionZ);
 		return this;
 	}
 }
