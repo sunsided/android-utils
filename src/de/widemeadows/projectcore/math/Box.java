@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,6 +10,30 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Box {
 
+	/** Der Punkt vorne unten links (000) */
+	public static final int FRONT_BOTTOM_LEFT = 0;
+
+	/** Der Punkt vorne unten rechts (001) */
+	public static final int FRONT_BOTTOM_RIGHT = 1;
+
+	/** Der Punkt vorne oben links (010) */
+	public static final int FRONT_TOP_LEFT = 2;
+
+	/** Der Punkt vorne oben rechts (011) */
+	public static final int FRONT_TOP_RIGHT = 3;
+
+	/** Der Punkt hinten unten links (100) */
+	public static final int BACK_BOTTOM_LEFT = 4;
+
+	/** Der Punkt hinten unten rechts (101) */
+	public static final int BACK_BOTTOM_RIGHT = 5;
+
+	/** Der Punkt hinten oben links (110) */
+	public static final int BACK_TOP_LEFT = 6;
+
+	/** Der Punkt hinten oben rechts (111) */
+	public static final int BACK_TOP_RIGHT = 7;
+	
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
@@ -121,6 +146,7 @@ public final class Box {
 	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
 	 */
 	private Box() {
+		this.extent.set(0.5f, 0.5f, 0.5f);
 	}
 
 	/**
@@ -130,9 +156,8 @@ public final class Box {
 	 * @param extent Der Maximalvektor der Box
 	 */
 	private Box(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
-		this();
 		this.center.set(center);
-		this.extent.set(extent);
+		this.extent.set(extent).makeAbsolute();
 	}
 
 	/**
@@ -182,7 +207,7 @@ public final class Box {
 	 * @return Diese Instanz für method chaining
 	 */
 	public final Box setExtent(@NotNull final Vector3 extent) {
-		this.extent.set(extent);
+		this.extent.set(extent).makeAbsolute();
 		return this;
 	}
 
@@ -195,7 +220,7 @@ public final class Box {
 	 * @return Diese Instanz für method chaining
 	 */
 	public final Box setExtent(final float x, final float y, final float z) {
-		this.extent.set(x, y, z);
+		this.extent.set(x, y, z).makeAbsolute();
 		return this;
 	}
 
@@ -224,6 +249,35 @@ public final class Box {
 	}
 
 	/**
+	 * Liefert den Punkt mit dem angegebenen Index
+	 * @param pointIndex Der Punktindex
+	 * @return Der Punkt (cached)
+	 */
+	@ReturnsCachedValue @NotNull
+	public final Vector3 getCornerPoint(int pointIndex) {
+		assert pointIndex >= 0;
+		assert pointIndex <= 7;
+		assert extent.x >= 0;
+		assert extent.y >= 0;
+		assert extent.z >= 0;
+
+		return Vector3.createNew(
+				((pointIndex & 1) == 1) ? (center.x - extent.x) : (center.x + extent.x),
+				((pointIndex & 2) == 2) ? (center.y - extent.y) : (center.y + extent.y),
+				((pointIndex & 4) == 4) ? (center.z - extent.z) : (center.z + extent.z)
+				);
+	}
+
+	/**
+	 * Berechnet die Fläche der Box
+	 * @return Die Fläche
+	 */
+	public final float calculateArea() {
+		// return (2*extent.x) * (2*extent.y) * (2*extent.z);
+		return 8 * extent.x * extent.y * extent.z;
+	}
+
+	/**
 	 * Ermittelt, ob ein Punkt auf oder in der Box liegt
 	 * @param vector Der zu prüfende Vektor
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
@@ -241,15 +295,16 @@ public final class Box {
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
 	public final boolean intersects(final float x, final float y, final float z) {
-		final float extentX = Math.abs(extent.x);
-		final float extentY = Math.abs(extent.y);
-		final float extentZ = Math.abs(extent.z);
-		final float minX = center.x - extentX;
-		final float minY = center.y - extentY;
-		final float minZ = center.z - extentZ;
-		final float maxX = center.x + extentX;
-		final float maxY = center.y + extentY;
-		final float maxZ = center.z + extentZ;
+		assert extent.x >= 0;
+		assert extent.y >= 0;
+		assert extent.z >= 0;
+
+		final float minX = center.x - extent.x;
+		final float minY = center.y - extent.y;
+		final float minZ = center.z - extent.z;
+		final float maxX = center.x + extent.x;
+		final float maxY = center.y + extent.y;
+		final float maxZ = center.z + extent.z;
 
 		return  x >= minX && x <= maxX &&
 				y >= minY && y <= maxY &&
