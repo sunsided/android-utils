@@ -158,42 +158,42 @@ public class BoxTests {
 
 		// Punkt in der Box
 		Vector3 point = Vector3.createNew(0, 0, 0);
-		assertTrue(box.intersects(point));
-		assertTrue(box.intersects(point.x, point.y, point.z));
+		assertTrue(box.intersectsAABB(point));
+		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt in der Box
 		point = Vector3.createNew(0.5f, -0.5f, 0.23f);
-		assertTrue(box.intersects(point));
-		assertTrue(box.intersects(point.x, point.y, point.z));
+		assertTrue(box.intersectsAABB(point));
+		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt auf der Box
 		point = Vector3.createNew(1, 2, 3);
-		assertTrue(box.intersects(point));
-		assertTrue(box.intersects(point.x, point.y, point.z));
+		assertTrue(box.intersectsAABB(point));
+		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt auf der Box
 		point = Vector3.createNew(-1, -2, -3);
-		assertTrue(box.intersects(point));
-		assertTrue(box.intersects(point.x, point.y, point.z));
+		assertTrue(box.intersectsAABB(point));
+		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1, 2, 3.01f);
-		assertFalse(box.intersects(point));
-		assertFalse(box.intersects(point.x, point.y, point.z));
+		assertFalse(box.intersectsAABB(point));
+		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1, 2.01f, 3);
-		assertFalse(box.intersects(point));
-		assertFalse(box.intersects(point.x, point.y, point.z));
+		assertFalse(box.intersectsAABB(point));
+		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1.01f, 2, 3);
-		assertFalse(box.intersects(point));
-		assertFalse(box.intersects(point.x, point.y, point.z));
+		assertFalse(box.intersectsAABB(point));
+		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1.01f, 10000, -3000);
-		assertFalse(box.intersects(point));
-		assertFalse(box.intersects(point.x, point.y, point.z));
+		assertFalse(box.intersectsAABB(point));
+		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
 	}
 }

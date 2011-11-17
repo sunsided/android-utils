@@ -308,8 +308,8 @@ public final class Box {
 	 * @param vector Der zu prüfende Vektor
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersects(@NotNull final Vector3 vector) {
-		return intersects(vector.x, vector.y, vector.z);
+	public final boolean intersectsAABB(@NotNull final Vector3 vector) {
+		return intersectsAABB(vector.x, vector.y, vector.z);
 	}
 
 	/**
@@ -320,7 +320,7 @@ public final class Box {
 	 * @param z Der zu prüfende Vektor (Z-Komponente)
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersects(final float x, final float y, final float z) {
+	public final boolean intersectsAABB(final float x, final float y, final float z) {
 		assert extent.x >= 0;
 		assert extent.y >= 0;
 		assert extent.z >= 0;
