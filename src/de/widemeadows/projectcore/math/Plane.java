@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Eine Ebene
  */
+@Deprecated
 public final class Plane { // TODO: Caching!
 
 	/**

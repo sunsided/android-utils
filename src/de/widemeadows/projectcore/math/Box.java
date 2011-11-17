@@ -2,12 +2,56 @@ package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Symmetrische Box
  */
 public final class Box {
+
+	/**
+	 * Eckpunkt
+	 */
+	public enum Point {
+
+		/** Der Punkt vorne unten links (000) */
+		FrontBottomLeft(0),
+
+		/** Der Punkt vorne unten rechts (001) */
+		FrontBottomRight(1),
+
+		/** Der Punkt vorne oben links (010) */
+		FrontTopLeft(2),
+
+		/** Der Punkt vorne oben rechts (011) */
+		FrontTopRight(3),
+
+		/** Der Punkt hinten unten links (100) */
+		BackBottomLeft(4),
+
+		/** Der Punkt hinten unten rechts (101) */
+		BackBottomRight(5),
+
+		/** Der Punkt hinten oben links (110) */
+		BackTopLeft(6),
+
+		/** Der Punkt hinten oben rechts (111) */
+		BackTopRight(7);
+
+		/**
+		 * Die ID des Punktes
+		 */
+		public final int pointId;
+
+		/**
+		 * Setzt die Punkt-ID
+		 * @param pointId Die Punkt-ID
+		 */
+		private Point(int pointId) {
+			this.pointId = pointId;
+		}
+	}
 
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
@@ -112,7 +156,15 @@ public final class Box {
 	public final Vector3 center = Vector3.createNew();
 
 	/**
-	 * Der Der Maximalvektor der Box
+	 * Der (absolute) Maximalvektor der Box.
+	 * 
+	 * <h3>Hinweis zu den Werten des Vektors</h3>
+	 * Die Werte des Vektors müssen immer positiv sein. Um dies sicherzustellen, sollten Veränderungen
+	 * an diesem Vektor ausschließlich über die Methoden {@link #setExtent(Vector3)} oder {@link #setExtent(float, float, float)}
+	 * erfolgen. 
+	 * <p/>
+	 * Ist ein manuelles Setzen der Werte zwingend erforderlich, muss im Anschluss auf dem Vektor {@link de.widemeadows.projectcore.math.Vector3#makeAbsolute()}
+	 * aufgerufen werden.
 	 */
 	@NotNull
 	public final Vector3 extent = Vector3.createNew();
@@ -121,6 +173,7 @@ public final class Box {
 	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
 	 */
 	private Box() {
+		this.extent.set(0.5f, 0.5f, 0.5f);
 	}
 
 	/**
@@ -130,9 +183,8 @@ public final class Box {
 	 * @param extent Der Maximalvektor der Box
 	 */
 	private Box(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
-		this();
 		this.center.set(center);
-		this.extent.set(extent);
+		this.extent.set(extent).makeAbsolute();
 	}
 
 	/**
@@ -182,7 +234,7 @@ public final class Box {
 	 * @return Diese Instanz für method chaining
 	 */
 	public final Box setExtent(@NotNull final Vector3 extent) {
-		this.extent.set(extent);
+		this.extent.set(extent).makeAbsolute();
 		return this;
 	}
 
@@ -195,7 +247,7 @@ public final class Box {
 	 * @return Diese Instanz für method chaining
 	 */
 	public final Box setExtent(final float x, final float y, final float z) {
-		this.extent.set(x, y, z);
+		this.extent.set(x, y, z).makeAbsolute();
 		return this;
 	}
 
@@ -224,12 +276,40 @@ public final class Box {
 	}
 
 	/**
+	 * Liefert den Punkt mit dem angegebenen Index
+	 * @param point Der Punkt
+	 * @return Der Punkt (cached)
+	 */
+	@ReturnsCachedValue @NotNull
+	public final Vector3 getCornerPoint(@NotNull final Point point) {
+		assert extent.x >= 0;
+		assert extent.y >= 0;
+		assert extent.z >= 0;
+
+		final int id = point.pointId;
+		return Vector3.createNew(
+				((id & 1) == 0) ? (center.x - extent.x) : (center.x + extent.x),
+				((id & 2) == 0) ? (center.y - extent.y) : (center.y + extent.y),
+				((id & 4) == 0) ? (center.z + extent.z) : (center.z - extent.z) // NOTE: OpenGL macht's andersrum!
+				);
+	}
+
+	/**
+	 * Berechnet die Fläche der Box
+	 * @return Die Fläche
+	 */
+	public final float calculateArea() {
+		// return (2*extent.x) * (2*extent.y) * (2*extent.z);
+		return 8 * extent.x * extent.y * extent.z;
+	}
+
+	/**
 	 * Ermittelt, ob ein Punkt auf oder in der Box liegt
 	 * @param vector Der zu prüfende Vektor
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersects(@NotNull final Vector3 vector) {
-		return intersects(vector.x, vector.y, vector.z);
+	public final boolean intersectsAABB(@NotNull final Vector3 vector) {
+		return intersectsAABB(vector.x, vector.y, vector.z);
 	}
 
 	/**
@@ -240,17 +320,26 @@ public final class Box {
 	 * @param z Der zu prüfende Vektor (Z-Komponente)
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersects(final float x, final float y, final float z) {
-		final float extentX = Math.abs(extent.x);
-		final float extentY = Math.abs(extent.y);
-		final float extentZ = Math.abs(extent.z);
-		final float minX = center.x - extentX;
-		final float minY = center.y - extentY;
-		final float minZ = center.z - extentZ;
-		final float maxX = center.x + extentX;
-		final float maxY = center.y + extentY;
-		final float maxZ = center.z + extentZ;
+	public final boolean intersectsAABB(float x, float y, float z) {
+		assert extent.x >= 0;
+		assert extent.y >= 0;
+		assert extent.z >= 0;
 
+		// Koordinaten in Box-Space transformieren
+		x -= center.x;
+		y -= center.y;
+		z -= center.z;
+
+		// Punkte beziehen
+		final float maxX = extent.x;
+		final float maxY = extent.y;
+		final float maxZ = extent.z;
+		final float minX = -maxX;
+		final float minY = -maxY;
+		final float minZ = -maxZ;
+
+		// Test durchführen
+		// TODO: Subtrahieren und Test auf null durchführen -- schneller?
 		return  x >= minX && x <= maxX &&
 				y >= minY && y <= maxY &&
 				z >= minZ && z <= maxZ;

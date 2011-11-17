@@ -3,6 +3,7 @@ package de.widemeadows.projectcore.math;
 /**
  * Definiert einen Schnittbereich
  */
+@Deprecated
 public enum Intersection {
 
 	/**

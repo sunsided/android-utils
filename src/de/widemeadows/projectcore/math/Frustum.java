@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * Work in progress
  */
+@Deprecated
 public final class Frustum {
 
 	/**
