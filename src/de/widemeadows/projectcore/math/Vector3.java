@@ -421,9 +421,9 @@ public final class Vector3 {
 	 */
 	@NotNull
 	public Vector3 crossInPlace(@NotNull final Vector3 b) {
-		float nx = y*b.z - z*b.y;
-		float ny = z*b.x - x*b.z;
-			   z = x*b.y - y*b.x;
+		final float nx = y*b.z - z*b.y;
+		final float ny = z*b.x - x*b.z;
+				this.z = x*b.y - y*b.x;
 		this.y = ny;
 		this.x = nx;
 		return this;

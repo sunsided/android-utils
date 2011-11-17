@@ -264,38 +264,13 @@ public final class Ray3 {
 	 */
 	public float getDistanceFromPoint(@NotNull final Vector3 point) {
 
-		// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20Parametric%20Line
-		// d(P, L) = |w - (w dot direction)*direction|
-		// mit w = Vektor von Origin-->P
-
-		Vector3 w = point.sub(origin);
-		Vector3 bvl = direction.mul(w.dot(direction));
-		float length = w.subInPlace(bvl).getLength();
-
-		// aufräumen und raus hier
-		w.recycle();
-		bvl.recycle();
-		return length;
-	}
-
-	/**
-	 * Berechnet die Distanz eines Punktes zu diesem Strahl
-	 *
-	 * @param point Der Punkt
-	 * @return Die berechnete Distanz
-	 */
-	@Deprecated
-	public float getDistanceFromPointEx(@NotNull final Vector3 point) {
-
 		// http://answers.yahoo.com/question/index?qid=20080912194015AAIlm9X
 
-		Vector3 w = point.sub(origin);
-		Vector3 bvl = w.cross(direction);
-		float length = bvl.getLength();
+		Vector3 w = point.sub(origin).crossInPlace(direction);
+		float length = w.getLength();
 
 		// aufräumen und raus hier
 		w.recycle();
-		bvl.recycle();
 		return length;
 	}
 
