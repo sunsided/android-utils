@@ -553,6 +553,28 @@ public final class Vector3 {
 	}
 
 	/**
+	 * Bezieht den Absolutbetrag des Vektors
+	 * @return Der Vektor mit den Absolutbeträgen
+	 */
+	@ReturnsCachedValue @NotNull
+	public final Vector3 getAbsolute() {
+		return Vector3.createNew(Math.abs(x), Math.abs(y), Math.abs(z));
+	}
+
+	/**
+	 * Wandelt alle Werte in ihre Absolutwerte um
+	 *
+	 * @return Diese Instanz für method chaining
+	 */
+	@NotNull
+	public final Vector3 makeAbsolute() {
+		x = Math.abs(x);
+		y = Math.abs(y);
+		z = Math.abs(z);
+		return this;
+	}
+	
+	/**
 	 * Liefert den Vektor aus den maximalen Komponenten zweier Vektoren
 	 *
 	 * @param a Erster Vektor
