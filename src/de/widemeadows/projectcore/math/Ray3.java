@@ -295,7 +295,7 @@ public final class Ray3 {
 	public Vector3 projectPoint(@NotNull final Vector3 point) {
 		// Richtung bestimmen und auf Richtungsvektor projizieren
 		Vector3 w = point.sub(origin);
-		Vector3 projected = direction.mul(w.dot(direction));
+		Vector3 projected = direction.mul(w.dot(direction)); // TODO: Als static herausziehen, damit für diesen Test das Caching der anderen Werte nicht nötig ist
 
 		w.recycle();
 		return projected;
