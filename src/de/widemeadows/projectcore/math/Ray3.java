@@ -6,7 +6,7 @@ import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Strahl im 3D-Raum, bestehend aus Ursprung und Richtung
+ * Strahl im 3D-Raum, bestehend aus projectPointg und Richtung
  * @see RayFactory
  */
 public final class Ray3 {
@@ -31,7 +31,7 @@ public final class Ray3 {
 	 * @param originX Der Ursprung (X-Komponente)
 	 * @param originY Der Ursprung (Y-Komponente)
 	 * @param originZ Der Ursprung (Z-Komponente)
-	 * @param directionX Die Richtung (X-Komponente)
+	 * @param directionX Die RiprojectPoint(X-Komponente)
 	 * @param directionY Die Richtung (Y-Komponente)
 	 * @param directionZ Die Richtung (Z-Komponente)
 	 * @return Der neue oder aufbereitete Vektor
@@ -39,7 +39,7 @@ public final class Ray3 {
 	 */
 	@NotNull
 	public static Ray3 createNew(final float originX, final float originY, final float originZ,
-	                             final float directionX, final float directionY, final float directionZ) {
+	                      final float directionX, final float directionY, final float directionZ) {
 		return Recycling.getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
 	}
 
@@ -125,7 +125,7 @@ public final class Ray3 {
 	private Ray3() {}
 
 	/**
-	 * Setzt Ursprung und Richtung
+	 * Setzt Ursprung projectPointhtung
 	 * @param origin Der Ursprung
 	 * @param direction Die Richtung
 	 */
@@ -247,5 +247,68 @@ public final class Ray3 {
 	public Ray3 invert() {
 		direction.invert();
 		return this;
+	}
+
+	/**
+	 * Berechnet die Distanz eines Punktes zu diesem Strahl
+	 *
+	 * @param point Der Punkt
+	 * @return Die berechnete Distanz
+	 */
+	public float getDistanceFromPoint(@NotNull final Vector3 point) {
+
+		// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20Parametric%20Line
+		// d(P, L) = |w - (w dot direction)*direction|
+		// mit w = Vektor von Origin-->P
+
+		Vector3 w = point.sub(origin);
+		Vector3 bvl = direction.mul(w.dot(direction));
+		float length = w.subInPlace(bvl).getLength();
+
+		// aufräumen und raus hier
+		w.recycle();
+		bvl.recycle();
+		return length;
+	}
+
+	/**
+	 * Berechnet die Distanz eines Punktes zu diesem Strahl
+	 *
+	 * @param point Der Punkt
+	 * @return Die berechnete Distanz
+	 */
+	@Deprecated
+	public float getDistanceFromPointEx(@NotNull final Vector3 point) {
+
+		// http://answers.yahoo.com/question/index?qid=20080912194015AAIlm9X
+
+		final float directionLength = direction.getLength(); // sollte immer 1 sein
+
+		Vector3 w = point.sub(origin);
+		Vector3 bvl = w.cross(direction);
+		float length = bvl.getLength() / directionLength;
+
+		// aufräumen und raus hier
+		w.recycle();
+		bvl.recycle();
+		return length;
+	}
+
+	/**
+	 * Projiziert einen Punkt auf den Strahl
+	 *
+	 * @param point Der Punkt
+	 * @return Der projizierte Punkt
+	 */
+	@NotNull @ReturnsCachedValue
+	public Vector3 projectPoint(@NotNull final Vector3 point) {
+		direction.normalize(); // TODO: Assertion für Performance!
+
+		// Richtung bestimmen und auf Richtungsvektor projizieren
+		Vector3 w = point.sub(origin);
+		Vector3 projected = direction.mul(w.dot(direction));
+
+		w.recycle();
+		return projected;
 	}
 }
