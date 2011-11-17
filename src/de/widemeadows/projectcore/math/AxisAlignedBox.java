@@ -311,44 +311,44 @@ public final class AxisAlignedBox {
 	 * @return <code>true</code>, wenn der Strahl die Box schneidet
 	 */
 	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
-		float tmin, tmax, tymin, tymax, tzmin, tzmax;
+		float txmin, txmax, tymin, tymax, tzmin, tzmax;
 		
 		final Vector3 min = center.sub(extent);
 		final Vector3 max = center.add(extent);
 		
-		final float divx = 1.0f / ray.direction.x;
-		final float divy = 1.0f / ray.direction.y;
-		final float divz = 1.0f / ray.direction.z;
+		final float divX = ray.invDirection.x;
+		final float divY = ray.invDirection.y;
+		final float divZ = ray.invDirection.z;
 		
-		if (divx >= 0) {
-			tmin = (min.x - ray.origin.x) * divx;
-			tmax = (max.x - ray.origin.x) * divx;
+		if (divX >= 0) {
+			txmin = (min.x - ray.origin.x) * divX;
+			txmax = (max.x - ray.origin.x) * divX;
 		} else {
-			tmin = (max.x - ray.origin.x) * divx;
-			tmax = (min.x - ray.origin.x) * divx;
+			txmin = (max.x - ray.origin.x) * divX;
+			txmax = (min.x - ray.origin.x) * divX;
 		}
-		if (divy >= 0) {
-			tymin = (min.y - ray.origin.y) * divy;
-			tymax = (max.y - ray.origin.y) * divy;
+		if (divY >= 0) {
+			tymin = (min.y - ray.origin.y) * divY;
+			tymax = (max.y - ray.origin.y) * divY;
 		} else {
-			tymin = (max.y - ray.origin.y) * divy;
-			tymax = (min.y - ray.origin.y) * divy;
+			tymin = (max.y - ray.origin.y) * divY;
+			tymax = (min.y - ray.origin.y) * divY;
 		}
-		if ((tmin > tymax) || (tymin > tmax)) return false;
-		if (tymin > tmin) tmin = tymin;
-		if (tymax < tmax) tmax = tymax;
+		if ((txmin > tymax) || (tymin > txmax)) return false;
+		if (tymin > txmin) txmin = tymin;
+		if (tymax < txmax) txmax = tymax;
 
-		if (divz >= 0) {
-			tzmin = (min.z - ray.origin.z) * divz;
-			tzmax = (max.z - ray.origin.z) * divz;
+		if (divZ >= 0) {
+			tzmin = (min.z - ray.origin.z) * divZ;
+			tzmax = (max.z - ray.origin.z) * divZ;
 		} else {
-			tzmin = (max.z - ray.origin.z) * divz;
-			tzmax = (min.z - ray.origin.z) * divz;
+			tzmin = (max.z - ray.origin.z) * divZ;
+			tzmax = (min.z - ray.origin.z) * divZ;
 		}
 
-		if ((tmin > tzmax) || (tzmin > tmax)) return false;
-		if (tzmin > tmin) tmin = tzmin;
-		if (tzmax < tmax) tmax = tzmax;
-		return ((tmin >= nearBound) && (tmax <= farBound));
+		if ((txmin > tzmax) || (tzmin > txmax)) return false;
+		if (tzmin > txmin) txmin = tzmin;
+		if (tzmax < txmax) txmax = tzmax;
+		return ((txmin >= nearBound) && (txmax <= farBound));
 	}
 }
