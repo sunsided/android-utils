@@ -137,7 +137,15 @@ public final class Box {
 	public final Vector3 center = Vector3.createNew();
 
 	/**
-	 * Der Der Maximalvektor der Box
+	 * Der (absolute) Maximalvektor der Box.
+	 * 
+	 * <h3>Hinweis zu den Werten des Vektors</h3>
+	 * Die Werte des Vektors müssen immer positiv sein. Um dies sicherzustellen, sollten Veränderungen
+	 * an diesem Vektor ausschließlich über die Methoden {@link #setExtent(Vector3)} oder {@link #setExtent(float, float, float)}
+	 * erfolgen. 
+	 * <p/>
+	 * Ist ein manuelles Setzen der Werte zwingend erforderlich, muss im Anschluss auf dem Vektor {@link de.widemeadows.projectcore.math.Vector3#makeAbsolute()}
+	 * aufgerufen werden.
 	 */
 	@NotNull
 	public final Vector3 extent = Vector3.createNew();
