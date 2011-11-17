@@ -8,59 +8,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Symmetrische Box
  */
-public final class Box {
-
-	/**
-	 * Eckpunkt
-	 */
-	public enum Point {
-
-		/** Der Punkt vorne unten links (000) */
-		FrontBottomLeft(0),
-
-		/** Der Punkt vorne unten rechts (001) */
-		FrontBottomRight(1),
-
-		/** Der Punkt vorne oben links (010) */
-		FrontTopLeft(2),
-
-		/** Der Punkt vorne oben rechts (011) */
-		FrontTopRight(3),
-
-		/** Der Punkt hinten unten links (100) */
-		BackBottomLeft(4),
-
-		/** Der Punkt hinten unten rechts (101) */
-		BackBottomRight(5),
-
-		/** Der Punkt hinten oben links (110) */
-		BackTopLeft(6),
-
-		/** Der Punkt hinten oben rechts (111) */
-		BackTopRight(7);
-
-		/**
-		 * Die ID des Punktes
-		 */
-		public final int pointId;
-
-		/**
-		 * Setzt die Punkt-ID
-		 * @param pointId Die Punkt-ID
-		 */
-		private Point(int pointId) {
-			this.pointId = pointId;
-		}
-	}
+public final class AxisAlignedBox {
 
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Box> Recycling = new ObjectCache<Box>(new ObjectFactory<Box>() {
+	public static final ObjectCache<AxisAlignedBox> Recycling = new ObjectCache<AxisAlignedBox>(new ObjectFactory<AxisAlignedBox>() {
 		@NotNull
 		@Override
-		public Box createNew() {
-			return new Box();
+		public AxisAlignedBox createNew() {
+			return new AxisAlignedBox();
 		}
 	});
 
@@ -80,13 +37,13 @@ public final class Box {
 	 * @see #Recycling
 	 */
 	@NotNull
-	public static Box createNew(final float centerX, final float centerY, final float centerZ,
+	public static AxisAlignedBox createNew(final float centerX, final float centerY, final float centerZ,
 	                            final float extentX, final float extentY, final float extentZ) {
 		return Recycling.getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
 	}
 
 	/**
-	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * Erzeugt eine neue {@link AxisAlignedBox}-Instanz.
 	 * <p>
 	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
 	 * </p>
@@ -95,27 +52,27 @@ public final class Box {
 	 * @return Die neue oder aufbereitete Box
 	 * @see #Recycling
 	 */
-	public static Box createNew(@NotNull final Box other) {
+	public static AxisAlignedBox createNew(@NotNull final AxisAlignedBox other) {
 		return Recycling.getOrCreate().set(other);
 	}
 
 	/**
-	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * Erzeugt eine neue {@link AxisAlignedBox}-Instanz.
 	 * <p>
 	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
 	 * </p>
 	 *
 	 * @param center Der Mittelpunkt der Box
-	 * @param extent Der Maximalvektor der Box   
+	 * @param extent Der Maximalvektor der Box
 	 * @return Die neue oder aufbereitete Box
 	 * @see #Recycling
 	 */
-	public static Box createNew(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+	public static AxisAlignedBox createNew(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
 		return Recycling.getOrCreate().set(center, extent);
 	}
 
 	/**
-	 * Erzeugt eine neue {@link Box}-Instanz.
+	 * Erzeugt eine neue {@link AxisAlignedBox}-Instanz.
 	 * <p>
 	 * <strong>Hinweis:</strong> Der Zustand der Box kann korrupt sein!
 	 * </p>
@@ -124,7 +81,7 @@ public final class Box {
 	 * @see #Recycling
 	 */
 	@NotNull
-	public static Box createNew() {
+	public static AxisAlignedBox createNew() {
 		return Recycling.getOrCreate();
 	}
 
@@ -133,9 +90,9 @@ public final class Box {
 	 *
 	 * @param box Die zu recyclende Box
 	 * @see #Recycling
-	 * @see Box#recycle()
+	 * @see AxisAlignedBox#recycle()
 	 */
-	public static void recycle(@NotNull final Box box) {
+	public static void recycle(@NotNull final AxisAlignedBox box) {
 		Recycling.registerElement(box);
 	}
 
@@ -170,19 +127,19 @@ public final class Box {
 	public final Vector3 extent = Vector3.createNew();
 
 	/**
-	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
+	 * Erzeugt eine neue Instanz der {@link AxisAlignedBox}-Klasse
 	 */
-	private Box() {
+	private AxisAlignedBox() {
 		this.extent.set(0.5f, 0.5f, 0.5f);
 	}
 
 	/**
-	 * Erzeugt eine neue Instanz der {@link Box}-Klasse
+	 * Erzeugt eine neue Instanz der {@link AxisAlignedBox}-Klasse
 	 *
 	 * @param center Der Mittelpunkt der Box
 	 * @param extent Der Maximalvektor der Box
 	 */
-	private Box(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+	private AxisAlignedBox(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
 		this.center.set(center);
 		this.extent.set(extent).makeAbsolute();
 	}
@@ -193,7 +150,7 @@ public final class Box {
 	 * @param other Die zu kopierende Box
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box set(@NotNull final Box other) {
+	public final AxisAlignedBox set(@NotNull final AxisAlignedBox other) {
 		return set(other.center, other.extent);
 	}
 
@@ -204,7 +161,7 @@ public final class Box {
 	 * @param extent Die Dimensionen
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box set(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
+	public final AxisAlignedBox set(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
 		setCenter(center);
 		setExtent(extent);
 		return this;
@@ -221,7 +178,7 @@ public final class Box {
 	 * @param extentZ Der Maximalvektor (Z-Komponente)
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box set(final float centerX, final float centerY, final float centerZ, final float extentX, final float extentY, final float extentZ) {
+	public final AxisAlignedBox set(final float centerX, final float centerY, final float centerZ, final float extentX, final float extentY, final float extentZ) {
 		setCenter(centerX, centerY, centerZ);
 		setExtent(extentX, extentY, extentZ);
 		return this;
@@ -233,7 +190,7 @@ public final class Box {
 	 * @param extent Der Maximalvektor
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box setExtent(@NotNull final Vector3 extent) {
+	public final AxisAlignedBox setExtent(@NotNull final Vector3 extent) {
 		this.extent.set(extent).makeAbsolute();
 		return this;
 	}
@@ -246,7 +203,7 @@ public final class Box {
 	 * @param z Der Maximalvektor (Z-Komponente)
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box setExtent(final float x, final float y, final float z) {
+	public final AxisAlignedBox setExtent(final float x, final float y, final float z) {
 		this.extent.set(x, y, z).makeAbsolute();
 		return this;
 	}
@@ -257,7 +214,7 @@ public final class Box {
 	 * @param center Die Position
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box setCenter(@NotNull final Vector3 center) {
+	public final AxisAlignedBox setCenter(@NotNull final Vector3 center) {
 		this.center.set(center);
 		return this;
 	}
@@ -270,7 +227,7 @@ public final class Box {
 	 * @param z Die Position (Z-Komponente)
 	 * @return Diese Instanz für method chaining
 	 */
-	public final Box setCenter(final float x, final float y, final float z) {
+	public final AxisAlignedBox setCenter(final float x, final float y, final float z) {
 		this.center.set(x, y, z);
 		return this;
 	}
@@ -281,7 +238,7 @@ public final class Box {
 	 * @return Der Punkt (cached)
 	 */
 	@ReturnsCachedValue @NotNull
-	public final Vector3 getCornerPoint(@NotNull final Point point) {
+	public final Vector3 getCornerPoint(@NotNull final BoxPoint point) {
 		assert extent.x >= 0;
 		assert extent.y >= 0;
 		assert extent.z >= 0;
@@ -308,8 +265,8 @@ public final class Box {
 	 * @param vector Der zu prüfende Vektor
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersectsAABB(@NotNull final Vector3 vector) {
-		return intersectsAABB(vector.x, vector.y, vector.z);
+	public final boolean intersects(@NotNull final Vector3 vector) {
+		return intersects(vector.x, vector.y, vector.z);
 	}
 
 	/**
@@ -320,7 +277,7 @@ public final class Box {
 	 * @param z Der zu prüfende Vektor (Z-Komponente)
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersectsAABB(float x, float y, float z) {
+	public final boolean intersects(float x, float y, float z) {
 		assert extent.x >= 0;
 		assert extent.y >= 0;
 		assert extent.z >= 0;
