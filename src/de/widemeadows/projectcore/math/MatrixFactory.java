@@ -4,7 +4,7 @@ import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Factory für Matrizen
+ * Factory für {@link Matrix4}
  */
 public class MatrixFactory {
 
