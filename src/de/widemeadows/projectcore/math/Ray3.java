@@ -115,6 +115,13 @@ public final class Ray3 {
 
 	/**
 	 * Die Richtung des Strahls
+	 * <h3>Vektor muss normalisiert sein</h3>
+	 * Die Berechnungen in dieser Klasse gehen von einem normalisierten Richtungsvektor aus.
+	 * Um sicherzustellen, dass der Vektor immer normalisiert ist, bitte die Methoden {@link #setDirection(Vector3)} oder
+	 * {@link #setDirection(float, float, float)} verwenden.
+	 * <p/>
+	 * Wenn der Vektor von Hand gesetzt werden muss, diesen nachträglich mit {@link de.widemeadows.projectcore.math.Vector3#normalize()}
+	 * normalisieren!
 	 */
 	@NotNull
 	public final Vector3 direction = Vector3.createNew(0.57735f, 0.57735f, 0.57735f);
@@ -282,11 +289,9 @@ public final class Ray3 {
 
 		// http://answers.yahoo.com/question/index?qid=20080912194015AAIlm9X
 
-		final float directionLength = direction.getLength(); // sollte immer 1 sein
-
 		Vector3 w = point.sub(origin);
 		Vector3 bvl = w.cross(direction);
-		float length = bvl.getLength() / directionLength;
+		float length = bvl.getLength();
 
 		// aufräumen und raus hier
 		w.recycle();
@@ -302,8 +307,6 @@ public final class Ray3 {
 	 */
 	@NotNull @ReturnsCachedValue
 	public Vector3 projectPoint(@NotNull final Vector3 point) {
-		direction.normalize(); // TODO: Assertion für Performance!
-
 		// Richtung bestimmen und auf Richtungsvektor projizieren
 		Vector3 w = point.sub(origin);
 		Vector3 projected = direction.mul(w.dot(direction));
