@@ -206,5 +206,15 @@ public class BoxTests {
 
 		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 0, 0), Vector3.createNew(10, 0, 0)), 0, 100));
 		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 10, 0), Vector3.createNew(10, 10, 0)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(0, -10, 0), Vector3.createNew(0, 10, 0)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, -10, 0), Vector3.createNew(-10, 10, 0)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(0, 0, -10), Vector3.createNew(0, 0, 10)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 0, -10), Vector3.createNew(-10, 0, 10)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, -10, -10), Vector3.createNew(10, 10, 10)), 0, 100));
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(10, 10, 10), Vector3.createNew(-10, -10, -10)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-20, -10, -10), Vector3.createNew(-20, 10, 10)), 0, 100));
 	}
 }

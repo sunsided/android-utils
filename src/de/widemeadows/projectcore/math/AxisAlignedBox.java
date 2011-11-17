@@ -316,40 +316,39 @@ public final class AxisAlignedBox {
 		final Vector3 min = center.sub(extent);
 		final Vector3 max = center.add(extent);
 		
-		if (ray.direction.x >= 0) {
-			tmin = (min.x - ray.origin.x) / ray.direction.x;
-			tmax = (max.x - ray.origin.x) / ray.direction.x;
+		final float divx = 1.0f / ray.direction.x;
+		final float divy = 1.0f / ray.direction.y;
+		final float divz = 1.0f / ray.direction.z;
+		
+		if (divx >= 0) {
+			tmin = (min.x - ray.origin.x) * divx;
+			tmax = (max.x - ray.origin.x) * divx;
 		} else {
-			tmin = (max.x - ray.origin.x) / ray.direction.x;
-			tmax = (min.x - ray.origin.x) / ray.direction.x;
+			tmin = (max.x - ray.origin.x) * divx;
+			tmax = (min.x - ray.origin.x) * divx;
 		}
-		if (ray.direction.y >= 0) {
-			tymin = (min.y - ray.origin.y) / ray.direction.y;
-			tymax = (max.y - ray.origin.y) / ray.direction.y;
+		if (divy >= 0) {
+			tymin = (min.y - ray.origin.y) * divy;
+			tymax = (max.y - ray.origin.y) * divy;
 		} else {
-			tymin = (max.y - ray.origin.y) / ray.direction.y;
-			tymax = (min.y - ray.origin.y) / ray.direction.y;
+			tymin = (max.y - ray.origin.y) * divy;
+			tymax = (min.y - ray.origin.y) * divy;
 		}
-		if ((tmin > tymax) || (tymin > tmax))
-			return false;
+		if ((tmin > tymax) || (tymin > tmax)) return false;
+		if (tymin > tmin) tmin = tymin;
+		if (tymax < tmax) tmax = tymax;
 
-		if (tymin > tmin)
-			tmin = tymin;
-		if (tymax < tmax)
-			tmax = tymax;
-		if (ray.direction.z >= 0) {
-			tzmin = (min.z - ray.origin.z) / ray.direction.z;
-			tzmax = (max.z - ray.origin.z) / ray.direction.z;
+		if (divz >= 0) {
+			tzmin = (min.z - ray.origin.z) * divz;
+			tzmax = (max.z - ray.origin.z) * divz;
 		} else {
-			tzmin = (max.z - ray.origin.z) / ray.direction.z;
-			tzmax = (min.z - ray.origin.z) / ray.direction.z;
+			tzmin = (max.z - ray.origin.z) * divz;
+			tzmax = (min.z - ray.origin.z) * divz;
 		}
-		if ((tmin > tzmax) || (tzmin > tmax))
-			return false;
-		if (tzmin > tmin)
-			tmin = tzmin;
-		if (tzmax < tmax)
-			tmax = tzmax;
+
+		if ((tmin > tzmax) || (tzmin > tmax)) return false;
+		if (tzmin > tmin) tmin = tzmin;
+		if (tzmax < tmax) tmax = tzmax;
 		return ((tmin >= nearBound) && (tmax <= farBound));
 	}
 }
