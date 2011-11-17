@@ -573,7 +573,47 @@ public final class Vector3 {
 		z = Math.abs(z);
 		return this;
 	}
-	
+
+	/**
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
+	 */
+	public final boolean isSmallerThan(@NotNull final Vector3 other) {
+		return x < other.x - EPSILON && y < other.y - EPSILON && z < other.z - EPSILON;
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
+	 */
+	public final boolean isSmallerOrEqual(@NotNull final Vector3 other) {
+		return x <= other.x + EPSILON && y <= other.y + EPSILON && z <= other.z + EPSILON;
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
+	 */
+	public final boolean isGraterThan(@NotNull final Vector3 other) {
+		return x > other.x + EPSILON && y > other.y + EPSILON && z > other.z + EPSILON;
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
+	 */
+	public final boolean isGreaterOrEqual(@NotNull final Vector3 other) {
+		return x >= other.x - EPSILON && y >= other.y - EPSILON && z >= other.z - EPSILON;
+	}
+
 	/**
 	 * Liefert den Vektor aus den maximalen Komponenten zweier Vektoren
 	 *
