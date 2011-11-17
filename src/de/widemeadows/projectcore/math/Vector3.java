@@ -615,6 +615,46 @@ public final class Vector3 {
 	}
 
 	/**
+	 * Ermittelt, ob dieser Vektor länger als ein Vergleichsvektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return <code>true</code>, wenn dieser Vektor länger ist
+	 */
+	public final boolean isLongerThan(@NotNull final Vector3 other) {
+		return getLengthSquared() > other.getLengthSquared();
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor länger als ein Vergleichsvektor ist
+	 *
+	 * @param otherLength Die Länge des Vergleichsvektors
+	 * @return <code>true</code>, wenn dieser Vektor länger ist
+	 */
+	public final boolean isLongerThan(final float otherLength) {
+		return getLengthSquared() > (otherLength* otherLength);
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kürzer als ein Vergleichsvektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return <code>true</code>, wenn dieser Vektor kürzer ist
+	 */
+	public final boolean isShorterThan(@NotNull final Vector3 other) {
+		return getLengthSquared() < other.getLengthSquared();
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kürzer als ein Vergleichsvektor ist
+	 *
+	 * @param otherLength Die Länge des Vergleichsvektors
+	 * @return <code>true</code>, wenn dieser Vektor kürzer ist
+	 */
+	public final boolean isShorterThan(final float otherLength) {
+		return getLengthSquared() < (otherLength * otherLength);
+	}
+
+	/**
 	 * Liefert den Vektor aus den maximalen Komponenten zweier Vektoren
 	 *
 	 * @param a Erster Vektor
