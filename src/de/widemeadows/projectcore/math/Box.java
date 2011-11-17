@@ -10,30 +10,49 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Box {
 
-	/** Der Punkt vorne unten links (000) */
-	public static final int FRONT_BOTTOM_LEFT = 0;
+	/**
+	 * Eckpunkt
+	 */
+	public enum Point {
 
-	/** Der Punkt vorne unten rechts (001) */
-	public static final int FRONT_BOTTOM_RIGHT = 1;
+		/** Der Punkt vorne unten links (000) */
+		FrontBottomLeft(0),
 
-	/** Der Punkt vorne oben links (010) */
-	public static final int FRONT_TOP_LEFT = 2;
+		/** Der Punkt vorne unten rechts (001) */
+		FrontBottomRight(1),
 
-	/** Der Punkt vorne oben rechts (011) */
-	public static final int FRONT_TOP_RIGHT = 3;
+		/** Der Punkt vorne oben links (010) */
+		FrontTopLeft(2),
 
-	/** Der Punkt hinten unten links (100) */
-	public static final int BACK_BOTTOM_LEFT = 4;
+		/** Der Punkt vorne oben rechts (011) */
+		FrontTopRight(3),
 
-	/** Der Punkt hinten unten rechts (101) */
-	public static final int BACK_BOTTOM_RIGHT = 5;
+		/** Der Punkt hinten unten links (100) */
+		BackBottomLeft(4),
 
-	/** Der Punkt hinten oben links (110) */
-	public static final int BACK_TOP_LEFT = 6;
+		/** Der Punkt hinten unten rechts (101) */
+		BackBottomRight(5),
 
-	/** Der Punkt hinten oben rechts (111) */
-	public static final int BACK_TOP_RIGHT = 7;
-	
+		/** Der Punkt hinten oben links (110) */
+		BackTopLeft(6),
+
+		/** Der Punkt hinten oben rechts (111) */
+		BackTopRight(7);
+
+		/**
+		 * Die ID des Punktes
+		 */
+		public final int pointId;
+
+		/**
+		 * Setzt die Punkt-ID
+		 * @param pointId Die Punkt-ID
+		 */
+		private Point(int pointId) {
+			this.pointId = pointId;
+		}
+	}
+
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
@@ -258,21 +277,20 @@ public final class Box {
 
 	/**
 	 * Liefert den Punkt mit dem angegebenen Index
-	 * @param pointIndex Der Punktindex
+	 * @param point Der Punkt
 	 * @return Der Punkt (cached)
 	 */
 	@ReturnsCachedValue @NotNull
-	public final Vector3 getCornerPoint(int pointIndex) {
-		assert pointIndex >= 0;
-		assert pointIndex <= 7;
+	public final Vector3 getCornerPoint(@NotNull final Point point) {
 		assert extent.x >= 0;
 		assert extent.y >= 0;
 		assert extent.z >= 0;
 
+		final int id = point.pointId;
 		return Vector3.createNew(
-				((pointIndex & 1) == 0) ? (center.x - extent.x) : (center.x + extent.x),
-				((pointIndex & 2) == 0) ? (center.y - extent.y) : (center.y + extent.y),
-				((pointIndex & 4) == 0) ? (center.z + extent.z) : (center.z - extent.z) // NOTE: OpenGL macht's andersrum!
+				((id & 1) == 0) ? (center.x - extent.x) : (center.x + extent.x),
+				((id & 2) == 0) ? (center.y - extent.y) : (center.y + extent.y),
+				((id & 4) == 0) ? (center.z + extent.z) : (center.z - extent.z) // NOTE: OpenGL macht's andersrum!
 				);
 	}
 
