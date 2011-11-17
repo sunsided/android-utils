@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Tests für die Bounding Box
@@ -140,5 +142,58 @@ public class BoxTests {
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
 		assertEquals(+2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
+	}
+
+	/**
+	 * Überprüft Punkte
+	 */
+	@Test
+	public void intersectionWithPoint() {
+
+		// Alle Komponenten positiv
+		Box box = Box.createNew(
+				0, 0, 0,
+				1, 2, 3
+		);
+
+		// Punkt in der Box
+		Vector3 point = Vector3.createNew(0, 0, 0);
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
+
+		// Punkt in der Box
+		point = Vector3.createNew(0.5f, -0.5f, 0.23f);
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
+
+		// Punkt auf der Box
+		point = Vector3.createNew(1, 2, 3);
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
+
+		// Punkt auf der Box
+		point = Vector3.createNew(-1, -2, -3);
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
+
+		// Punkt außerhalb der Box
+		point = Vector3.createNew(1, 2, 3.01f);
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
+
+		// Punkt außerhalb der Box
+		point = Vector3.createNew(1, 2.01f, 3);
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
+
+		// Punkt außerhalb der Box
+		point = Vector3.createNew(1.01f, 2, 3);
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
+
+		// Punkt außerhalb der Box
+		point = Vector3.createNew(1.01f, 10000, -3000);
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
 	}
 }
