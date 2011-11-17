@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -225,6 +226,26 @@ public final class Ray3 {
 	) {
 		setOrigin(originX, originY, originZ);
 		setDirection(directionX, directionY, directionZ);
+		return this;
+	}
+
+	/**
+	 * Bezieht einen Strahl, der in die entgegengesetzte Richtung zeigt
+	 * @return Der Strahl
+	 */
+	@NotNull @ReturnsCachedValue
+	public Ray3 getInverted() {
+		return Ray3.createNew(origin, direction.getInverted());
+	}
+
+	/**
+	 * Dreht den Strahl um, so dass er in die entgegengesetzte Richtung zeigt
+	 *
+	 * @return Diese Instanz für method chaining
+	 */
+	@NotNull
+	public Ray3 invert() {
+		direction.invert();
 		return this;
 	}
 }
