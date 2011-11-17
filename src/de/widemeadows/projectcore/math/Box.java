@@ -320,18 +320,26 @@ public final class Box {
 	 * @param z Der zu prüfende Vektor (Z-Komponente)
 	 * @return <code>true</code>, wenn der Punkt auf oder in der Box liegt
 	 */
-	public final boolean intersectsAABB(final float x, final float y, final float z) {
+	public final boolean intersectsAABB(float x, float y, float z) {
 		assert extent.x >= 0;
 		assert extent.y >= 0;
 		assert extent.z >= 0;
 
-		final float minX = center.x - extent.x;
-		final float minY = center.y - extent.y;
-		final float minZ = center.z - extent.z;
-		final float maxX = center.x + extent.x;
-		final float maxY = center.y + extent.y;
-		final float maxZ = center.z + extent.z;
+		// Koordinaten in Box-Space transformieren
+		x -= center.x;
+		y -= center.y;
+		z -= center.z;
 
+		// Punkte beziehen
+		final float maxX = extent.x;
+		final float maxY = extent.y;
+		final float maxZ = extent.z;
+		final float minX = -maxX;
+		final float minY = -maxY;
+		final float minZ = -maxZ;
+
+		// Test durchführen
+		// TODO: Subtrahieren und Test auf null durchführen -- schneller?
 		return  x >= minX && x <= maxX &&
 				y >= minY && y <= maxY &&
 				z >= minZ && z <= maxZ;
