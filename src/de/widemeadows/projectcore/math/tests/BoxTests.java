@@ -1,13 +1,12 @@
 package de.widemeadows.projectcore.math.tests;
 
-import de.widemeadows.projectcore.math.Box;
+import de.widemeadows.projectcore.math.AxisAlignedBox;
+import de.widemeadows.projectcore.math.BoxPoint;
 import de.widemeadows.projectcore.math.Vector3;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * Tests für die Bounding Box
@@ -21,25 +20,25 @@ public class BoxTests {
 	public void areaTest() {
 
 		// Einheitsbox testen
-		Box box = Box.createNew();
+		AxisAlignedBox box = AxisAlignedBox.createNew();
 		assertEquals(1.0f, box.calculateArea(), DEFAULT_EPSILON);
 
 		// Box der Größe 2x2x2
-		box = Box.createNew(
+		box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				1, 1, 1
 		);
 		assertEquals(8.0f, box.calculateArea(), DEFAULT_EPSILON);
 
 		// Box der Größe 2x2x2
-		box = Box.createNew(
+		box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				-1, -1, -1
 		);
 		assertEquals(8.0f, box.calculateArea(), DEFAULT_EPSILON);
 
 		// Box der Größe 2x2x2
-		box = Box.createNew(
+		box = AxisAlignedBox.createNew(
 				0, 1000, 0,
 				1, -1, 1
 		);
@@ -53,7 +52,7 @@ public class BoxTests {
 	@Test
 	public void extentAlwaysPositiveTest() {
 		// Alle Komponenten positiv
-		Box box = Box.createNew(
+		AxisAlignedBox box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				1, 1, 1
 		);
@@ -62,7 +61,7 @@ public class BoxTests {
 		assertEquals(1.0f, box.extent.z, DEFAULT_EPSILON);
 
 		// Alle Komponenten negativ
-		box = Box.createNew(
+		box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				-1, -1, -1
 		);
@@ -90,55 +89,55 @@ public class BoxTests {
 	public void boxCornerSelection() {
 
 		// Alle Komponenten positiv
-		Box box = Box.createNew(
+		AxisAlignedBox box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				1, 2, 3
 		);
 
 		// vorne unten links
-		Vector3 point = box.getCornerPoint(Box.Point.FrontBottomLeft);
+		Vector3 point = box.getCornerPoint(BoxPoint.FrontBottomLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
 		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne unten rechts
-		point = box.getCornerPoint(Box.Point.FrontBottomRight);
+		point = box.getCornerPoint(BoxPoint.FrontBottomRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
 		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne oben links
-		point = box.getCornerPoint(Box.Point.FrontTopLeft);
+		point = box.getCornerPoint(BoxPoint.FrontTopLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
 		assertEquals(+2, point.y, DEFAULT_EPSILON);
 		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// vorne oben rechts
-		point = box.getCornerPoint(Box.Point.FrontTopRight);
+		point = box.getCornerPoint(BoxPoint.FrontTopRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
 		assertEquals(+2, point.y, DEFAULT_EPSILON);
 		assertEquals(+3, point.z, DEFAULT_EPSILON);
 
 		// hinten unten links
-		point = box.getCornerPoint(Box.Point.BackBottomLeft);
+		point = box.getCornerPoint(BoxPoint.BackBottomLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten unten rechts
-		point = box.getCornerPoint(Box.Point.BackBottomRight);
+		point = box.getCornerPoint(BoxPoint.BackBottomRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten oben links
-		point = box.getCornerPoint(Box.Point.BackTopLeft);
+		point = box.getCornerPoint(BoxPoint.BackTopLeft);
 		assertEquals(-1, point.x, DEFAULT_EPSILON);
 		assertEquals(+2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
 
 		// hinten oben rechts
-		point = box.getCornerPoint(Box.Point.BackTopRight);
+		point = box.getCornerPoint(BoxPoint.BackTopRight);
 		assertEquals(+1, point.x, DEFAULT_EPSILON);
 		assertEquals(+2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
@@ -151,49 +150,49 @@ public class BoxTests {
 	public void intersectionWithPoint() {
 
 		// Alle Komponenten positiv
-		Box box = Box.createNew(
+		AxisAlignedBox box = AxisAlignedBox.createNew(
 				0, 0, 0,
 				1, 2, 3
 		);
 
 		// Punkt in der Box
 		Vector3 point = Vector3.createNew(0, 0, 0);
-		assertTrue(box.intersectsAABB(point));
-		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
 
 		// Punkt in der Box
 		point = Vector3.createNew(0.5f, -0.5f, 0.23f);
-		assertTrue(box.intersectsAABB(point));
-		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
 
 		// Punkt auf der Box
 		point = Vector3.createNew(1, 2, 3);
-		assertTrue(box.intersectsAABB(point));
-		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
 
 		// Punkt auf der Box
 		point = Vector3.createNew(-1, -2, -3);
-		assertTrue(box.intersectsAABB(point));
-		assertTrue(box.intersectsAABB(point.x, point.y, point.z));
+		assertTrue(box.intersects(point));
+		assertTrue(box.intersects(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1, 2, 3.01f);
-		assertFalse(box.intersectsAABB(point));
-		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1, 2.01f, 3);
-		assertFalse(box.intersectsAABB(point));
-		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1.01f, 2, 3);
-		assertFalse(box.intersectsAABB(point));
-		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
 
 		// Punkt außerhalb der Box
 		point = Vector3.createNew(1.01f, 10000, -3000);
-		assertFalse(box.intersectsAABB(point));
-		assertFalse(box.intersectsAABB(point.x, point.y, point.z));
+		assertFalse(box.intersects(point));
+		assertFalse(box.intersects(point.x, point.y, point.z));
 	}
 }
