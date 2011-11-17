@@ -270,9 +270,9 @@ public final class Box {
 		assert extent.z >= 0;
 
 		return Vector3.createNew(
-				((pointIndex & 1) == 1) ? (center.x - extent.x) : (center.x + extent.x),
-				((pointIndex & 2) == 2) ? (center.y - extent.y) : (center.y + extent.y),
-				((pointIndex & 4) == 4) ? (center.z - extent.z) : (center.z + extent.z)
+				((pointIndex & 1) == 0) ? (center.x - extent.x) : (center.x + extent.x),
+				((pointIndex & 2) == 0) ? (center.y - extent.y) : (center.y + extent.y),
+				((pointIndex & 4) == 0) ? (center.z + extent.z) : (center.z - extent.z) // NOTE: OpenGL macht's andersrum!
 				);
 	}
 

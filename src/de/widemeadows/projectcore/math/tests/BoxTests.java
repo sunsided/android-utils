@@ -80,5 +80,65 @@ public class BoxTests {
 		assertEquals(1.0f, box.extent.y, DEFAULT_EPSILON);
 		assertEquals(1.0f, box.extent.z, DEFAULT_EPSILON);
 	}
-	
+
+	/**
+	 * Testet das Beziehen der Eckpunkte der Box
+	 */
+	@Test
+	public void boxCornerSelection() {
+
+		// Alle Komponenten positiv
+		Box box = Box.createNew(
+				0, 0, 0,
+				1, 1, 1
+		);
+
+		// vorne unten links
+		Vector3 point = box.getCornerPoint(Box.FRONT_BOTTOM_LEFT);
+		assertEquals(-1, point.x, DEFAULT_EPSILON);
+		assertEquals(-1, point.y, DEFAULT_EPSILON);
+		assertEquals(+1, point.z, DEFAULT_EPSILON);
+
+		// vorne unten rechts
+		point = box.getCornerPoint(Box.FRONT_BOTTOM_RIGHT);
+		assertEquals(+1, point.x, DEFAULT_EPSILON);
+		assertEquals(-1, point.y, DEFAULT_EPSILON);
+		assertEquals(+1, point.z, DEFAULT_EPSILON);
+
+		// vorne oben links
+		point = box.getCornerPoint(Box.FRONT_TOP_LEFT);
+		assertEquals(-1, point.x, DEFAULT_EPSILON);
+		assertEquals(+1, point.y, DEFAULT_EPSILON);
+		assertEquals(+1, point.z, DEFAULT_EPSILON);
+
+		// vorne oben rechts
+		point = box.getCornerPoint(Box.FRONT_TOP_RIGHT);
+		assertEquals(+1, point.x, DEFAULT_EPSILON);
+		assertEquals(+1, point.y, DEFAULT_EPSILON);
+		assertEquals(+1, point.z, DEFAULT_EPSILON);
+
+		// hinten unten links
+		point = box.getCornerPoint(Box.BACK_BOTTOM_LEFT);
+		assertEquals(-1, point.x, DEFAULT_EPSILON);
+		assertEquals(-1, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
+
+		// hinten unten rechts
+		point = box.getCornerPoint(Box.BACK_BOTTOM_RIGHT);
+		assertEquals(+1, point.x, DEFAULT_EPSILON);
+		assertEquals(-1, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
+
+		// hinten oben links
+		point = box.getCornerPoint(Box.BACK_TOP_LEFT);
+		assertEquals(-1, point.x, DEFAULT_EPSILON);
+		assertEquals(+1, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
+
+		// hinten oben rechts
+		point = box.getCornerPoint(Box.BACK_TOP_RIGHT);
+		assertEquals(+1, point.x, DEFAULT_EPSILON);
+		assertEquals(+1, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
+	}
 }
