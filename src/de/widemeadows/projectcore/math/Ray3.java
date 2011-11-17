@@ -115,16 +115,26 @@ public final class Ray3 {
 
 	/**
 	 * Die Richtung des Strahls
-	 * <h3>Vektor muss normalisiert sein</h3>
-	 * Die Berechnungen in dieser Klasse gehen von einem normalisierten Richtungsvektor aus.
-	 * Um sicherzustellen, dass der Vektor immer normalisiert ist, bitte die Methoden {@link #setDirection(Vector3)} oder
-	 * {@link #setDirection(float, float, float)} verwenden.
-	 * <p/>
-	 * Wenn der Vektor von Hand gesetzt werden muss, diesen nachträglich mit {@link de.widemeadows.projectcore.math.Vector3#normalize()}
-	 * normalisieren!
+	 *
+	 * <h3>Vektor nicht manuell setzen!</h3>
+	 * Der Vektor muss über die Methode {@link #setDirection(Vector3)} oder {@link #setDirection(float, float, float)}
+	 * gesetzt werden!
+	 *
+	 * @see #invDirection
+	 * @see #setDirection(Vector3)
+	 * @see #setDirection(float, float, float)
 	 */
 	@NotNull
 	public final Vector3 direction = Vector3.createNew(0.57735f, 0.57735f, 0.57735f);
+
+	/**
+	 * Die reziproke Richtung des Strahls
+	 * @see #direction
+	 * @see #setDirection(Vector3)
+	 * @see #setDirection(float, float, float)
+	 */
+	@NotNull
+	public final Vector3 invDirection = Vector3.createNew(1.0f / 0.57735f, 1.0f / 0.57735f, 1.0f / 0.57735f);
 
 	/**
 	 * Normalokonstruktor
@@ -173,8 +183,7 @@ public final class Ray3 {
 	 */
 	@NotNull
 	public Ray3 setDirection(@NotNull final Vector3 direction) {
-		this.direction.set(direction).normalize();
-		return this;
+		return setDirection(direction.x, direction.y, direction.z);
 	}
 
 	/**
@@ -188,6 +197,7 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 setDirection(final float directionX, final float directionY, final float directionZ) {
 		this.direction.set(directionX, directionY, directionZ).normalize();
+		this.invDirection.set(1.0f / this.direction.x, 1.0f / this.direction.y, 1.0f / this.direction.z);
 		return this;
 	}
 
@@ -253,6 +263,7 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 invert() {
 		direction.invert();
+		invDirection.set(1.0f/direction.x, 1.0f/direction.y, 1.0f/direction.z);
 		return this;
 	}
 
