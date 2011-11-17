@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
  *     Neue Objekte werden erzeugt mittels {@link #createNew()}; Nicht länger benötigte Objekte sollten per
  *     {@link #recycle(Matrix4)} zurückgegeben werden.
  * </p>
+ *
+ * @see MatrixFactory
  */
 public final class Matrix4 {
 
