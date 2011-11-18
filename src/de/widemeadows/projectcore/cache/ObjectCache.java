@@ -69,7 +69,7 @@ public final class ObjectCache<T> {
 	 * @return This instance for method chaining
 	 */
 	@NotNull
-	public synchronized ObjectCache<T> registerElement(@NotNull T element) {
+	public ObjectCache<T> registerElement(@NotNull T element) {
 		DoubleLinkedListNode<T> target;
 
 		// if no element is in the cache
@@ -100,7 +100,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @return The number of elements in the cache
 	 */
-	public synchronized int getCount() {
+	public int getCount() {
 		return elementCount;
 	}
 
@@ -109,7 +109,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @return <code>true</code> if there are elements, otherwise <code>false</code>
 	 */
-	public synchronized boolean hasElements() {
+	public boolean hasElements() {
 		return elementCount > 0;
 	}
 
@@ -124,7 +124,7 @@ public final class ObjectCache<T> {
 	 * @see #registerElement(Object)
 	 */
 	@NotNull @ReturnsCachedValue
-	public synchronized T getOrCreate() {
+	public T getOrCreate() {
 		assert factory != null;
 
 		if (hasElements()) return getElement();
@@ -141,7 +141,7 @@ public final class ObjectCache<T> {
 	 * @see #registerElement(Object)
 	 */
 	@NotNull @ReturnsCachedValue
-	public synchronized T getElement() {
+	public T getElement() {
 		assert elementCount > 0;
 		assert lastElementWithValue != null;
 
@@ -167,7 +167,7 @@ public final class ObjectCache<T> {
 	 * @see #registerElement(Object)
 	 */
 	@Nullable @ReturnsCachedValue
-	public synchronized T getElementOrNull() {
+	public T getElementOrNull() {
 		if (elementCount == 0 || lastElementWithValue == null) return null;
 
 		// retrieve the element
@@ -186,7 +186,7 @@ public final class ObjectCache<T> {
 	 * Removes all cached items.
 	 * A call to this method does not change the capacity of the queue.
 	 */
-	public synchronized void clear() {
+	public void clear() {
 		// reset counter and pointers
 		elementCount = 0;
 		lastElementWithValue = null;
@@ -205,7 +205,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @param forceGc Forces a garbage collect after compacting
 	 */
-	public synchronized void compact(boolean forceGc) {
+	public void compact(boolean forceGc) {
 
 		// reset counter and pointers
 		elementCount = 0;
