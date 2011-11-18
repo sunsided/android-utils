@@ -237,10 +237,8 @@ public class BoxTests {
 
 		assertTrue(box.intersects(ray1, 0, 100));
 		assertFalse(box.intersects(ray2, 0, 100));
-		assertTrue(box.intersectsEx(ray1, 0, 100));
-		assertFalse(box.intersectsEx(ray2, 0, 100));
-		
-		final int iterations = 10000000;
+
+		final int iterations = 100000000;
 
 		for (int i=10; i>=0; --i) {
 			box.intersects(ray1, 0, 100);
@@ -254,21 +252,7 @@ public class BoxTests {
 		}
 		long elapsed1 = System.nanoTime() - start;
 
-		// 2 --------------------------------------------------------
-
-		for (int i = 10; i >= 0; --i) {
-			box.intersectsEx(ray1, 0, 100);
-			box.intersectsEx(ray2, 0, 100);
-		}
-
-		start = System.nanoTime();
-		for (int i = iterations - 1; i >= 0; --i) {
-			box.intersectsEx(ray1, 0, 100);
-			box.intersectsEx(ray2, 0, 100);
-		}
-		long elapsed2 = System.nanoTime() - start;
 
 		System.out.println(elapsed1/(float)iterations/2 + "ms");
-		System.out.println(elapsed2/(float)iterations/2 + "ms");
 	}
 }
