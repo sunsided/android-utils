@@ -370,7 +370,7 @@ public class MatrixTests {
 			Matrix4 mtx = Matrix4.createNew();
 			mtx.recycle();
 		}
-		Matrix4.Cache.get().clear();
+		Matrix4.Cache.clear();
 
 		long start = System.nanoTime();
 		for (int i = iterations - 1; i >= 0; --i) {
@@ -382,7 +382,7 @@ public class MatrixTests {
 			mtx3.recycle();
 		}
 		long elapsed1 = System.nanoTime() - start;
-		Matrix4.Cache.get().clear();
+		Matrix4.Cache.clear();
 
 		System.out.println("Erzeugen und Recyclen von " + iterations*3 + " Matrizen: " + elapsed1 / (float) iterations / 3 + " ms");
 	}

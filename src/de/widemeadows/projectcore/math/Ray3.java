@@ -1,5 +1,6 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.IObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
@@ -14,7 +15,7 @@ public final class Ray3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ThreadLocalObjectCache<Ray3> Cache = new ThreadLocalObjectCache<Ray3>(new ObjectFactory<Ray3>() {
+	public static final IObjectCache<Ray3> Cache = new ThreadLocalObjectCache<Ray3>(new ObjectFactory<Ray3>() {
 		@NotNull
 		@Override
 		public Ray3 createNew() {
@@ -40,7 +41,7 @@ public final class Ray3 {
 	@NotNull
 	public static Ray3 createNew(final float originX, final float originY, final float originZ,
 	                      final float directionX, final float directionY, final float directionZ) {
-		return Cache.get().getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
+		return Cache.getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
 	}
 
 	/**
@@ -55,7 +56,7 @@ public final class Ray3 {
 	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Vector3 origin, @NotNull final Vector3 direction) {
-		return Cache.get().getOrCreate().set(origin, direction);
+		return Cache.getOrCreate().set(origin, direction);
 	}
 
 	/**
@@ -69,7 +70,7 @@ public final class Ray3 {
 	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Ray3 other) {
-		return Cache.get().getOrCreate().set(other);
+		return Cache.getOrCreate().set(other);
 	}
 
 	/**
@@ -83,7 +84,7 @@ public final class Ray3 {
 	 */
 	@NotNull
 	public static Ray3 createNew() {
-		return Cache.get().getOrCreate();
+		return Cache.getOrCreate();
 	}
 
 	/**
@@ -94,7 +95,7 @@ public final class Ray3 {
 	 * @see AxisAlignedBox#recycle()
 	 */
 	public static void recycle(@NotNull final Ray3 box) {
-		Cache.get().registerElement(box);
+		Cache.registerElement(box);
 	}
 
 	/**
@@ -104,7 +105,7 @@ public final class Ray3 {
 	 * @see Vector3#recycle(Vector3)
 	 */
 	public void recycle() {
-		Cache.get().registerElement(this);
+		Cache.registerElement(this);
 	}
 
 	/**

@@ -7,9 +7,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * A cache that allows recycling of destroyed objects to compensate for the garbage collector.
+ * <h2>Thread Safety</h2>
+ * Members of this class are not thread safe.
  *
  * <p>
- *     Users may want to utilize the {@link ObjectCache#getOrCreate()} method for ease of use.<br/>
+ *     Users may want to utilize the {@link RealObjectCache#getOrCreate()} method for ease of use.<br/>
  * </p>
   *
  * @param <T> The object type
@@ -17,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * @see #hasElements()
  * @see #getOrCreate()
  */
-public final class ObjectCache<T> {
+public final class RealObjectCache<T> implements IObjectCache<T> {
 
 	/**
 	 * The caching list
@@ -48,17 +50,17 @@ public final class ObjectCache<T> {
 	private final ObjectFactory<T> factory;
 
 	/**
-	 * Creates a new instance of the {@link ObjectCache} class.
+	 * Creates a new instance of the {@link RealObjectCache} class.
 	 * @param factory The factory to create new instances
 	 */
-	ObjectCache(@NotNull ObjectFactory<T> factory) {
+	RealObjectCache(@NotNull ObjectFactory<T> factory) {
 		this.factory = factory;
 	}
 
 	/**
-	 * Creates a new instance of the {@link ObjectCache} class.
+	 * Creates a new instance of the {@link RealObjectCache} class.
 	 */
-	private ObjectCache() {
+	private RealObjectCache() {
 		factory = null;
 	}
 
@@ -68,8 +70,9 @@ public final class ObjectCache<T> {
 	 * @param element The element to cache
 	 * @return This instance for method chaining
 	 */
+	@Override
 	@NotNull
-	public ObjectCache<T> registerElement(@NotNull T element) {
+	public RealObjectCache<T> registerElement(@NotNull T element) {
 		DoubleLinkedListNode<T> target;
 
 		// if no element is in the cache
@@ -100,6 +103,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @return The number of elements in the cache
 	 */
+	@Override
 	public int getCount() {
 		return elementCount;
 	}
@@ -109,6 +113,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @return <code>true</code> if there are elements, otherwise <code>false</code>
 	 */
+	@Override
 	public boolean hasElements() {
 		return elementCount > 0;
 	}
@@ -123,6 +128,7 @@ public final class ObjectCache<T> {
 	 * @see #getElementOrNull()
 	 * @see #registerElement(Object)
 	 */
+	@Override
 	@NotNull @ReturnsCachedValue
 	public T getOrCreate() {
 		assert factory != null;
@@ -140,6 +146,7 @@ public final class ObjectCache<T> {
 	 * @see #getElementOrNull()
 	 * @see #registerElement(Object)
 	 */
+	@Override
 	@NotNull @ReturnsCachedValue
 	public T getElement() {
 		assert elementCount > 0;
@@ -166,6 +173,7 @@ public final class ObjectCache<T> {
 	 * @see #getElement()
 	 * @see #registerElement(Object)
 	 */
+	@Override
 	@Nullable @ReturnsCachedValue
 	public T getElementOrNull() {
 		if (elementCount == 0 || lastElementWithValue == null) return null;
@@ -186,6 +194,7 @@ public final class ObjectCache<T> {
 	 * Removes all cached items.
 	 * A call to this method does not change the capacity of the queue.
 	 */
+	@Override
 	public void clear() {
 		// reset counter and pointers
 		elementCount = 0;
@@ -205,6 +214,7 @@ public final class ObjectCache<T> {
 	 *
 	 * @param forceGc Forces a garbage collect after compacting
 	 */
+	@Override
 	public void compact(boolean forceGc) {
 
 		// reset counter and pointers

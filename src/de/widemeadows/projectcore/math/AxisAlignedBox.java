@@ -1,5 +1,6 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.IObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
@@ -13,7 +14,7 @@ public final class AxisAlignedBox {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ThreadLocalObjectCache<AxisAlignedBox> Cache = new ThreadLocalObjectCache<AxisAlignedBox>(new ObjectFactory<AxisAlignedBox>() {
+	public static final IObjectCache<AxisAlignedBox> Cache = new ThreadLocalObjectCache<AxisAlignedBox>(new ObjectFactory<AxisAlignedBox>() {
 		@NotNull
 		@Override
 		public AxisAlignedBox createNew() {
@@ -39,7 +40,7 @@ public final class AxisAlignedBox {
 	@NotNull
 	public static AxisAlignedBox createNew(final float centerX, final float centerY, final float centerZ,
 	                            final float extentX, final float extentY, final float extentZ) {
-		return Cache.get().getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
+		return Cache.getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
 	}
 
 	/**
@@ -53,7 +54,7 @@ public final class AxisAlignedBox {
 	 * @see #Cache
 	 */
 	public static AxisAlignedBox createNew(@NotNull final AxisAlignedBox other) {
-		return Cache.get().getOrCreate().set(other);
+		return Cache.getOrCreate().set(other);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public final class AxisAlignedBox {
 	 * @see #Cache
 	 */
 	public static AxisAlignedBox createNew(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
-		return Cache.get().getOrCreate().set(center, extent);
+		return Cache.getOrCreate().set(center, extent);
 	}
 
 	/**
@@ -82,7 +83,7 @@ public final class AxisAlignedBox {
 	 */
 	@NotNull
 	public static AxisAlignedBox createNew() {
-		return Cache.get().getOrCreate();
+		return Cache.getOrCreate();
 	}
 
 	/**
@@ -93,7 +94,7 @@ public final class AxisAlignedBox {
 	 * @see AxisAlignedBox#recycle()
 	 */
 	public static void recycle(@NotNull final AxisAlignedBox box) {
-		Cache.get().registerElement(box);
+		Cache.registerElement(box);
 	}
 
 	/**
@@ -103,7 +104,7 @@ public final class AxisAlignedBox {
 	 * @see Vector3#recycle(Vector3)
 	 */
 	public void recycle() {
-		Cache.get().registerElement(this);
+		Cache.registerElement(this);
 	}
 
 	/**

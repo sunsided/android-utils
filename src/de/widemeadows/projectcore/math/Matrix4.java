@@ -1,5 +1,6 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.IObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
@@ -21,7 +22,7 @@ public final class Matrix4 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ThreadLocalObjectCache<Matrix4> Cache = new ThreadLocalObjectCache<Matrix4>(new ObjectFactory<Matrix4>() {
+	public static final IObjectCache<Matrix4> Cache = new ThreadLocalObjectCache<Matrix4>(new ObjectFactory<Matrix4>() {
 		@NotNull
         @Override
 		public Matrix4 createNew() {
@@ -39,7 +40,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	public static Matrix4 createNew() {
-        return Cache.get().getOrCreate().toUnit();
+        return Cache.getOrCreate().toUnit();
 	}
 
 	/**
@@ -53,7 +54,7 @@ public final class Matrix4 {
 	 */
 	@NotNull
 	public static Matrix4 createNew(boolean makeUnit) {
-		return makeUnit ? Cache.get().getOrCreate().toUnit() : Cache.get().getOrCreate();
+		return makeUnit ? Cache.getOrCreate().toUnit() : Cache.getOrCreate();
 	}
 
 	/**
@@ -87,7 +88,7 @@ public final class Matrix4 {
 	                                float m21, float m22, float m23, float m24,
 	                                float m31, float m32, float m33, float m34,
 	                                float m41, float m42, float m43, float m44) {
-		return Cache.get().getOrCreate().set(
+		return Cache.getOrCreate().set(
 				m11, m12, m13, m14,
 				m21, m22, m23, m24,
 				m31, m32, m33, m34,
@@ -102,7 +103,7 @@ public final class Matrix4 {
      * @see Matrix4#recycle()
      */
 	public static void recycle(@NotNull Matrix4 matrix) {
-		Cache.get().registerElement(matrix);
+		Cache.registerElement(matrix);
 	}
 
     /**
@@ -112,7 +113,7 @@ public final class Matrix4 {
      * @see Matrix4#recycle(Matrix4)
      */
     public void recycle() {
-        Cache.get().registerElement(this);
+        Cache.registerElement(this);
     }
 	
 	/**

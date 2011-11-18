@@ -1,5 +1,6 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.IObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
@@ -18,7 +19,7 @@ public final class Vector3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ThreadLocalObjectCache<Vector3> Cache = new ThreadLocalObjectCache<Vector3>(new ObjectFactory<Vector3>() {
+	public static final IObjectCache<Vector3> Cache = new ThreadLocalObjectCache<Vector3>(new ObjectFactory<Vector3>() {
 		@NotNull
         @Override
 		public Vector3 createNew() {
@@ -40,7 +41,7 @@ public final class Vector3 {
 	 */
 	@NotNull
 	public static Vector3 createNew(final float x, final float y, final float z) {
-		return Cache.get().getOrCreate().set(x, y, z);
+		return Cache.getOrCreate().set(x, y, z);
 	}
 
 	/**
@@ -54,7 +55,7 @@ public final class Vector3 {
 	 * @see #Cache
 	 */
     public static Vector3 createNew(@NotNull final Vector3 other) {
-        return Cache.get().getOrCreate().set(other);
+        return Cache.getOrCreate().set(other);
     }
 
     /**
@@ -68,7 +69,7 @@ public final class Vector3 {
      */
     @NotNull
     public static Vector3 createNew() {
-        return Cache.get().getOrCreate();
+        return Cache.getOrCreate();
     }
 
 	/**
@@ -79,7 +80,7 @@ public final class Vector3 {
      * @see Vector3#recycle()
 	 */
 	public static void recycle(@NotNull final Vector3 vector) {
-		Cache.get().registerElement(vector);
+		Cache.registerElement(vector);
 	}
 
     /**
@@ -89,7 +90,7 @@ public final class Vector3 {
      * @see Vector3#recycle(Vector3)
      */
     public void recycle() {
-        Cache.get().registerElement(this);
+        Cache.registerElement(this);
     }
 
 	/**
