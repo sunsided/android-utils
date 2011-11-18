@@ -12,13 +12,13 @@ public final class Plane2 { // TODO: Caching!
 	 * Position der Plane
 	 */
 	@NotNull
-	private Vector3 _center;
+	private final Vector3 _center = Vector3.ZERO.clone();
 	
 	/**
 	 * Normale der Plane
 	 */
 	@NotNull
-	private Vector3 _normal;
+	private final Vector3 _normal = Vector3.YAXIS.clone();
 
 	/**
 	 * Erzeugt eine Plane aus drei Punkten
@@ -26,7 +26,7 @@ public final class Plane2 { // TODO: Caching!
 	 * @param b Zeiter Punkt
 	 * @param c Dritter Punkt
 	 */
-	public Plane2(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
+	public Plane2(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
 		assert !a.equals(b) && !b.equals(c);
 
 		define(a, b, c);
@@ -37,7 +37,7 @@ public final class Plane2 { // TODO: Caching!
 	 * @param center Mittelpunkt
 	 * @param normal Normale
 	 */
-	public Plane2(@NotNull Vector3 center, @NotNull Vector3 normal) {
+	public Plane2(@NotNull final Vector3 center, @NotNull final Vector3 normal) {
 		assert !normal.isEmpty();
 
 		define(center, normal);
@@ -47,7 +47,6 @@ public final class Plane2 { // TODO: Caching!
 	 * Erzeugt eine XZ-Plane
 	 */
 	public Plane2() {
-		define(Vector3.ZERO, Vector3.YAXIS);
 	}
 
 	/**
@@ -65,22 +64,20 @@ public final class Plane2 { // TODO: Caching!
 	 * @param b Zweiter Punkt
 	 * @param c Dritter Punkt
 	 */
-	public void define(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
+	public void define(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
 		assert !a.equals(b) && !b.equals(c);
 
-		_center = a;
+		_center.set(a);
 
 		// Normale berechnen: _normal = a.sub(b).cross(a.sub(c));
 		Vector3 aSubB = a.sub(b);
 		Vector3 aSubC = a.sub(c);
-		try {
-			_normal = aSubB.cross(aSubC);
-			_normal.normalize();
-		}
-		finally {
-			aSubB.recycle();
-			aSubC.recycle();
-		}
+
+		_normal.set(aSubB.cross(aSubC));
+		_normal.normalize();
+
+		aSubB.recycle();
+		aSubC.recycle();
 	}
 	
 	/**
@@ -88,11 +85,11 @@ public final class Plane2 { // TODO: Caching!
 	 * @param center Der Punkt
 	 * @param normal Die Normale
 	 */
-	public void define(@NotNull Vector3 center, @NotNull Vector3 normal) {
+	public void define(@NotNull final Vector3 center, @NotNull final Vector3 normal) {
 		assert !normal.isEmpty();
 
-		_center = center;
-		_normal = normal;
+		_center.set(center);
+		_normal.set(normal.getNormalized());
 	}
 
 	/**
@@ -100,14 +97,11 @@ public final class Plane2 { // TODO: Caching!
 	 * @param point Der Punkt
 	 * @return Die Distanz zur Ebene
 	 */
-	public float getDistance(@NotNull Vector3 point) {
+	public float getDistance(@NotNull final Vector3 point) {
 		Vector3 direction = point.sub(_center);
-		try {
-			return _normal.dot(direction); // / _normal.getLength();
-		}
-		finally {
-			direction.recycle();
-		}
+		final float distance = _normal.dot(direction); // / _normal.getLength();;
+		direction.recycle();
+		return distance;
 	}
 
 	/**
