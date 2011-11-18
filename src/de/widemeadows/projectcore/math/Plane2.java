@@ -1,5 +1,6 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,10 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public final class Plane2 { // TODO: Caching!
 
 	/**
-	 * Position der Plane
+	 * Distanz der Normalen zum Ursprung
 	 */
-	@NotNull
-	private final Vector3 _center = Vector3.ZERO.clone();
+	private float _distanceToOrigin = 0;
 	
 	/**
 	 * Normale der Plane
@@ -50,12 +50,24 @@ public final class Plane2 { // TODO: Caching!
 	}
 
 	/**
-	 * Liefert die Position dieses Plane
+	 * Liefert die Entfernung dieser Plane vom Ursprung
+	 *
 	 * @return Die Referenz auf die Positionskomponente
+	 * @see #getCenter()
 	 */
-	@NotNull
-	public Vector3 getPosition() {
-		return _center;
+	public float getDistanceFromOrigin() {
+		return _distanceToOrigin;
+	}
+
+	/**
+	 * Liefert die Position dieser Plane
+	 *
+	 * @return Die Referenz auf die Positionskomponente
+	 * @see #getDistanceFromOrigin()
+	 */
+	@NotNull @ReturnsCachedValue
+	public Vector3 getCenter() {
+		return _normal.mul(_distanceToOrigin);
 	}
 
 	/**
@@ -67,8 +79,6 @@ public final class Plane2 { // TODO: Caching!
 	public void define(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
 		assert !a.equals(b) && !b.equals(c);
 
-		_center.set(a);
-
 		// Normale berechnen: _normal = a.sub(b).cross(a.sub(c));
 		Vector3 aSubB = a.sub(b);
 		Vector3 aSubC = a.sub(c);
@@ -78,6 +88,11 @@ public final class Plane2 { // TODO: Caching!
 
 		aSubB.recycle();
 		aSubC.recycle();
+
+		// Entfernung berechnen
+		Vector3 invN = _normal.getInverted();
+		_distanceToOrigin = invN.dot(a); // TODO: Tests!
+		invN.recycle();
 	}
 	
 	/**
@@ -88,8 +103,13 @@ public final class Plane2 { // TODO: Caching!
 	public void define(@NotNull final Vector3 center, @NotNull final Vector3 normal) {
 		assert !normal.isEmpty();
 
-		_center.set(center);
+		// Normale setzen
 		_normal.set(normal.getNormalized());
+
+		// Entfernung berechnen
+		Vector3 invN = _normal.getInverted();
+		_distanceToOrigin = invN.dot(center); // TODO: Tests!
+		invN.recycle();
 	}
 
 	/**
@@ -98,10 +118,7 @@ public final class Plane2 { // TODO: Caching!
 	 * @return Die Distanz zur Ebene
 	 */
 	public float getDistance(@NotNull final Vector3 point) {
-		Vector3 direction = point.sub(_center);
-		final float distance = _normal.dot(direction); // / _normal.getLength();;
-		direction.recycle();
-		return distance;
+		return _normal.dot(point) + _distanceToOrigin; // TODO: Tests!
 	}
 
 	/**
@@ -110,6 +127,6 @@ public final class Plane2 { // TODO: Caching!
 	 */
 	@Override
 	public String toString() {
-		return "{center: "+_center+", normal: " + _normal+"}";
+		return "{dist: "+_distanceToOrigin+", normal: " + _normal+"}";
 	}
 }
