@@ -3,10 +3,10 @@ package de.widemeadows.projectcore.math;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Eine Ebene
+ * Eine Ebene, die durch Punkt und Normale definiert ist
  */
 @Deprecated
-public final class Plane { // TODO: Caching!
+public final class Plane2 { // TODO: Caching!
 
 	/**
 	 * Position der Plane
@@ -26,7 +26,7 @@ public final class Plane { // TODO: Caching!
 	 * @param b Zeiter Punkt
 	 * @param c Dritter Punkt
 	 */
-	public Plane(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
+	public Plane2(@NotNull Vector3 a, @NotNull Vector3 b, @NotNull Vector3 c) {
 		assert !a.equals(b) && !b.equals(c);
 
 		define(a, b, c);
@@ -37,7 +37,7 @@ public final class Plane { // TODO: Caching!
 	 * @param center Mittelpunkt
 	 * @param normal Normale
 	 */
-	public Plane(@NotNull Vector3 center, @NotNull Vector3 normal) {
+	public Plane2(@NotNull Vector3 center, @NotNull Vector3 normal) {
 		assert !normal.isEmpty();
 
 		define(center, normal);
@@ -46,7 +46,7 @@ public final class Plane { // TODO: Caching!
 	/**
 	 * Erzeugt eine XZ-Plane
 	 */
-	public Plane() {
+	public Plane2() {
 		define(Vector3.ZERO, Vector3.YAXIS);
 	}
 
