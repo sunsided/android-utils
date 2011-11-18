@@ -310,15 +310,15 @@ public final class AxisAlignedBox {
 	 * @return <code>true</code>, wenn der Strahl die Box schneidet
 	 */
 	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
-		float txmin, txmax, tymin, tymax, tzmin, tzmax;
-		
+
 		final Vector3 min = center.sub(extent);
 		final Vector3 max = center.add(extent);
-		
+
+		float txmin, txmax, tymin, tymax, tzmin, tzmax;
 		final float divX = ray.invDirection.x;
 		final float divY = ray.invDirection.y;
 		final float divZ = ray.invDirection.z;
-		
+
 		if (divX >= 0) {
 			txmin = (min.x - ray.origin.x) * divX;
 			txmax = (max.x - ray.origin.x) * divX;
@@ -333,7 +333,11 @@ public final class AxisAlignedBox {
 			tymin = (max.y - ray.origin.y) * divY;
 			tymax = (min.y - ray.origin.y) * divY;
 		}
-		if ((txmin > tymax) || (tymin > txmax)) return false;
+		if ((txmin > tymax) || (tymin > txmax)) {
+			max.recycle();
+			min.recycle();
+			return false;
+		}
 		if (tymin > txmin) txmin = tymin;
 		if (tymax < txmax) txmax = tymax;
 
@@ -344,6 +348,81 @@ public final class AxisAlignedBox {
 			tzmin = (max.z - ray.origin.z) * divZ;
 			tzmax = (min.z - ray.origin.z) * divZ;
 		}
+
+		max.recycle();
+		min.recycle();
+
+		if ((txmin > tzmax) || (tzmin > txmax)) return false;
+		if (tzmin > txmin) txmin = tzmin;
+		if (tzmax < txmax) txmax = tzmax;
+		return ((txmin >= nearBound) && (txmax <= farBound));
+	}
+
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet
+	 *
+	 * @param ray       Der Strahl
+	 * @param nearBound Der nähste, gültige Punkt
+	 * @param farBound  Der weiteste, gültige Punkt
+	 * @return <code>true</code>, wenn der Strahl die Box schneidet
+	 */
+	public final boolean intersectsEx(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+		float txmin, txmax, tymin, tymax, tzmin, tzmax, swap;
+
+		// final Vector3 min = center.sub(extent);
+		// final Vector3 max = center.add(extent);
+
+		final float divX = ray.invDirection.x;
+		final float divY = ray.invDirection.y;
+		final float divZ = ray.invDirection.z;
+
+		txmin = (center.x - extent.x - ray.origin.x) * divX;
+		txmax = (center.x + extent.x - ray.origin.x) * divX;
+		tymin = (center.y - extent.y - ray.origin.y) * divY;
+		tymax = (center.y + extent.y - ray.origin.y) * divY;
+		tzmin = (center.z - extent.z - ray.origin.z) * divZ;
+		tzmax = (center.z + extent.z - ray.origin.z) * divZ;
+
+		if (divX < 0) {
+			int flt1 = Float.floatToRawIntBits(txmin);
+			int flt2 = Float.floatToRawIntBits(txmax);
+
+			flt1 = flt1 ^ flt2;
+			flt2 = flt1 ^ flt2;
+			flt1 = flt1 ^ flt2;
+
+			txmin = Float.intBitsToFloat(flt1);
+			txmax = Float.intBitsToFloat(flt2);
+		}
+
+		if (divY < 0) {
+			int flt1 = Float.floatToRawIntBits(tymin);
+			int flt2 = Float.floatToRawIntBits(tymax);
+
+			flt1 = flt1 ^ flt2;
+			flt2 = flt1 ^ flt2;
+			flt1 = flt1 ^ flt2;
+
+			tymin = Float.intBitsToFloat(flt1);
+			tymax = Float.intBitsToFloat(flt2);
+		}
+
+		if (divZ < 0) {
+			int flt1 = Float.floatToRawIntBits(tzmin);
+			int flt2 = Float.floatToRawIntBits(tzmax);
+
+			flt1 = flt1 ^ flt2;
+			flt2 = flt1 ^ flt2;
+			flt1 = flt1 ^ flt2;
+
+			tzmin = Float.intBitsToFloat(flt1);
+			tzmax = Float.intBitsToFloat(flt2);
+		}
+
+		if ((txmin > tymax) || (tymin > txmax)) return false;
+		if (tymin > txmin) txmin = tymin;
+		if (tymax < txmax) txmax = tymax;
 
 		if ((txmin > tzmax) || (tzmin > txmax)) return false;
 		if (tzmin > txmin) txmin = tzmin;

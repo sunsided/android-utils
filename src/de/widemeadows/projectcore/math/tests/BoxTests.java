@@ -217,4 +217,58 @@ public class BoxTests {
 		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(10, 10, 10), Vector3.createNew(-10, -10, -10)), 0, 100));
 		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-20, -10, -10), Vector3.createNew(-20, 10, 10)), 0, 100));
 	}
+
+	/**
+	 * Schnitt von {@link AxisAlignedBox} und {@link Ray3}
+	 */
+	@Test
+	public void rayBoxIntersectionPerformance() {
+		final AxisAlignedBox box = AxisAlignedBox.createNew(
+				0, 0, 0,
+				0.5f, 0.5f, 0.5f
+		);
+
+		final Vector3 from1 = Vector3.createNew(-10, 0, 0);
+		final Vector3 to1 = Vector3.createNew(10, 0, 0);
+		final Vector3 from2 = Vector3.createNew(-10, 10, 0);
+		final Vector3 to2 = Vector3.createNew(10, 10, 0);
+		final Ray3 ray1 = RayFactory.rayFromTwoPoints(from1, to1);
+		final Ray3 ray2 = RayFactory.rayFromTwoPoints(from2, to2);
+
+		assertTrue(box.intersects(ray1, 0, 100));
+		assertFalse(box.intersects(ray2, 0, 100));
+		assertTrue(box.intersectsEx(ray1, 0, 100));
+		assertFalse(box.intersectsEx(ray2, 0, 100));
+		
+		final int iterations = 10000000;
+
+		for (int i=10; i>=0; --i) {
+			box.intersects(ray1, 0, 100);
+			box.intersects(ray2, 0, 100);
+		}
+
+		long start = System.nanoTime();
+		for (int i = iterations - 1; i >= 0; --i) {
+			box.intersects(ray1, 0, 100);
+			box.intersects(ray2, 0, 100);
+		}
+		long elapsed1 = System.nanoTime() - start;
+
+		// 2 --------------------------------------------------------
+
+		for (int i = 10; i >= 0; --i) {
+			box.intersectsEx(ray1, 0, 100);
+			box.intersectsEx(ray2, 0, 100);
+		}
+
+		start = System.nanoTime();
+		for (int i = iterations - 1; i >= 0; --i) {
+			box.intersectsEx(ray1, 0, 100);
+			box.intersectsEx(ray2, 0, 100);
+		}
+		long elapsed2 = System.nanoTime() - start;
+
+		System.out.println(elapsed1/(float)iterations/2 + "ms");
+		System.out.println(elapsed2/(float)iterations/2 + "ms");
+	}
 }
