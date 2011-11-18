@@ -107,9 +107,7 @@ public final class Plane2 { // TODO: Caching!
 		_normal.set(normal.getNormalized());
 
 		// Entfernung berechnen
-		Vector3 invN = _normal.getInverted();
-		_distanceToOrigin = invN.dot(center); // TODO: Tests!
-		invN.recycle();
+		_distanceToOrigin = center.getLength();
 	}
 
 	/**
