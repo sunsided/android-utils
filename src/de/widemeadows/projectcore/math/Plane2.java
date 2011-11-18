@@ -80,19 +80,21 @@ public final class Plane2 { // TODO: Caching!
 		assert !a.equals(b) && !b.equals(c);
 
 		// Normale berechnen: _normal = a.sub(b).cross(a.sub(c));
-		Vector3 aSubB = a.sub(b);
+		final Vector3 aSubB = a.sub(b);
 		Vector3 aSubC = a.sub(c);
 
 		_normal.set(aSubB.cross(aSubC));
 		_normal.normalize();
 
+		// aSubB freigeben.
+		// aSubC wird noch nicht freigegeben, da wir den Wert in Kürze weiterverwenden werden
 		aSubB.recycle();
-		aSubC.recycle();
 
 		// Entfernung berechnen
-		Vector3 invN = _normal.getInverted();
-		_distanceToOrigin = invN.dot(a); // TODO: Tests!
-		invN.recycle();
+		final Vector3 invNormal = aSubC;
+		invNormal.set(_normal).invert();
+		_distanceToOrigin = invNormal.dot(a); // TODO: Tests!
+		invNormal.recycle();
 	}
 	
 	/**
