@@ -311,46 +311,37 @@ public final class AxisAlignedBox {
 	 */
 	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
 
-		final Vector3 min = center.sub(extent);
-		final Vector3 max = center.add(extent);
-
 		float txmin, txmax, tymin, tymax, tzmin, tzmax;
 		final float divX = ray.invDirection.x;
 		final float divY = ray.invDirection.y;
 		final float divZ = ray.invDirection.z;
 
 		if (divX >= 0) {
-			txmin = (min.x - ray.origin.x) * divX;
-			txmax = (max.x - ray.origin.x) * divX;
+			txmin = (center.x - extent.x - ray.origin.x) * divX;
+			txmax = (center.x + extent.x - ray.origin.x) * divX;
 		} else {
-			txmin = (max.x - ray.origin.x) * divX;
-			txmax = (min.x - ray.origin.x) * divX;
+			txmin = (center.x + extent.x - ray.origin.x) * divX;
+			txmax = (center.x - extent.x - ray.origin.x) * divX;
 		}
 		if (divY >= 0) {
-			tymin = (min.y - ray.origin.y) * divY;
-			tymax = (max.y - ray.origin.y) * divY;
+			tymin = (center.y - extent.y - ray.origin.y) * divY;
+			tymax = (center.y + extent.y - ray.origin.y) * divY;
 		} else {
-			tymin = (max.y - ray.origin.y) * divY;
-			tymax = (min.y - ray.origin.y) * divY;
+			tymin = (center.y + extent.y - ray.origin.y) * divY;
+			tymax = (center.y - extent.y - ray.origin.y) * divY;
 		}
-		if ((txmin > tymax) || (tymin > txmax)) {
-			max.recycle();
-			min.recycle();
-			return false;
-		}
+		if ((txmin > tymax) || (tymin > txmax)) return false;
+
 		if (tymin > txmin) txmin = tymin;
 		if (tymax < txmax) txmax = tymax;
 
 		if (divZ >= 0) {
-			tzmin = (min.z - ray.origin.z) * divZ;
-			tzmax = (max.z - ray.origin.z) * divZ;
+			tzmin = (center.z - extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z + extent.z - ray.origin.z) * divZ;
 		} else {
-			tzmin = (max.z - ray.origin.z) * divZ;
-			tzmax = (min.z - ray.origin.z) * divZ;
+			tzmin = (center.z + extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z - extent.z - ray.origin.z) * divZ;
 		}
-
-		max.recycle();
-		min.recycle();
 
 		if ((txmin > tzmax) || (tzmin > txmax)) return false;
 		if (tzmin > txmin) txmin = tzmin;
@@ -381,8 +372,6 @@ public final class AxisAlignedBox {
 		txmax = (center.x + extent.x - ray.origin.x) * divX;
 		tymin = (center.y - extent.y - ray.origin.y) * divY;
 		tymax = (center.y + extent.y - ray.origin.y) * divY;
-		tzmin = (center.z - extent.z - ray.origin.z) * divZ;
-		tzmax = (center.z + extent.z - ray.origin.z) * divZ;
 
 		if (divX < 0) {
 			int flt1 = Float.floatToRawIntBits(txmin);
@@ -407,6 +396,9 @@ public final class AxisAlignedBox {
 			tymin = Float.intBitsToFloat(flt1);
 			tymax = Float.intBitsToFloat(flt2);
 		}
+
+		tzmin = (center.z - extent.z - ray.origin.z) * divZ;
+		tzmax = (center.z + extent.z - ray.origin.z) * divZ;
 
 		if (divZ < 0) {
 			int flt1 = Float.floatToRawIntBits(tzmin);

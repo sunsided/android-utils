@@ -186,7 +186,7 @@ public final class ObjectCache<T> {
 	 * Removes all cached items.
 	 * A call to this method does not change the capacity of the queue.
 	 */
-	public synchronized void clear() {
+	public void clear() {
 		// reset counter and pointers
 		elementCount = 0;
 		lastElementWithValue = null;
