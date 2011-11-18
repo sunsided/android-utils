@@ -4,8 +4,8 @@ import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Recycling for objects, used by the {@link ObjectCache}.
- * @see ObjectCache
+ * Recycling for objects, used by the {@link RealObjectCache}.
+ * @see RealObjectCache
  */
 public interface ObjectFactory<T> {
 
