@@ -1078,6 +1078,20 @@ public final class Matrix4 {
 	}
 
 	/**
+	 * Interpretiert diese Matrix als 3x3-Matrix und transformiert einen Vektor
+	 *
+	 * @param vector Der zu transformierende Vektor
+	 * @return Der transformierte Vektor
+	 * @see #transformVector(Vector3)
+	 */
+	@ReturnsCachedValue
+	public final Vector3 transform3x3(final @NotNull Vector3 vector) {
+		Vector3 v = vector.clone();
+		transformInPlace3x3(v);
+		return v;
+	}
+
+	/**
 	 * Transformiert einen Vektor mittels dieser Matrix unter der Annahme w=0
 	 *
 	 * <h2>Besonderheiten</h2>
@@ -1136,6 +1150,22 @@ public final class Matrix4 {
 		final float invW = 1.0f / w;
 
 		vector.set(x * invW, y * invW, z * invW);
+	}
+
+	/**
+	 * Interpretiert diese Matrix als 3x3-Matrix und transformiert einen Vektor.
+	 * </p>
+	 * Dieser Aufruf ähnelt {@link #transformVectorInPlace(Vector3)} bis auf die fehlende Skalierung durch
+	 * w-Werte.
+	 *
+	 * @param vector Der zu transformierende Vektor
+	 * @see Matrix4#transform(Vector3, float)
+	 */
+	public final void transformInPlace3x3(@NotNull Vector3 vector) {
+		final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z);
+		final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z);
+		final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z);
+		vector.set(x, y, z);
 	}
 
 	/**
