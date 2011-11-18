@@ -1,7 +1,7 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ public final class AxisAlignedBox {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<AxisAlignedBox> Recycling = new ObjectCache<AxisAlignedBox>(new ObjectFactory<AxisAlignedBox>() {
+	public static final ThreadLocalObjectCache<AxisAlignedBox> Cache = new ThreadLocalObjectCache<AxisAlignedBox>(new ObjectFactory<AxisAlignedBox>() {
 		@NotNull
 		@Override
 		public AxisAlignedBox createNew() {
@@ -34,12 +34,12 @@ public final class AxisAlignedBox {
 	 * @param extentY Der Maximalvektor (Y-Komponente)
 	 * @param extentZ Der Maximalvektor (Z-Komponente)
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static AxisAlignedBox createNew(final float centerX, final float centerY, final float centerZ,
 	                            final float extentX, final float extentY, final float extentZ) {
-		return Recycling.getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
+		return Cache.get().getOrCreate().set(centerX, centerY, centerZ, extentX, extentY, extentZ);
 	}
 
 	/**
@@ -50,10 +50,10 @@ public final class AxisAlignedBox {
 	 *
 	 * @param other Die zu kopierende Box
 	 * @return Die neue oder aufbereitete Box
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static AxisAlignedBox createNew(@NotNull final AxisAlignedBox other) {
-		return Recycling.getOrCreate().set(other);
+		return Cache.get().getOrCreate().set(other);
 	}
 
 	/**
@@ -65,10 +65,10 @@ public final class AxisAlignedBox {
 	 * @param center Der Mittelpunkt der Box
 	 * @param extent Der Maximalvektor der Box
 	 * @return Die neue oder aufbereitete Box
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static AxisAlignedBox createNew(@NotNull final Vector3 center, @NotNull final Vector3 extent) {
-		return Recycling.getOrCreate().set(center, extent);
+		return Cache.get().getOrCreate().set(center, extent);
 	}
 
 	/**
@@ -78,32 +78,32 @@ public final class AxisAlignedBox {
 	 * </p>
 	 *
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static AxisAlignedBox createNew() {
-		return Recycling.getOrCreate();
+		return Cache.get().getOrCreate();
 	}
 
 	/**
 	 * Recyclet eine Box
 	 *
 	 * @param box Die zu recyclende Box
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see AxisAlignedBox#recycle()
 	 */
 	public static void recycle(@NotNull final AxisAlignedBox box) {
-		Recycling.registerElement(box);
+		Cache.get().registerElement(box);
 	}
 
 	/**
-	 * Registriert diesen Vektor für das spätere Recycling
+	 * Registriert diesen Vektor für das spätere Cache
 	 *
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see Vector3#recycle(Vector3)
 	 */
 	public void recycle() {
-		Recycling.registerElement(this);
+		Cache.get().registerElement(this);
 	}
 
 	/**
@@ -296,9 +296,55 @@ public final class AxisAlignedBox {
 		final float minZ = -maxZ;
 
 		// Test durchführen
-		// TODO: Subtrahieren und Test auf null durchführen -- schneller?
 		return  x >= minX && x <= maxX &&
 				y >= minY && y <= maxY &&
 				z >= minZ && z <= maxZ;
+	}
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet
+	 *
+	 * @param ray Der Strahl
+	 * @param nearBound Der nähste, gültige Punkt
+	 * @param farBound Der weiteste, gültige Punkt
+	 * @return <code>true</code>, wenn der Strahl die Box schneidet
+	 */
+	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+
+		float txmin, txmax, tymin, tymax, tzmin, tzmax;
+		final float divX = ray.invDirection.x;
+		final float divY = ray.invDirection.y;
+		final float divZ = ray.invDirection.z;
+
+		if (divX >= 0) {
+			txmin = (center.x - extent.x - ray.origin.x) * divX;
+			txmax = (center.x + extent.x - ray.origin.x) * divX;
+		} else {
+			txmin = (center.x + extent.x - ray.origin.x) * divX;
+			txmax = (center.x - extent.x - ray.origin.x) * divX;
+		}
+		if (divY >= 0) {
+			tymin = (center.y - extent.y - ray.origin.y) * divY;
+			tymax = (center.y + extent.y - ray.origin.y) * divY;
+		} else {
+			tymin = (center.y + extent.y - ray.origin.y) * divY;
+			tymax = (center.y - extent.y - ray.origin.y) * divY;
+		}
+		if ((txmin > tymax) || (tymin > txmax)) return false;
+		if (tymin > txmin) txmin = tymin;
+		if (tymax < txmax) txmax = tymax;
+
+		if (divZ >= 0) {
+			tzmin = (center.z - extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z + extent.z - ray.origin.z) * divZ;
+		} else {
+			tzmin = (center.z + extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z - extent.z - ray.origin.z) * divZ;
+		}
+
+		if ((txmin > tzmax) || (tzmin > txmax)) return false;
+		if (tzmin > txmin) txmin = tzmin;
+		if (tzmax < txmax) txmax = tzmax;
+		return ((txmin >= nearBound) && (txmax <= farBound));
 	}
 }

@@ -1,5 +1,8 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Mathematische Helfermethoden
  */
@@ -91,5 +94,111 @@ public class MathUtils {
 	 */
 	public static float deg2Rad(float degree) {
 		return DEG_TO_RAD * degree;
+	}
+
+	/**
+	 * Liefert den Vektor aus den maximalen Komponenten zweier Vektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @return Der Vektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b) {
+		float x = Math.max(a.x, b.x);
+		float y = Math.max(a.y, b.y);
+		float z = Math.max(a.z, b.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den maximalen Komponenten dreier Vektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @param c Dritter Vektor
+	 * @return Der Vektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
+		float x = Math.max(Math.max(a.x, b.x), c.x);
+		float y = Math.max(Math.max(a.y, b.y), c.y);
+		float z = Math.max(Math.max(a.z, b.z), c.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den minimalen Komponenten von sechs Eingabevektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @param c Dritter Vektor
+	 * @param d Vierter Vektor
+	 * @param e Fünfter Vektor
+	 * @param f Sechster Vektor
+	 * @return Der Maximalvektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
+		float x = Math.max(Math.max(Math.max(Math.max(Math.max(a.x, b.x), c.x), d.x), e.x), f.x);
+		float y = Math.max(Math.max(Math.max(Math.max(Math.max(a.y, b.y), c.y), d.y), e.y), f.y);
+		float z = Math.max(Math.max(Math.max(Math.max(Math.max(a.z, b.z), c.z), d.z), e.z), f.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den minimalen Komponenten zweier Vektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @return Der Vektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b) {
+		float x = Math.min(a.x, b.x);
+		float y = Math.min(a.y, b.y);
+		float z = Math.min(a.z, b.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den minimalen Komponenten dreier Vektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @param c Dritter Vektor
+	 * @return Der Vektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
+		float x = Math.min(Math.min(a.x, b.x), c.x);
+		float y = Math.min(Math.min(a.y, b.y), c.y);
+		float z = Math.min(Math.min(a.z, b.z), c.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den minimalen Komponenten von sechs Eingabevektoren
+	 *
+	 * @param a Erster Vektor
+	 * @param b Zweiter Vektor
+	 * @param c Dritter Vektor
+	 * @param d Vierter Vektor
+	 * @param e Fünfter Vektor
+	 * @param f Sechster Vektor
+	 * @return Der Vektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
+		float x = Math.min(Math.min(Math.min(Math.min(Math.min(a.x, b.x), c.x), d.x), e.x), f.x);
+		float y = Math.min(Math.min(Math.min(Math.min(Math.min(a.y, b.y), c.y), d.y), e.y), f.y);
+		float z = Math.min(Math.min(Math.min(Math.min(Math.min(a.z, b.z), c.z), d.z), e.z), f.z);
+		return Vector3.createNew(x, y, z);
 	}
 }

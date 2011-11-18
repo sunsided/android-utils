@@ -1,9 +1,9 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
-import de.widemeadows.projectcore.math.mock.FloatMath; // TODO: Ersetzen mit android.util.FloatMath wenn nicht in Test
+import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +18,7 @@ public final class Vector3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Vector3> Recycling = new ObjectCache<Vector3>(new ObjectFactory<Vector3>() {
+	public static final ThreadLocalObjectCache<Vector3> Cache = new ThreadLocalObjectCache<Vector3>(new ObjectFactory<Vector3>() {
 		@NotNull
         @Override
 		public Vector3 createNew() {
@@ -36,11 +36,11 @@ public final class Vector3 {
      * @param y Y-Koordinate
      * @param z Z-Koordinate
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Vector3 createNew(final float x, final float y, final float z) {
-		return Recycling.getOrCreate().set(x, y, z);
+		return Cache.get().getOrCreate().set(x, y, z);
 	}
 
 	/**
@@ -51,10 +51,10 @@ public final class Vector3 {
 	 *
      * @param other der zu kopierende Vector3
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
     public static Vector3 createNew(@NotNull final Vector3 other) {
-        return Recycling.getOrCreate().set(other);
+        return Cache.get().getOrCreate().set(other);
     }
 
     /**
@@ -64,32 +64,32 @@ public final class Vector3 {
      * </p>
      *
      * @return Der neue oder aufbereitete Vektor
-     * @see #Recycling
+     * @see #Cache
      */
     @NotNull
     public static Vector3 createNew() {
-        return Recycling.getOrCreate();
+        return Cache.get().getOrCreate();
     }
 
 	/**
-	 * Registriert einen Vektor für das spätere Recycling
+	 * Registriert einen Vektor für das spätere Cache
 	 *
 	 * @param vector Der zu registrierende Vektor
-	 * @see #Recycling
+	 * @see #Cache
      * @see Vector3#recycle()
 	 */
 	public static void recycle(@NotNull final Vector3 vector) {
-		Recycling.registerElement(vector);
+		Cache.get().registerElement(vector);
 	}
 
     /**
-     * Registriert diesen Vektor für das spätere Recycling
+     * Registriert diesen Vektor für das spätere Cache
      *
-     * @see #Recycling
+     * @see #Cache
      * @see Vector3#recycle(Vector3)
      */
     public void recycle() {
-        Recycling.registerElement(this);
+        Cache.get().registerElement(this);
     }
 
 	/**
@@ -421,9 +421,9 @@ public final class Vector3 {
 	 */
 	@NotNull
 	public Vector3 crossInPlace(@NotNull final Vector3 b) {
-		float nx = y*b.z - z*b.y;
-		float ny = z*b.x - x*b.z;
-			   z = x*b.y - y*b.x;
+		final float nx = y*b.z - z*b.y;
+		final float ny = z*b.x - x*b.z;
+				this.z = x*b.y - y*b.x;
 		this.y = ny;
 		this.x = nx;
 		return this;
@@ -573,110 +573,84 @@ public final class Vector3 {
 		z = Math.abs(z);
 		return this;
 	}
-	
+
 	/**
-	 * Liefert den Vektor aus den maximalen Komponenten zweier Vektoren
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @return Der Vektor
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b) {
-		float x = Math.max(a.x, b.x);
-		float y = Math.max(a.y, b.y);
-		float z = Math.max(a.z, b.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isSmallerThan(@NotNull final Vector3 other) {
+		return x < other.x - EPSILON && y < other.y - EPSILON && z < other.z - EPSILON;
 	}
 
 	/**
-	 * Liefert den Vektor aus den maximalen Komponenten dreier Vektoren
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @param c Dritter Vektor
-	 * @return Der Vektor
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
-		float x = Math.max(Math.max(a.x, b.x), c.x);
-		float y = Math.max(Math.max(a.y, b.y), c.y);
-		float z = Math.max(Math.max(a.z, b.z), c.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isSmallerOrEqual(@NotNull final Vector3 other) {
+		return x <= other.x + EPSILON && y <= other.y + EPSILON && z <= other.z + EPSILON;
 	}
 
 	/**
-	 * Liefert den Vektor aus den minimalen Komponenten von sechs Eingabevektoren
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @param c Dritter Vektor
-	 * @param d Vierter Vektor
-	 * @param e Fünfter Vektor
-	 * @param f Sechster Vektor
-	 * @return Der Maximalvektor
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 max(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
-		float x = Math.max(Math.max(Math.max(Math.max(Math.max(a.x, b.x), c.x), d.x), e.x), f.x);
-		float y = Math.max(Math.max(Math.max(Math.max(Math.max(a.y, b.y), c.y), d.y), e.y), f.y);
-		float z = Math.max(Math.max(Math.max(Math.max(Math.max(a.z, b.z), c.z), d.z), e.z), f.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isGraterThan(@NotNull final Vector3 other) {
+		return x > other.x + EPSILON && y > other.y + EPSILON && z > other.z + EPSILON;
 	}
 
 	/**
-	 * Liefert den Vektor aus den minimalen Komponenten zweier Vektoren
+	 * Ermittelt, ob dieser Vektor kleiner als ein anderer Vektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @return Der Vektor
+	 * @param other Der Vergleichsvektor
+	 * @return Das Resultat
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b) {
-		float x = Math.min(a.x, b.x);
-		float y = Math.min(a.y, b.y);
-		float z = Math.min(a.z, b.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isGreaterOrEqual(@NotNull final Vector3 other) {
+		return x >= other.x - EPSILON && y >= other.y - EPSILON && z >= other.z - EPSILON;
 	}
 
 	/**
-	 * Liefert den Vektor aus den minimalen Komponenten dreier Vektoren
+	 * Ermittelt, ob dieser Vektor länger als ein Vergleichsvektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @param c Dritter Vektor
-	 * @return Der Vektor
+	 * @param other Der Vergleichsvektor
+	 * @return <code>true</code>, wenn dieser Vektor länger ist
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
-		float x = Math.min(Math.min(a.x, b.x), c.x);
-		float y = Math.min(Math.min(a.y, b.y), c.y);
-		float z = Math.min(Math.min(a.z, b.z), c.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isLongerThan(@NotNull final Vector3 other) {
+		return getLengthSquared() > other.getLengthSquared();
 	}
 
 	/**
-	 * Liefert den Vektor aus den minimalen Komponenten von sechs Eingabevektoren
+	 * Ermittelt, ob dieser Vektor länger als ein Vergleichsvektor ist
 	 *
-	 * @param a Erster Vektor
-	 * @param b Zweiter Vektor
-	 * @param c Dritter Vektor
-	 * @param d Vierter Vektor
-	 * @param e Fünfter Vektor
-	 * @param f Sechster Vektor
-	 * @return Der Vektor
+	 * @param otherLength Die Länge des Vergleichsvektors
+	 * @return <code>true</code>, wenn dieser Vektor länger ist
 	 */
-	@NotNull
-	@ReturnsCachedValue
-	public static Vector3 min(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c, @NotNull final Vector3 d, @NotNull final Vector3 e, @NotNull final Vector3 f) {
-		float x = Math.min(Math.min(Math.min(Math.min(Math.min(a.x, b.x), c.x), d.x),e.x),f.x);
-		float y = Math.min(Math.min(Math.min(Math.min(Math.min(a.y, b.y), c.y), d.y),e.y),f.y);
-		float z = Math.min(Math.min(Math.min(Math.min(Math.min(a.z, b.z), c.z), d.z),e.z),f.z);
-		return Vector3.createNew(x, y, z);
+	public final boolean isLongerThan(final float otherLength) {
+		return getLengthSquared() > (otherLength* otherLength);
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kürzer als ein Vergleichsvektor ist
+	 *
+	 * @param other Der Vergleichsvektor
+	 * @return <code>true</code>, wenn dieser Vektor kürzer ist
+	 */
+	public final boolean isShorterThan(@NotNull final Vector3 other) {
+		return getLengthSquared() < other.getLengthSquared();
+	}
+
+	/**
+	 * Ermittelt, ob dieser Vektor kürzer als ein Vergleichsvektor ist
+	 *
+	 * @param otherLength Die Länge des Vergleichsvektors
+	 * @return <code>true</code>, wenn dieser Vektor kürzer ist
+	 */
+	public final boolean isShorterThan(final float otherLength) {
+		return getLengthSquared() < (otherLength * otherLength);
 	}
 }

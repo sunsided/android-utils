@@ -1,14 +1,14 @@
 package de.widemeadows.projectcore.math.tests;
 
-import de.widemeadows.projectcore.math.MathUtils;
-import de.widemeadows.projectcore.math.Matrix4;
-import de.widemeadows.projectcore.math.Vector3;
+import de.widemeadows.projectcore.math.*;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.Random;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.*;
 
 /**
@@ -356,5 +356,34 @@ public class MatrixTests {
 		assertEquals(0.86364f, result.x, Epsilon);
 		assertEquals(0.89394f, result.y, Epsilon);
 		assertEquals(0.84848f, result.z, Epsilon);
+	}
+
+	/**
+	 * Testet die Performance von erzeugen/recyclen
+	 */
+	@Test
+	public void createDestroyPerformance() {
+
+		final int iterations = 100000000;
+
+		for (int i = 10; i >= 0; --i) {
+			Matrix4 mtx = Matrix4.createNew();
+			mtx.recycle();
+		}
+		Matrix4.Cache.get().clear();
+
+		long start = System.nanoTime();
+		for (int i = iterations - 1; i >= 0; --i) {
+			Matrix4 mtx1 = Matrix4.createNew();
+			mtx1.recycle();
+			Matrix4 mtx2 = Matrix4.createNew();
+			Matrix4 mtx3 = Matrix4.createNew();
+			mtx2.recycle();
+			mtx3.recycle();
+		}
+		long elapsed1 = System.nanoTime() - start;
+		Matrix4.Cache.get().clear();
+
+		System.out.println("Erzeugen und Recyclen von " + iterations*3 + " Matrizen: " + elapsed1 / (float) iterations / 3 + " ms");
 	}
 }

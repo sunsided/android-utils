@@ -1,7 +1,7 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public final class Ray3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Ray3> Recycling = new ObjectCache<Ray3>(new ObjectFactory<Ray3>() {
+	public static final ThreadLocalObjectCache<Ray3> Cache = new ThreadLocalObjectCache<Ray3>(new ObjectFactory<Ray3>() {
 		@NotNull
 		@Override
 		public Ray3 createNew() {
@@ -35,12 +35,12 @@ public final class Ray3 {
 	 * @param directionY Die Richtung (Y-Komponente)
 	 * @param directionZ Die Richtung (Z-Komponente)
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Ray3 createNew(final float originX, final float originY, final float originZ,
 	                      final float directionX, final float directionY, final float directionZ) {
-		return Recycling.getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
+		return Cache.get().getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
 	}
 
 	/**
@@ -52,10 +52,10 @@ public final class Ray3 {
 	 * @param origin Der Ursprung
 	 * @param direction Die Richtung
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Vector3 origin, @NotNull final Vector3 direction) {
-		return Recycling.getOrCreate().set(origin, direction);
+		return Cache.get().getOrCreate().set(origin, direction);
 	}
 
 	/**
@@ -66,10 +66,10 @@ public final class Ray3 {
 	 *
 	 * @param other    Der zu kopierende Ray
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Ray3 other) {
-		return Recycling.getOrCreate().set(other);
+		return Cache.get().getOrCreate().set(other);
 	}
 
 	/**
@@ -79,32 +79,32 @@ public final class Ray3 {
 	 * </p>
 	 *
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Ray3 createNew() {
-		return Recycling.getOrCreate();
+		return Cache.get().getOrCreate();
 	}
 
 	/**
 	 * Recyclet einen Ray
 	 *
 	 * @param box Der zu recyclende Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see AxisAlignedBox#recycle()
 	 */
 	public static void recycle(@NotNull final Ray3 box) {
-		Recycling.registerElement(box);
+		Cache.get().registerElement(box);
 	}
 
 	/**
-	 * Registriert diesen Ray für das spätere Recycling
+	 * Registriert diesen Ray für das spätere Cache
 	 *
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see Vector3#recycle(Vector3)
 	 */
 	public void recycle() {
-		Recycling.registerElement(this);
+		Cache.get().registerElement(this);
 	}
 
 	/**
@@ -115,9 +115,26 @@ public final class Ray3 {
 
 	/**
 	 * Die Richtung des Strahls
+	 *
+	 * <h3>Vektor nicht manuell setzen!</h3>
+	 * Der Vektor muss über die Methode {@link #setDirection(Vector3)} oder {@link #setDirection(float, float, float)}
+	 * gesetzt werden!
+	 *
+	 * @see #invDirection
+	 * @see #setDirection(Vector3)
+	 * @see #setDirection(float, float, float)
 	 */
 	@NotNull
 	public final Vector3 direction = Vector3.createNew(0.57735f, 0.57735f, 0.57735f);
+
+	/**
+	 * Die reziproke Richtung des Strahls
+	 * @see #direction
+	 * @see #setDirection(Vector3)
+	 * @see #setDirection(float, float, float)
+	 */
+	@NotNull
+	public final Vector3 invDirection = Vector3.createNew(1.0f / 0.57735f, 1.0f / 0.57735f, 1.0f / 0.57735f);
 
 	/**
 	 * Normalokonstruktor
@@ -166,8 +183,7 @@ public final class Ray3 {
 	 */
 	@NotNull
 	public Ray3 setDirection(@NotNull final Vector3 direction) {
-		this.direction.set(direction).normalize();
-		return this;
+		return setDirection(direction.x, direction.y, direction.z);
 	}
 
 	/**
@@ -181,6 +197,7 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 setDirection(final float directionX, final float directionY, final float directionZ) {
 		this.direction.set(directionX, directionY, directionZ).normalize();
+		this.invDirection.set(1.0f / this.direction.x, 1.0f / this.direction.y, 1.0f / this.direction.z);
 		return this;
 	}
 
@@ -246,6 +263,7 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 invert() {
 		direction.invert();
+		invDirection.set(1.0f/direction.x, 1.0f/direction.y, 1.0f/direction.z);
 		return this;
 	}
 
@@ -257,40 +275,13 @@ public final class Ray3 {
 	 */
 	public float getDistanceFromPoint(@NotNull final Vector3 point) {
 
-		// http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%20Parametric%20Line
-		// d(P, L) = |w - (w dot direction)*direction|
-		// mit w = Vektor von Origin-->P
-
-		Vector3 w = point.sub(origin);
-		Vector3 bvl = direction.mul(w.dot(direction));
-		float length = w.subInPlace(bvl).getLength();
-
-		// aufräumen und raus hier
-		w.recycle();
-		bvl.recycle();
-		return length;
-	}
-
-	/**
-	 * Berechnet die Distanz eines Punktes zu diesem Strahl
-	 *
-	 * @param point Der Punkt
-	 * @return Die berechnete Distanz
-	 */
-	@Deprecated
-	public float getDistanceFromPointEx(@NotNull final Vector3 point) {
-
 		// http://answers.yahoo.com/question/index?qid=20080912194015AAIlm9X
 
-		final float directionLength = direction.getLength(); // sollte immer 1 sein
-
-		Vector3 w = point.sub(origin);
-		Vector3 bvl = w.cross(direction);
-		float length = bvl.getLength() / directionLength;
+		Vector3 w = point.sub(origin).crossInPlace(direction);
+		float length = w.getLength();
 
 		// aufräumen und raus hier
 		w.recycle();
-		bvl.recycle();
 		return length;
 	}
 
@@ -302,11 +293,9 @@ public final class Ray3 {
 	 */
 	@NotNull @ReturnsCachedValue
 	public Vector3 projectPoint(@NotNull final Vector3 point) {
-		direction.normalize(); // TODO: Assertion für Performance!
-
 		// Richtung bestimmen und auf Richtungsvektor projizieren
 		Vector3 w = point.sub(origin);
-		Vector3 projected = direction.mul(w.dot(direction));
+		Vector3 projected = direction.mul(w.dot(direction)); // TODO: Als static herausziehen, damit für diesen Test das Caching der anderen Werte nicht nötig ist
 
 		w.recycle();
 		return projected;

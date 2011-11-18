@@ -1,8 +1,6 @@
 package de.widemeadows.projectcore.math.tests;
 
-import de.widemeadows.projectcore.math.AxisAlignedBox;
-import de.widemeadows.projectcore.math.BoxPoint;
-import de.widemeadows.projectcore.math.Vector3;
+import de.widemeadows.projectcore.math.*;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
@@ -194,5 +192,67 @@ public class BoxTests {
 		point = Vector3.createNew(1.01f, 10000, -3000);
 		assertFalse(box.intersects(point));
 		assertFalse(box.intersects(point.x, point.y, point.z));
+	}
+
+	/**
+	 * Schnitt von {@link AxisAlignedBox} und {@link Ray3}
+	 */
+	@Test
+	public void rayBoxIntersection() {
+		AxisAlignedBox box = AxisAlignedBox.createNew(
+				0, 0, 0,
+				0.5f, 0.5f, 0.5f
+		);
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 0, 0), Vector3.createNew(10, 0, 0)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 10, 0), Vector3.createNew(10, 10, 0)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(0, -10, 0), Vector3.createNew(0, 10, 0)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, -10, 0), Vector3.createNew(-10, 10, 0)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(0, 0, -10), Vector3.createNew(0, 0, 10)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, 0, -10), Vector3.createNew(-10, 0, 10)), 0, 100));
+
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-10, -10, -10), Vector3.createNew(10, 10, 10)), 0, 100));
+		assertTrue(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(10, 10, 10), Vector3.createNew(-10, -10, -10)), 0, 100));
+		assertFalse(box.intersects(RayFactory.rayFromTwoPoints(Vector3.createNew(-20, -10, -10), Vector3.createNew(-20, 10, 10)), 0, 100));
+	}
+
+	/**
+	 * Schnitt von {@link AxisAlignedBox} und {@link Ray3}
+	 */
+	@Test
+	public void rayBoxIntersectionPerformance() {
+		final AxisAlignedBox box = AxisAlignedBox.createNew(
+				0, 0, 0,
+				0.5f, 0.5f, 0.5f
+		);
+
+		final Vector3 from1 = Vector3.createNew(-10, 0, 0);
+		final Vector3 to1 = Vector3.createNew(10, 0, 0);
+		final Vector3 from2 = Vector3.createNew(-10, 10, 0);
+		final Vector3 to2 = Vector3.createNew(10, 10, 0);
+		final Ray3 ray1 = RayFactory.rayFromTwoPoints(from1, to1);
+		final Ray3 ray2 = RayFactory.rayFromTwoPoints(from2, to2);
+
+		assertTrue(box.intersects(ray1, 0, 100));
+		assertFalse(box.intersects(ray2, 0, 100));
+
+		final int iterations = 100000000;
+
+		for (int i=10; i>=0; --i) {
+			box.intersects(ray1, 0, 100);
+			box.intersects(ray2, 0, 100);
+		}
+
+		long start = System.nanoTime();
+		for (int i = iterations - 1; i >= 0; --i) {
+			box.intersects(ray1, 0, 100);
+			box.intersects(ray2, 0, 100);
+		}
+		long elapsed1 = System.nanoTime() - start;
+
+
+		System.out.println("Performance Ray-Box-Intersection: " + elapsed1/(float)iterations/2 + " ms");
 	}
 }
