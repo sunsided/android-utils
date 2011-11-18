@@ -1,7 +1,7 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ public final class Matrix4 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Matrix4> Recycling = new ObjectCache<Matrix4>(new ObjectFactory<Matrix4>() {
+	public static final ThreadLocalObjectCache<Matrix4> Cache = new ThreadLocalObjectCache<Matrix4>(new ObjectFactory<Matrix4>() {
 		@NotNull
         @Override
 		public Matrix4 createNew() {
@@ -33,13 +33,13 @@ public final class Matrix4 {
 	 * Erzeugt eine neue Matrix-Instanz und initialisiert sie auf die Einheitsmatrix
 	 *
 	 * @return Die neue oder aufbereitete Matrix
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see #createNew(boolean) 
 	 * @see #createNew(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)
 	 */
 	@NotNull
 	public static Matrix4 createNew() {
-        return Recycling.getOrCreate().toUnit();
+        return Cache.get().getOrCreate().toUnit();
 	}
 
 	/**
@@ -47,13 +47,13 @@ public final class Matrix4 {
 	 *
 	 * @param makeUnit Gibt an, ob eine Einheitsmatrix erstellt werden soll. Ist dieser Wert false, bleibt die Matrix uninitialisiert.
 	 * @return Die neue oder aufbereitete Matrix
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see #createNew()
 	 * @see #createNew(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)
 	 */
 	@NotNull
 	public static Matrix4 createNew(boolean makeUnit) {
-		return makeUnit ? Recycling.getOrCreate().toUnit() : Recycling.getOrCreate();
+		return makeUnit ? Cache.get().getOrCreate().toUnit() : Cache.get().getOrCreate();
 	}
 
 	/**
@@ -80,14 +80,14 @@ public final class Matrix4 {
 	 * @param m44 Zeile 4, Spalte 4
 	 *
 	 * @return Die neue oder aufbereitete Matrix
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Matrix4 createNew(float m11, float m12, float m13, float m14,
 	                                float m21, float m22, float m23, float m24,
 	                                float m31, float m32, float m33, float m34,
 	                                float m41, float m42, float m43, float m44) {
-		return Recycling.getOrCreate().set(
+		return Cache.get().getOrCreate().set(
 				m11, m12, m13, m14,
 				m21, m22, m23, m24,
 				m31, m32, m33, m34,
@@ -95,24 +95,24 @@ public final class Matrix4 {
 	}
 
 	/**
-	 * Registriert eine Matrix für das spätere Recycling
+	 * Registriert eine Matrix für das spätere Cache
 	 * 
 	 * @param matrix Die zu registrierende Matrix
-	 * @see #Recycling
+	 * @see #Cache
      * @see Matrix4#recycle()
      */
 	public static void recycle(@NotNull Matrix4 matrix) {
-		Recycling.registerElement(matrix);
+		Cache.get().registerElement(matrix);
 	}
 
     /**
-     * Registriert diese Matrix für das spätere Recycling
+     * Registriert diese Matrix für das spätere Cache
      *
-     * @see #Recycling
+     * @see #Cache
      * @see Matrix4#recycle(Matrix4)
      */
     public void recycle() {
-        Recycling.registerElement(this);
+        Cache.get().registerElement(this);
     }
 	
 	/**

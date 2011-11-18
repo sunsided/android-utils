@@ -1,9 +1,9 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
-import de.widemeadows.projectcore.math.mock.FloatMath; // TODO: Ersetzen mit android.util.FloatMath wenn nicht in Test
+import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +18,7 @@ public final class Vector3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Vector3> Recycling = new ObjectCache<Vector3>(new ObjectFactory<Vector3>() {
+	public static final ThreadLocalObjectCache<Vector3> Cache = new ThreadLocalObjectCache<Vector3>(new ObjectFactory<Vector3>() {
 		@NotNull
         @Override
 		public Vector3 createNew() {
@@ -36,11 +36,11 @@ public final class Vector3 {
      * @param y Y-Koordinate
      * @param z Z-Koordinate
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Vector3 createNew(final float x, final float y, final float z) {
-		return Recycling.getOrCreate().set(x, y, z);
+		return Cache.get().getOrCreate().set(x, y, z);
 	}
 
 	/**
@@ -51,10 +51,10 @@ public final class Vector3 {
 	 *
      * @param other der zu kopierende Vector3
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
     public static Vector3 createNew(@NotNull final Vector3 other) {
-        return Recycling.getOrCreate().set(other);
+        return Cache.get().getOrCreate().set(other);
     }
 
     /**
@@ -64,32 +64,32 @@ public final class Vector3 {
      * </p>
      *
      * @return Der neue oder aufbereitete Vektor
-     * @see #Recycling
+     * @see #Cache
      */
     @NotNull
     public static Vector3 createNew() {
-        return Recycling.getOrCreate();
+        return Cache.get().getOrCreate();
     }
 
 	/**
-	 * Registriert einen Vektor für das spätere Recycling
+	 * Registriert einen Vektor für das spätere Cache
 	 *
 	 * @param vector Der zu registrierende Vektor
-	 * @see #Recycling
+	 * @see #Cache
      * @see Vector3#recycle()
 	 */
 	public static void recycle(@NotNull final Vector3 vector) {
-		Recycling.registerElement(vector);
+		Cache.get().registerElement(vector);
 	}
 
     /**
-     * Registriert diesen Vektor für das spätere Recycling
+     * Registriert diesen Vektor für das spätere Cache
      *
-     * @see #Recycling
+     * @see #Cache
      * @see Vector3#recycle(Vector3)
      */
     public void recycle() {
-        Recycling.registerElement(this);
+        Cache.get().registerElement(this);
     }
 
 	/**

@@ -51,14 +51,14 @@ public final class ObjectCache<T> {
 	 * Creates a new instance of the {@link ObjectCache} class.
 	 * @param factory The factory to create new instances
 	 */
-	public ObjectCache(@NotNull ObjectFactory<T> factory) {
+	ObjectCache(@NotNull ObjectFactory<T> factory) {
 		this.factory = factory;
 	}
 
 	/**
 	 * Creates a new instance of the {@link ObjectCache} class.
 	 */
-	public ObjectCache() {
+	private ObjectCache() {
 		factory = null;
 	}
 

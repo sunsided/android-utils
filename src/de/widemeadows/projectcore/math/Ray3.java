@@ -1,7 +1,7 @@
 package de.widemeadows.projectcore.math;
 
-import de.widemeadows.projectcore.cache.ObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public final class Ray3 {
 	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
-	public static final ObjectCache<Ray3> Recycling = new ObjectCache<Ray3>(new ObjectFactory<Ray3>() {
+	public static final ThreadLocalObjectCache<Ray3> Cache = new ThreadLocalObjectCache<Ray3>(new ObjectFactory<Ray3>() {
 		@NotNull
 		@Override
 		public Ray3 createNew() {
@@ -35,12 +35,12 @@ public final class Ray3 {
 	 * @param directionY Die Richtung (Y-Komponente)
 	 * @param directionZ Die Richtung (Z-Komponente)
 	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Ray3 createNew(final float originX, final float originY, final float originZ,
 	                      final float directionX, final float directionY, final float directionZ) {
-		return Recycling.getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
+		return Cache.get().getOrCreate().set(originX, originY, originZ, directionX, directionY, directionZ);
 	}
 
 	/**
@@ -52,10 +52,10 @@ public final class Ray3 {
 	 * @param origin Der Ursprung
 	 * @param direction Die Richtung
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Vector3 origin, @NotNull final Vector3 direction) {
-		return Recycling.getOrCreate().set(origin, direction);
+		return Cache.get().getOrCreate().set(origin, direction);
 	}
 
 	/**
@@ -66,10 +66,10 @@ public final class Ray3 {
 	 *
 	 * @param other    Der zu kopierende Ray
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	public static Ray3 createNew(@NotNull final Ray3 other) {
-		return Recycling.getOrCreate().set(other);
+		return Cache.get().getOrCreate().set(other);
 	}
 
 	/**
@@ -79,32 +79,32 @@ public final class Ray3 {
 	 * </p>
 	 *
 	 * @return Der neue oder aufbereitete Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 */
 	@NotNull
 	public static Ray3 createNew() {
-		return Recycling.getOrCreate();
+		return Cache.get().getOrCreate();
 	}
 
 	/**
 	 * Recyclet einen Ray
 	 *
 	 * @param box Der zu recyclende Ray
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see AxisAlignedBox#recycle()
 	 */
 	public static void recycle(@NotNull final Ray3 box) {
-		Recycling.registerElement(box);
+		Cache.get().registerElement(box);
 	}
 
 	/**
-	 * Registriert diesen Ray für das spätere Recycling
+	 * Registriert diesen Ray für das spätere Cache
 	 *
-	 * @see #Recycling
+	 * @see #Cache
 	 * @see Vector3#recycle(Vector3)
 	 */
 	public void recycle() {
-		Recycling.registerElement(this);
+		Cache.get().registerElement(this);
 	}
 
 	/**
