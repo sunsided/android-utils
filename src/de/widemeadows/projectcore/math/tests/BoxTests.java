@@ -253,6 +253,6 @@ public class BoxTests {
 		long elapsed1 = System.nanoTime() - start;
 
 
-		System.out.println(elapsed1/(float)iterations/2 + "ms");
+		System.out.println("Performance Ray-Box-Intersection: " + elapsed1/(float)iterations/2 + " ms");
 	}
 }
