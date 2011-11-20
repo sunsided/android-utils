@@ -5,6 +5,7 @@ import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Symmetrische Box
@@ -311,6 +312,17 @@ public final class AxisAlignedBox {
 	 * @return <code>true</code>, wenn der Strahl die Box schneidet
 	 */
 	public final boolean intersects(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+		return !Float.isNaN(getIntersectionF(ray, nearBound, farBound));
+	}
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet und liefert den Schnittpunkt
+	 * in Form eines Skalars t, so dass <code>ray.getPoint(t)}</code> den Vektor ergibt.
+	 *
+	 * @param ray       Der Strahl
+	 * @return <code>{@link Float#NaN}</code>, wenn der Strahl die Box nicht schneidet, ansonsten die Distanz vom Ursprung des Strahles
+	 */
+	public final float getIntersectionF(@NotNull final Ray3 ray) {
 
 		float txmin, txmax, tymin, tymax, tzmin, tzmax;
 		final float divX = ray.invDirection.x;
@@ -331,7 +343,7 @@ public final class AxisAlignedBox {
 			tymin = (center.y + extent.y - ray.origin.y) * divY;
 			tymax = (center.y - extent.y - ray.origin.y) * divY;
 		}
-		if ((txmin > tymax) || (tymin > txmax)) return false;
+		if ((txmin > tymax) || (tymin > txmax)) return Float.NaN;
 		if (tymin > txmin) txmin = tymin;
 		if (tymax < txmax) txmax = tymax;
 
@@ -343,9 +355,86 @@ public final class AxisAlignedBox {
 			tzmax = (center.z - extent.z - ray.origin.z) * divZ;
 		}
 
-		if ((txmin > tzmax) || (tzmin > txmax)) return false;
+		if ((txmin > tzmax) || (tzmin > txmax)) return Float.NaN;
 		if (tzmin > txmin) txmin = tzmin;
-		if (tzmax < txmax) txmax = tzmax;
-		return ((txmin >= nearBound) && (txmax <= farBound));
+		return txmin;
+	}
+	
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet und liefert den Schnittpunkt
+	 * in Form eines Skalars t, so dass <code>ray.getPoint(t)}</code> den Vektor ergibt.
+	 *
+	 * @param ray       Der Strahl
+	 * @param nearBound Der nähste, gültige Punkt
+	 * @param farBound  Der weiteste, gültige Punkt
+	 * @return <code>{@link Float#NaN}</code>, wenn der Strahl die Box nicht innerhalb der Range schneidet, ansonsten die Distanz vom Ursprung des Strahles
+	 */
+	public final float getIntersectionF(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+
+		float txmin, txmax, tymin, tymax, tzmin, tzmax;
+		final float divX = ray.invDirection.x;
+		final float divY = ray.invDirection.y;
+		final float divZ = ray.invDirection.z;
+
+		if (divX >= 0) {
+			txmin = (center.x - extent.x - ray.origin.x) * divX;
+			txmax = (center.x + extent.x - ray.origin.x) * divX;
+		} else {
+			txmin = (center.x + extent.x - ray.origin.x) * divX;
+			txmax = (center.x - extent.x - ray.origin.x) * divX;
+		}
+		if (divY >= 0) {
+			tymin = (center.y - extent.y - ray.origin.y) * divY;
+			tymax = (center.y + extent.y - ray.origin.y) * divY;
+		} else {
+			tymin = (center.y + extent.y - ray.origin.y) * divY;
+			tymax = (center.y - extent.y - ray.origin.y) * divY;
+		}
+		if ((txmin > tymax) || (tymin > txmax)) return Float.NaN;
+		if (tymin > txmin) txmin = tymin;
+		if (tymax < txmax) txmax = tymax;
+
+		if (divZ >= 0) {
+			tzmin = (center.z - extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z + extent.z - ray.origin.z) * divZ;
+		} else {
+			tzmin = (center.z + extent.z - ray.origin.z) * divZ;
+			tzmax = (center.z - extent.z - ray.origin.z) * divZ;
+		}
+
+		if ((txmin > tzmax) || (tzmin > txmax)) return Float.NaN;
+		if (tzmin > txmin) txmin = tzmin;
+		//if (tzmax < txmax) txmax = tzmax;
+		//return ((txmin >= nearBound) && (txmax <= farBound)) ? txmin : Float.NaN;
+		return ((txmin >= nearBound) && (txmin <= farBound)) ? txmin : Float.NaN;
+	}
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet und liefert den Schnittpunkt
+	 * in Form eines Skalars t, so dass <code>ray.getPoint(t)}</code> den Vektor ergibt.
+	 *
+	 * @param ray       Der Strahl
+	 * @param nearBound Der nähste, gültige Punkt
+	 * @param farBound  Der weiteste, gültige Punkt
+	 * @return <code>null</code>, wenn der Strahl die Box nicht innerhalb der Range schneidet, ansonsten der Punkt
+	 */
+	@Nullable @ReturnsCachedValue
+	public final Vector3 getIntersectionV(@NotNull final Ray3 ray, final float nearBound, final float farBound) {
+		final float t = getIntersectionF(ray, nearBound, farBound);
+		return Float.isNaN(t) ? null : ray.getPoint(t);
+	}
+
+	/**
+	 * Überprüft, ob ein Strahl die Box schneidet und liefert den Schnittpunkt
+	 * in Form eines Vektors.
+	 *
+	 * @param ray       Der Strahl
+	 * @return <code>null</code>, wenn der Strahl die Box nicht schneidet, ansonsten der Punkt
+	 */
+	@Nullable
+	@ReturnsCachedValue
+	public final Vector3 getIntersectionV(@NotNull final Ray3 ray) {
+		final float t = getIntersectionF(ray);
+		return Float.isNaN(t) ? null : ray.getPoint(t);
 	}
 }

@@ -301,4 +301,19 @@ public final class Ray3 {
 		w.recycle();
 		return projected;
 	}
+
+	/**
+	 * Liefert einen Punkt auf dem Strahl anhand eines Skalars <code>t</code>,
+	 * so dass gilt:
+	 * <p>
+	 * <code>P = t*{@link #direction} + {@link #origin}</code>
+	 * </p>
+	 *
+	 * @param t Der Skalar
+	 * @return Der Punkt auf dem Strahl
+	 */
+	@ReturnsCachedValue @NotNull
+	public Vector3 getPoint(final float t){
+		return direction.mul(t).addInPlace(origin);
+	}
 }
