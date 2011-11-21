@@ -14,7 +14,7 @@ public final class Plane3 {
     /**
      * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
      */
-    public static final IObjectCache<Plane3> Cache = new ThreadLocalObjectCache<>(new ObjectFactory<Plane3>() {
+    public static final IObjectCache<Plane3> Cache = new ThreadLocalObjectCache<Plane3>(new ObjectFactory<Plane3>() {
         @NotNull
         @Override
         public Plane3 createNew() {
