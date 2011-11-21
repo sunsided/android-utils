@@ -14,7 +14,7 @@ public final class Plane3 {
     /**
      * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
      */
-    public static final IObjectCache<Plane3> Cache = new ThreadLocalObjectCache<Plane3>(new ObjectFactory<Plane3>() {
+    public static final IObjectCache<Plane3> Cache = new ThreadLocalObjectCache<>(new ObjectFactory<Plane3>() {
         @NotNull
         @Override
         public Plane3 createNew() {
@@ -39,7 +39,8 @@ public final class Plane3 {
      * Erzeugt eine neue {@link Plane3}-Instanz.
      *
      * @param normal Die Normale der Ebene
-     * @Die neue oder aufbereitete Plane
+     * @param center Der Mittelpunkt der Ebene
+     * @return Die neue oder aufbereitete Plane
      * @see #Cache
      */
     public static Plane3 createNew(@NotNull final Vector3 normal, @NotNull final Vector3 center) {
@@ -188,7 +189,7 @@ public final class Plane3 {
 		// Entfernung berechnen
 		final Vector3 invNormal = aSubC;
 		invNormal.set(_normal).invert();
-		_distanceToOrigin = invNormal.dot(a); // TODO: Tests!
+		_distanceToOrigin = invNormal.dot(a);
 		invNormal.recycle();
         return this;
 	}
@@ -220,7 +221,7 @@ public final class Plane3 {
      */
     @NotNull
     public Plane3 set(@NotNull final Vector3 normal, final float distance) {
-        _normal.set(normal);
+        _normal.set(normal.getNormalized());
         _distanceToOrigin = distance;
         return this;
     }
@@ -239,15 +240,17 @@ public final class Plane3 {
 
 	/**
 	 * Ermittelt die Distanz eines Punktes zur Ebene
+     * 
 	 * @param point Der Punkt
 	 * @return Die Distanz zur Ebene
 	 */
 	public float getDistance(@NotNull final Vector3 point) {
-		return _normal.dot(point) + _distanceToOrigin; // TODO: Tests!
+		return Math.abs(_normal.dot(point) + _distanceToOrigin);
 	}
 
 	/**
 	 * Stringumwandlungs-Fu
+     * 
 	 * @return Le string
 	 */
 	@Override
