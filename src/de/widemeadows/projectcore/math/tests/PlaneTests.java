@@ -28,9 +28,11 @@ public class PlaneTests {
 		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(0, 1, 0)), DEFAULT_EPSILON);
 		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(-1, 1, 0)), DEFAULT_EPSILON);
 		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(1000, 1, 0)), DEFAULT_EPSILON);
-		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(0, -1, 0)), DEFAULT_EPSILON);
-		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(-1, -1, 0)), DEFAULT_EPSILON);
-		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(1000, -1, 40)), DEFAULT_EPSILON);
+
+		// Distanz -1
+		assertEquals(-1, plane.getDistanceFromPoint(Vector3.createNew(0, -1, 0)), DEFAULT_EPSILON);
+		assertEquals(-1, plane.getDistanceFromPoint(Vector3.createNew(-1, -1, 0)), DEFAULT_EPSILON);
+		assertEquals(-1, plane.getDistanceFromPoint(Vector3.createNew(1000, -1, 40)), DEFAULT_EPSILON);
 	}
 
 }
