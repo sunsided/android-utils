@@ -244,7 +244,7 @@ public final class Plane3 {
 	 * @param point Der Punkt
 	 * @return Die Distanz zur Ebene
 	 */
-	public float getDistance(@NotNull final Vector3 point) {
+	public float getDistanceFromPoint(@NotNull final Vector3 point) {
 		return Math.abs(_normal.dot(point) + _distanceToOrigin);
 	}
 
