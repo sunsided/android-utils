@@ -450,7 +450,8 @@ public final class Vector3 {
 	}
 
 	/**
-	 * Invertiert diesen Vektor
+	 * Invertiert diesen Vektor, so dass gilt:
+     * <code>inv({a; b; c}) = {-a; -b; -c}</code>
 	 */
 	public final void invert() {
 		x = -x;
