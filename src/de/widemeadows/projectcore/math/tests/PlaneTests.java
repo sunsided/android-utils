@@ -22,7 +22,7 @@ public class PlaneTests {
 		// Nulldistanz
 		assertEquals(0, plane.getDistanceFromPoint(Vector3.createNew(0, 0, 0)), DEFAULT_EPSILON);
 		assertEquals(0, plane.getDistanceFromPoint(Vector3.createNew(-1, 0, 0)), DEFAULT_EPSILON);
-		assertEquals(0, plane.getDistanceFromPoint(Vector3.createNew(1000, 1000, 0)), DEFAULT_EPSILON);
+		assertEquals(0, plane.getDistanceFromPoint(Vector3.createNew(1000, 0, 1000)), DEFAULT_EPSILON);
 
 		// Distanz 1
 		assertEquals(1, plane.getDistanceFromPoint(Vector3.createNew(0, 1, 0)), DEFAULT_EPSILON);
