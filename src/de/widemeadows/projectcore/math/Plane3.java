@@ -173,7 +173,7 @@ public final class Plane3 {
 	 */
     @NotNull
     public Plane3 set(@NotNull final Vector3 a, @NotNull final Vector3 b, @NotNull final Vector3 c) {
-		assert !a.equals(b) && !b.equals(c);
+		assert !a.equals(b) && !b.equals(c); // TODO: Dürfen nicht auf einer Geraden liegen!
 
 		// Normale berechnen: _normal = a.sub(b).cross(a.sub(c));
 		final Vector3 aSubB = a.sub(b);
@@ -201,14 +201,14 @@ public final class Plane3 {
      * @return Diese Instanz für method chaining
 	 */
     @NotNull
-    public Plane3 set(@NotNull final Vector3 center, @NotNull final Vector3 normal) {
+    public Plane3 set(@NotNull final Vector3 normal, @NotNull final Vector3 center) {
 		assert !normal.isEmpty();
 
 		// Normale setzen
 		_normal.set(normal.getNormalized());
 
 		// Entfernung berechnen
-		_distanceToOrigin = center.getLength();
+		_distanceToOrigin = normal.dotWithInversion(center);
         return this;
 	}
 
@@ -221,8 +221,10 @@ public final class Plane3 {
      */
     @NotNull
     public Plane3 set(@NotNull final Vector3 normal, final float distance) {
-        _normal.set(normal.getNormalized());
-        _distanceToOrigin = distance;
+	    assert !normal.isEmpty();
+
+	    _normal.set(normal.getNormalized());
+        _distanceToOrigin = -distance;
         return this;
     }
 
@@ -245,7 +247,8 @@ public final class Plane3 {
 	 * @return Die Distanz zur Ebene
 	 */
 	public float getDistanceFromPoint(@NotNull final Vector3 point) {
-		return _normal.dot(point) + _distanceToOrigin;
+		final float d1 = _normal.dot(point);
+		return d1 + _distanceToOrigin;
 	}
 
 	/**
