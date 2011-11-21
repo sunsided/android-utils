@@ -388,15 +388,42 @@ public final class Vector3 {
 	}
 	
 	/**
-	 * Berechnet das Punktprodukt zweier Vektoren
+	 * Berechnet das Punktprodukt zweier Vektoren.
+	 *
+	 * <h3>Berechnung</h3>
+	 * <code>dot(a, b) = a.x*b.x + a.y*b.y + a.z*b.z</code>
+	 *
+	 * <h3>Invertierter Vektor</h3>
+	 * Wird das Punktprodukt eines invertierten Vektors mit einem anderen Vektor benötigt,
+	 * kann die Funktion {@link #dotWithInversion(Vector3)} verwendet werden, welche keinen
+	 * Hilfsvektor benötigt.
 	 *
 	 * @param b Der zweite Vektor
 	 * @return Punktprodukt der Vektoren
+	 * @see #dotWithInversion(Vector3)
 	 */
 	public float dot(@NotNull final Vector3 b) {
 		return x*b.x + y*b.y + z*b.z;
 	}
-	
+
+	/**
+	 * Berechnet das Punktprodukt zweier Vektoren ohne Hilfsvektor derart, dass einer der beiden
+	 * Vektoren bei der Berechnung invertiert wird.
+	 * <p/>
+	 * Diese Methode ist gegenüber {@link #dot(Vector3)} in Verbindung mit {@link Vector3#getInverted()} zu bevorzugen,
+	 * da kein Hilfsvektor erzeugt werden muss.
+	 *
+	 * <h3>Berechnung</h3>
+	 * <code>dotWithInversion(a, b) = (-a.x*b.x) + (-a.y*b.y) + (-a.z*b.z)</code>
+	 *
+	 * @param b Der zweite Vektor
+	 * @return Punktprodukt der Vektoren
+	 * @see #dot(Vector3)
+	 */
+	public float dotWithInversion(@NotNull final Vector3 b) {
+		return -x * b.x -y * b.y - z * b.z;
+	}
+
 	/**
 	 * Berechnet das Kreuzprodukt zweier Vektoren
 	 *
