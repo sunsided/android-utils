@@ -365,7 +365,7 @@ public class MatrixTests {
 	/**
 	 * Testet die Performance von erzeugen/recyclen
 	 */
-	@Test
+	// @Test
 	public void createDestroyPerformanceCached() {
 
 		final int iterations = 100000000;
@@ -394,7 +394,7 @@ public class MatrixTests {
 	/**
 	 * Testet die Performance von erzeugen/recyclen
 	 */
-	@Test
+	// @Test
 	public void createDestroyPerformanceUncached() {
 
 		final int iterations = 100000;
