@@ -260,4 +260,10 @@ public final class Plane3 {
 	public String toString() {
 		return "{dist: "+_distanceToOrigin+", normal: " + _normal+"}";
 	}
+
+	/*
+	public float getIntersectionF(@NotNull final Ray3 ray) {
+
+	}
+	*/
 }
