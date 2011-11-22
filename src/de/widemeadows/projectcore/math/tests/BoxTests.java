@@ -221,7 +221,7 @@ public class BoxTests {
 	/**
 	 * Schnitt von {@link AxisAlignedBox} und {@link Ray3}
 	 */
-	@Test
+	// @Test
 	public void rayBoxIntersectionPerformance() {
 		final AxisAlignedBox box = AxisAlignedBox.createNew(
 				0, 0, 0,

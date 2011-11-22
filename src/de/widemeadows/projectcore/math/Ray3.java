@@ -253,7 +253,10 @@ public final class Ray3 {
 	 */
 	@NotNull @ReturnsCachedValue
 	public Ray3 getInverted() {
-		return Ray3.createNew(origin, direction.getInverted());
+		Vector3 inverted = direction.getInverted();
+		Ray3 ray = Ray3.createNew(origin, inverted);
+		inverted.recycle();
+		return ray;
 	}
 
 	/**
