@@ -16,7 +16,7 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation um die X-Achse
 	 *
-	 * @param theta Der Winkel
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -59,7 +59,7 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation um die Y-Achse
 	 *
-	 * @param theta Der Winkel
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -102,7 +102,7 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation um die Z-Achse
 	 *
-	 * @param theta Der Winkel
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -146,7 +146,7 @@ public class MatrixFactory {
 	 * Erzeugt eine Matrix zur Rotation um eine Achse
 	 *
 	 * @param axis  Die Achse
-	 * @param theta Der Winkel
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -211,9 +211,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur progressiven Rotation basierend auf Winkelgeschwindigkeit
 	 *
-	 * @param deltaX Winkelgeschwindigkeit in X-Richtung
-	 * @param deltaY Winkelgeschwindigkeit in Y-Richtung
-	 * @param deltaZ Winkelgeschwindigkeit in Z-Richtung
+	 * @param deltaX Winkelgeschwindigkeit in X-Richtung in radians/frame
+	 * @param deltaY Winkelgeschwindigkeit in Y-Richtung in radians/frame
+	 * @param deltaZ Winkelgeschwindigkeit in Z-Richtung in radians/frame
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -236,9 +236,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-ZXZ
 	 *
-	 * @param z  Der Winkel um die Z-Achse
-	 * @param x1 Der Winkel um die X'-Achse
-	 * @param z2 Der Winkel um die Z''-Achse
+	 * @param z  Der Winkel um die Z-Achse in radians
+	 * @param x1 Der Winkel um die X'-Achse in radians
+	 * @param z2 Der Winkel um die Z''-Achse in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZYZ(float, float, float)
@@ -272,9 +272,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-ZYZ
 	 *
-	 * @param z  Der Winkel um die Z-Achse
-	 * @param y1 Der Winkel um die Y'-Achse
-	 * @param z2 Der Winkel um die Z''-Achse
+	 * @param z  Der Winkel um die Z-Achse in radians
+	 * @param y1 Der Winkel um die Y'-Achse in radians
+	 * @param z2 Der Winkel um die Z''-Achse in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -308,9 +308,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-Roll-Pitch-Yaw
 	 *
-	 * @param rollX  Der Rollwinkel
-	 * @param pitchY Der Nickwinkel
-	 * @param yawZ   Der Gierwinkel
+	 * @param rollX  Der Rollwinkel in radians
+	 * @param pitchY Der Nickwinkel in radians
+	 * @param yawZ   Der Gierwinkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZYZ(float, float, float)

@@ -437,4 +437,26 @@ public final class AxisAlignedBox {
 		final float t = getIntersectionF(ray);
 		return Float.isNaN(t) ? null : ray.getPoint(t);
 	}
+
+    /**
+     * Transformiert die Box mittels der Matrix
+     *
+     * @param transformation Die anzuwendende Transformation
+     */
+    @NotNull @ReturnsCachedValue
+    public AxisAlignedBox transform(@NotNull final Matrix4 transformation) {
+        AxisAlignedBox box = AxisAlignedBox.createNew(this);
+        box.transformInPlace(transformation);
+        return box;
+    }
+
+    /**
+     * Transformiert die Box mittels der Matrix
+     *
+     * @param transformation Die anzuwendende Transformation
+     */
+    public void transformInPlace(@NotNull final Matrix4 transformation) {
+        transformation.transformPointInPlace(center);
+        transformation.transformVectorInPlace(extent);
+    }
 }

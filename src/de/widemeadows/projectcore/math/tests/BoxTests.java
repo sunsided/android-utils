@@ -255,4 +255,15 @@ public class BoxTests {
 
 		System.out.println("Performance Ray-Box-Intersection: " + elapsed1/(float)iterations/2 + " ms");
 	}
+
+    /**
+     * Test die Rotation der Box
+     */
+    @Test
+    public void boxRotation() {
+        Matrix4 translation = MatrixFactory.getRotationEulerRPY(0, MathUtils.deg2Rad(45), 0);
+        AxisAlignedBox box = AxisAlignedBox.createNew();
+
+        box.transform(translation);
+    }
 }
