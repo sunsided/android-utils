@@ -261,9 +261,10 @@ public class BoxTests {
      */
     @Test
     public void boxRotation() {
-        Matrix4 translation = MatrixFactory.getRotationEulerRPY(0, MathUtils.deg2Rad(45), 0);
+        //Matrix4 translation = MatrixFactory.getRotationEulerRPY(0, MathUtils.deg2Rad(45), 0);
+        Matrix4 translation = MatrixFactory.getRotationY(MathUtils.deg2Rad(45));
         AxisAlignedBox box = AxisAlignedBox.createNew();
 
-        box.transform(translation);
+        AxisAlignedBox box2 = box.transform(translation);
     }
 }

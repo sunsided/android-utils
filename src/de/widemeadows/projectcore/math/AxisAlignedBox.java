@@ -132,6 +132,7 @@ public final class AxisAlignedBox {
 	 * Erzeugt eine neue Instanz der {@link AxisAlignedBox}-Klasse
 	 */
 	private AxisAlignedBox() {
+        this.center.set(0.0f, 0.0f, 0.0f);
 		this.extent.set(0.5f, 0.5f, 0.5f);
 	}
 
