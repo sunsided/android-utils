@@ -152,6 +152,27 @@ public class MathUtils {
 	}
 
 	/**
+	 * Liefert den Vektor aus den minimalen Komponenten von beliebig vielen Eingabevektoren
+	 *
+	 * @param vectors Die Vektoren
+	 * @return Der Maximalvektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 max(@NotNull final Vector3... vectors) {
+		float x = Float.NEGATIVE_INFINITY;
+		float y = Float.NEGATIVE_INFINITY;
+		float z = Float.NEGATIVE_INFINITY;
+
+		for (int i= vectors.length-1; i>=0; --i) {
+			x = Math.max(x, vectors[i].x);
+			y = Math.max(y, vectors[i].y);
+			z = Math.max(z, vectors[i].z);
+		}
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
 	 * Liefert den Vektor aus den minimalen Komponenten zweier Vektoren
 	 *
 	 * @param a Erster Vektor
@@ -201,6 +222,27 @@ public class MathUtils {
 		float x = Math.min(Math.min(Math.min(Math.min(Math.min(a.x, b.x), c.x), d.x), e.x), f.x);
 		float y = Math.min(Math.min(Math.min(Math.min(Math.min(a.y, b.y), c.y), d.y), e.y), f.y);
 		float z = Math.min(Math.min(Math.min(Math.min(Math.min(a.z, b.z), c.z), d.z), e.z), f.z);
+		return Vector3.createNew(x, y, z);
+	}
+
+	/**
+	 * Liefert den Vektor aus den minimalen Komponenten von beliebig vielen Eingabevektoren
+	 *
+	 * @param vectors Die Vektoren
+	 * @return Der Maximalvektor
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Vector3 min(@NotNull final Vector3... vectors) {
+		float x = Float.POSITIVE_INFINITY;
+		float y = Float.POSITIVE_INFINITY;
+		float z = Float.POSITIVE_INFINITY;
+
+		for (int i = vectors.length - 1; i >= 0; --i) {
+			x = Math.min(x, vectors[i].x);
+			y = Math.min(y, vectors[i].y);
+			z = Math.min(z, vectors[i].z);
+		}
 		return Vector3.createNew(x, y, z);
 	}
 }
