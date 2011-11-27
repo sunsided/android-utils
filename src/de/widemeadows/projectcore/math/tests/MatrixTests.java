@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math.tests;
 
 import de.widemeadows.projectcore.math.MathUtils;
 import de.widemeadows.projectcore.math.Matrix4;
+import de.widemeadows.projectcore.math.MatrixFactory;
 import de.widemeadows.projectcore.math.Vector3;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -410,5 +412,84 @@ public class MatrixTests {
 		foo.clear();
 
 		System.out.println("Erzeugen und Recyclen von " + iterations + " Matrizen (uncached): " + elapsed / (float) iterations + " ms pro Instanz");
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationXYZ() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3, 1, 2, 3);
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3, 1, 2, 3);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix    Die anzuwendende Matrix
+	 * @param xIn       Der Vektor-Eingangswert (X)
+	 * @param yIn       Der Vektor-Eingangswert (Y)
+	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param xExpectedV Der erwartete Vektorwert (X) für den Vektor
+	 * @param yExpectedV Der erwartete Vektorwert (Y) für den Vektor
+	 * @param zExpectedV Der erwartete Vektorwert (Z) für den Vektor
+	 * @param xExpectedP Der erwartete Vektorwert (X) für den Punkt
+	 * @param yExpectedP Der erwartete Vektorwert (Y) für den Punkt
+	 * @param zExpectedP Der erwartete Vektorwert (Z) für den Punkt
+	 * @see #transformVector
+	 */
+	private void transformVectorAndPoint(@NotNull final Matrix4 matrix,
+	                                     final float xIn, final float yIn, final float zIn,
+	                                     final float xExpectedV, final float yExpectedV, final float zExpectedV,
+	                                     final float xExpectedP, final float yExpectedP, final float zExpectedP) {
+		transformVector(matrix, xIn, yIn, zIn, xExpectedV, yExpectedV, zExpectedV);
+		transformPoint(matrix, xIn, yIn, zIn, xExpectedP, yExpectedP, zExpectedP);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix Die anzuwendende Matrix
+	 * @param xIn Der Vektor-Eingangswert (X)
+	 * @param yIn Der Vektor-Eingangswert (Y)
+	 * @param zIn Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X)
+	 * @param yExpected Der erwartete Vektorwert (Y)
+	 * @param zExpected Der erwartete Vektorwert (Z)
+	 * @see #transformVector
+	 */
+	@NotNull
+	private Vector3 transformPoint(@NotNull final Matrix4 matrix, final float xIn, final float yIn, final float zIn, final float xExpected, final float yExpected, final float zExpected) {
+		Vector3 result = matrix.transformPoint(Vector3.createNew(xIn, yIn, zIn));
+		assertEquals(xExpected, result.x, Epsilon);
+		assertEquals(yExpected, result.y, Epsilon);
+		assertEquals(zExpected, result.z, Epsilon);
+		return result;
+	}
+
+	/**
+	 * Führt die Punkttransformation durch
+	 *
+	 * @param matrix    Die anzuwendende Matrix
+	 * @param xIn       Der Vektor-Eingangswert (X)
+	 * @param yIn       Der Vektor-Eingangswert (Y)
+	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X)
+	 * @param yExpected Der erwartete Vektorwert (Y)
+	 * @param zExpected Der erwartete Vektorwert (Z)
+	 * @see #transformPoint(de.widemeadows.projectcore.math.Matrix4, float, float, float, float, float, float)
+	 */
+	@NotNull
+	private Vector3 transformVector(@NotNull final Matrix4 matrix, final float xIn, final float yIn, final float zIn, final float xExpected, final float yExpected, final float zExpected) {
+		Vector3 result = matrix.transformPoint(Vector3.createNew(xIn, yIn, zIn));
+		assertEquals(xExpected, result.x, Epsilon);
+		assertEquals(yExpected, result.y, Epsilon);
+		assertEquals(zExpected, result.z, Epsilon);
+		return result;
 	}
 }

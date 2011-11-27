@@ -81,8 +81,9 @@ public class MathUtils {
 	 * Wandelt Radians in Grad um
 	 * @param radians Der Winkel in Radians
 	 * @return Der Winkel in Grad
+	 * @see #deg2rad(float)
 	 */
-	public static float rad2Deg(float radians) {
+	public static float rad2deg(float radians) {
 		return RAD_TO_DEG * radians;
 	}
 
@@ -91,8 +92,9 @@ public class MathUtils {
 	 *
 	 * @param degree Der Winkel in Grad
 	 * @return Der Winkel in Radians
+	 * @see #rad2deg(float)
 	 */
-	public static float deg2Rad(float degree) {
+	public static float deg2rad(float degree) {
 		return DEG_TO_RAD * degree;
 	}
 
