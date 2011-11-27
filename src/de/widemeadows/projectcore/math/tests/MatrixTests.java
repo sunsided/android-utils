@@ -418,23 +418,90 @@ public class MatrixTests {
 	 * Überprüft die Vektor-/Punktrotation
 	 */
 	@Test
-	public void vectorRotationXYZ() {
+	public void vectorRotationX() {
 
 		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(0)),
 				1, 2, 3,
-				1, 2, 3, 1, 2, 3);
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(90)),
+				1, 2, 3,
+				1, -3, 2);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(180)),
+				1, 2, 3,
+				1, -2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(270)),
+				1, 2, 3,
+				1, 3, -2);
+
 		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(360)),
 				1, 2, 3,
-				1, 2, 3, 1, 2, 3);
+				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationY() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(90)),
+				1, 2, 3,
+				-3, 2, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(180)),
+				1, 2, 3,
+				-1, 2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(270)),
+				1, 2, 3,
+				3, 2, 1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationZ() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(90)),
+				1, 2, 3,
+				-2, 1, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(180)),
+				1, 2, 3,
+				-1, -2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(270)),
+				1, 2, 3,
+				2, -1, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3);
 	}
 
 	/**
 	 * Führt die Vektortransformation durch
 	 *
-	 * @param matrix    Die anzuwendende Matrix
-	 * @param xIn       Der Vektor-Eingangswert (X)
-	 * @param yIn       Der Vektor-Eingangswert (Y)
-	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param matrix     Die anzuwendende Matrix
+	 * @param xIn        Der Vektor-Eingangswert (X)
+	 * @param yIn        Der Vektor-Eingangswert (Y)
+	 * @param zIn        Der Vektor-Eingangswert (Z)
 	 * @param xExpectedV Der erwartete Vektorwert (X) für den Vektor
 	 * @param yExpectedV Der erwartete Vektorwert (Y) für den Vektor
 	 * @param zExpectedV Der erwartete Vektorwert (Z) für den Vektor
@@ -449,6 +516,25 @@ public class MatrixTests {
 	                                     final float xExpectedP, final float yExpectedP, final float zExpectedP) {
 		transformVector(matrix, xIn, yIn, zIn, xExpectedV, yExpectedV, zExpectedV);
 		transformPoint(matrix, xIn, yIn, zIn, xExpectedP, yExpectedP, zExpectedP);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix    Die anzuwendende Matrix
+	 * @param xIn       Der Vektor-Eingangswert (X)
+	 * @param yIn       Der Vektor-Eingangswert (Y)
+	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X) für Vektor und Punkt
+	 * @param yExpected Der erwartete Vektorwert (Y) für Vektor und Punkt
+	 * @param zExpected Der erwartete Vektorwert (Z) für Vektor und Punkt
+	 * @see #transformVector
+	 */
+	private void transformVectorAndPoint(@NotNull final Matrix4 matrix,
+	                                     final float xIn, final float yIn, final float zIn,
+	                                     final float xExpected, final float yExpected, final float zExpected) {
+		transformVector(matrix, xIn, yIn, zIn, xExpected, yExpected, zExpected);
+		transformPoint(matrix, xIn, yIn, zIn, xExpected, yExpected, zExpected);
 	}
 
 	/**
