@@ -1,6 +1,7 @@
 package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +15,10 @@ public class MatrixFactory {
 	private MatrixFactory() {}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die X-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die X-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
@@ -28,18 +32,15 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationX(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, cos, sin, 0.0f,
-				0.0f, -sin, cos, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationX(final float theta) {
+		return getRotationX(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die X-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die X-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -48,7 +49,7 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationX(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationX(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, cosTheta, sinTheta, 0.0f,
@@ -57,7 +58,10 @@ public class MatrixFactory {
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Y-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Y-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
@@ -71,18 +75,15 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationY(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				cos, 0.0f, -sin, 0.0f,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				-sin, 0.0f, cos, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationY(final float theta) {
+		return getRotationY(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Y-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Y-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -91,16 +92,19 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationY(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationY(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				cosTheta, 0.0f, -sinTheta, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
-				-sinTheta, 0.0f, cosTheta, 0.0f,
+				sinTheta, 0.0f, cosTheta, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Z-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Z-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
@@ -114,18 +118,15 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationZ(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				cos, sin, 0.0f, 0.0f,
-				-sin, cos, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationZ(final float theta) {
+		return getRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Z-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Z-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -134,7 +135,7 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationZ(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationZ(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				cosTheta, sinTheta, 0.0f, 0.0f,
 				-sinTheta, cosTheta, 0.0f, 0.0f,
@@ -166,7 +167,7 @@ public class MatrixFactory {
 
 	/**
 	 * Erzeugt eine Matrix zur Rotation um eine Achse
-	 *
+		 *
 	 * @param axis     Die Achse
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels

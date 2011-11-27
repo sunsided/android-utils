@@ -453,7 +453,7 @@ public class MatrixTests {
 
 		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(90)),
 				1, 2, 3,
-				-3, 2, -1);
+				3, 2, -1);
 
 		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(180)),
 				1, 2, 3,
@@ -461,7 +461,7 @@ public class MatrixTests {
 
 		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(270)),
 				1, 2, 3,
-				3, 2, 1);
+				-3, 2, 1);
 
 		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(360)),
 				1, 2, 3,
@@ -493,6 +493,39 @@ public class MatrixTests {
 		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(360)),
 				1, 2, 3,
 				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationRPY() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(360), deg2rad(360), deg2rad(360)),
+				1, 2, 3, 1, 2, 3);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, -3, 2);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(180), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, -2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(270), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, 3, -2);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(90), deg2rad(0)),
+				1, 2, 3, 3, 2, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(180), deg2rad(0)),
+				1, 2, 3, -1, 2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(270), deg2rad(0)),
+				1, 2, 3, -3, 2, 1);
 	}
 
 	/**

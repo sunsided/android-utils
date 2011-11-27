@@ -90,12 +90,12 @@ public class MatrixFactoryTests {
 		{
 			Matrix4 rotation = MatrixFactory.getRotationY(MathUtils.deg2rad(90));
 			Vector3 result = rotation.transformPoint(a);
-			assertEquals(-a.z, result.x, MathUtils.DEFAULT_EPSILON);
+			assertEquals(a.z, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.x, result.z, MathUtils.DEFAULT_EPSILON);
 
 			result = rotation.transformVector(a);
-			assertEquals(-a.z, result.x, MathUtils.DEFAULT_EPSILON);
+			assertEquals(a.z, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.x, result.z, MathUtils.DEFAULT_EPSILON);
 		}
