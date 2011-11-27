@@ -266,6 +266,16 @@ public class BoxTests {
         Matrix4 translation = MatrixFactory.getRotationY(deg2rad(45));
         AxisAlignedBox box = AxisAlignedBox.createNew();
 	    AxisAlignedBox box2 = box.transform(translation);
-	    System.out.printf("AABB " + box.extent + " --> " + box2.extent);
-    }
+	    // System.out.printf("AABB " + box.extent + " --> " + box2.extent + "\n");
+	    assertEquals(0.70710677f, box2.extent.x, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.y, DEFAULT_EPSILON);
+	    assertEquals(0.70710677f, box2.extent.z, DEFAULT_EPSILON);
+
+	    translation = MatrixFactory.getRotationY(deg2rad(90));
+	    box = AxisAlignedBox.createNew();
+	    box2 = box.transform(translation);
+	    assertEquals(0.5, box2.extent.x, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.y, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.z, DEFAULT_EPSILON);
+	}
 }

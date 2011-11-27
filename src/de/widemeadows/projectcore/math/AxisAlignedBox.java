@@ -457,37 +457,13 @@ public final class AxisAlignedBox {
      * @param transformation Die anzuwendende Transformation
      */
     public void transformInPlace(@NotNull final Matrix4 transformation) {
-    
-	    Vector3 v1  = Vector3.createNew(center.x + Math.abs(extent.x), center.y + Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v2  = Vector3.createNew(center.x + Math.abs(extent.x), center.y + Math.abs(extent.y), center.z - Math.abs(extent.z));
-	    Vector3 v3  = Vector3.createNew(center.x + Math.abs(extent.x), center.y + Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v4  = Vector3.createNew(center.x + Math.abs(extent.x), center.y + Math.abs(extent.y), center.z + Math.abs(extent.z));
 
-	    Vector3 v5  = Vector3.createNew(center.x + Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v6  = Vector3.createNew(center.x + Math.abs(extent.x), center.y - Math.abs(extent.y), center.z - Math.abs(extent.z));
-	    Vector3 v7  = Vector3.createNew(center.x + Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v8  = Vector3.createNew(center.x + Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
+	    // Kudos: http://zeuxcg.org/2010/10/17/aabb-from-obb-with-component-wise-abs/
+	    final float x = Math.abs(transformation.getAt(Matrix4.M11)) * extent.x + Math.abs(transformation.getAt(Matrix4.M12)) * extent.y + Math.abs(transformation.getAt(Matrix4.M13)) * extent.z;
+	    final float y = Math.abs(transformation.getAt(Matrix4.M21)) * extent.x + Math.abs(transformation.getAt(Matrix4.M22)) * extent.y + Math.abs(transformation.getAt(Matrix4.M23)) * extent.z;
+	    final float z = Math.abs(transformation.getAt(Matrix4.M31)) * extent.x + Math.abs(transformation.getAt(Matrix4.M32)) * extent.y + Math.abs(transformation.getAt(Matrix4.M33)) * extent.z;
 
-	    Vector3 v9  = Vector3.createNew(center.x - Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v10 = Vector3.createNew(center.x - Math.abs(extent.x), center.y - Math.abs(extent.y), center.z - Math.abs(extent.z));
-	    Vector3 v11 = Vector3.createNew(center.x - Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
-	    Vector3 v12 = Vector3.createNew(center.x - Math.abs(extent.x), center.y - Math.abs(extent.y), center.z + Math.abs(extent.z));
-
-        transformation.transformVectorInPlace(v1);
-	    transformation.transformVectorInPlace(v2);
-	    transformation.transformVectorInPlace(v3);
-	    transformation.transformVectorInPlace(v4);
-	    transformation.transformVectorInPlace(v5);
-	    transformation.transformVectorInPlace(v6);
-	    transformation.transformVectorInPlace(v7);
-	    transformation.transformVectorInPlace(v8);
-	    transformation.transformVectorInPlace(v9);
-	    transformation.transformVectorInPlace(v10);
-	    transformation.transformVectorInPlace(v11);
-	    transformation.transformVectorInPlace(v12);
-
-	    extent.set(MathUtils.max(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12));
-	    
+	    extent.set(x, y, z);
 	    transformation.transformPointInPlace(center);
     }
 }
