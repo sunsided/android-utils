@@ -1,14 +1,29 @@
 function box(center, extent, linestyle)
 
+    if ~exist('linestyle', 'var') && exist('extent', 'var') && isletter(extent)
+        % box(extent, linestyle)
+        linestyle = extent;
+        extent = center;
+        center = [0, 0, 0];
+    elseif exist('center', 'var') && ~exist('extent', 'var')
+        % box(extent)
+        extent = center;
+        center = [0, 0, 0];
+    elseif ~exist('center', 'var') && ~exist('extent', 'var')
+        % box()
+        extent = [0.5, 0.5, 0.5];
+        center = [0, 0, 0];
+    end
+    
+    if ~exist('linestyle', 'var') 
+        linestyle = 'b:';
+    end
+
     extent = abs(extent);
     axis_min = 2*(center-extent);
     axis_max = 2*(center+extent);
     max_pt = center+extent;
 
-    if ~exist('linestyle', 'var')
-        linestyle = 'b:';
-    end
-    
     btl = [ 
         center(1)-extent(1)
         center(2)+extent(2)
@@ -71,7 +86,11 @@ function box(center, extent, linestyle)
     plot3([ftl(1) btl(1)], [ftl(2) btl(2)], [ftl(3) btl(3)], 'k', 'LineWidth', 2); hold on;
     plot3([ftr(1) btr(1)], [ftr(2) btr(2)], [ftr(3) btr(3)], 'k', 'LineWidth', 2); hold on;
     
-    plot3([center(1) max_pt(1)], [center(2) max_pt(2)], [center(3) max_pt(3)], linestyle);
+    h = plot3([center(1) max_pt(1)], [center(2) max_pt(2)], [center(3) max_pt(3)], linestyle);
+    h2 = plot3(center(1), center(2), center(3), '*', 'LineWidth', 2);
+    h3 = plot3(max_pt(1), max_pt(2), max_pt(3), '*', 'LineWidth', 2);
+    set(h2, 'Color', get(h, 'Color'));
+    set(h3, 'Color', get(h, 'Color'));
     
     axis([axis_min(1) axis_max(1) axis_min(2) axis_max(2) axis_min(3) axis_max(3)]);
     xlabel('X'); ylabel('Y'); zlabel('Z');
