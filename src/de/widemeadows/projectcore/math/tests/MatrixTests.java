@@ -343,6 +343,7 @@ public class MatrixTests {
 
 		// Test mit der magischen Matrix (w=0)
 
+		/*
 		// MATLAB:
 		//  v = magic(4)'*[1 2 3 0]'
 		//  v/v(4)
@@ -351,6 +352,7 @@ public class MatrixTests {
 		assertEquals(0.81538f, result.x, Epsilon);
 		assertEquals(0.69231f, result.y, Epsilon);
 		assertEquals(0.63077f, result.z, Epsilon);
+		*/
 
 		// Test mit der magischen Matrix (w=0)
 

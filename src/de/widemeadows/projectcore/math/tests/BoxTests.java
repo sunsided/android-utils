@@ -4,6 +4,7 @@ import de.widemeadows.projectcore.math.*;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
+import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.*;
 
 /**
@@ -262,9 +263,9 @@ public class BoxTests {
     @Test
     public void boxRotation() {
         //Matrix4 translation = MatrixFactory.getRotationEulerRPY(0, MathUtils.deg2rad(45), 0);
-        Matrix4 translation = MatrixFactory.getRotationY(MathUtils.deg2rad(45));
+        Matrix4 translation = MatrixFactory.getRotationY(deg2rad(45));
         AxisAlignedBox box = AxisAlignedBox.createNew();
-
-        AxisAlignedBox box2 = box.transform(translation);
+	    AxisAlignedBox box2 = box.transform(translation);
+	    System.out.printf("AABB " + box.extent + " --> " + box2.extent);
     }
 }
