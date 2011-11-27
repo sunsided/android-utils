@@ -19,10 +19,10 @@ function box(center, extent, linestyle)
         linestyle = 'b:';
     end
 
+    max_pt = center+extent;
     extent = abs(extent);
     axis_min = 2*(center-extent);
     axis_max = 2*(center+extent);
-    max_pt = center+extent;
 
     btl = [ 
         center(1)-extent(1)
@@ -92,6 +92,7 @@ function box(center, extent, linestyle)
     set(h2, 'Color', get(h, 'Color'));
     set(h3, 'Color', get(h, 'Color'));
     
+    pbaspect([1 1 1]);
     axis([axis_min(1) axis_max(1) axis_min(2) axis_max(2) axis_min(3) axis_max(3)]);
     xlabel('X'); ylabel('Y'); zlabel('Z');
     grid on;
