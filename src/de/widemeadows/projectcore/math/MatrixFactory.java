@@ -20,6 +20,14 @@ public class MatrixFactory {
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *    1,   0,    0, 0
+	 *    0, cos,  sin, 0
+	 *    0, -sin, cos, 0
+	 *    0,    0,   0, 1
+	 * </pre>
+	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
@@ -42,6 +50,14 @@ public class MatrixFactory {
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *    1,   0,    0, 0
+	 *    0, cos,  sin, 0
+	 *    0, -sin, cos, 0
+	 *    0,    0,   0, 1
+	 * </pre>
+	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 * @return Die Rotationsmatrix
@@ -62,6 +78,14 @@ public class MatrixFactory {
 	 *
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, 0, -sin, 0
+	 *    0, 1,    0, 0
+	 *  sin, 0,  cos, 0
+	 *    0, 0,    0, 1
+	 * </pre>
 	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
@@ -85,6 +109,14 @@ public class MatrixFactory {
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
 	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, 0, -sin, 0
+	 *    0, 1,    0, 0
+	 *  sin, 0,  cos, 0
+	 *    0, 0,    0, 1
+	 * </pre>
+	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 * @return Die Rotationsmatrix
@@ -105,6 +137,14 @@ public class MatrixFactory {
 	 *
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, sin, 0, 0
+	 *    0,   1, 0, 0
+	 * -sin, cos, 1, 0
+	 *    0,   0, 0, 1
+	 * </pre>
 	 *
 	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
@@ -127,6 +167,14 @@ public class MatrixFactory {
 	 *
 	 * <h3>RH-/LH-System</h3>
 	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, sin, 0, 0
+	 *    0,   1, 0, 0
+	 * -sin, cos, 1, 0
+	 *    0,   0, 0, 1
+	 * </pre>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
