@@ -526,6 +526,13 @@ public class MatrixTests {
 
 		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(270), deg2rad(0)),
 				1, 2, 3, -3, 2, 1);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(90), deg2rad(0)),
+				1, 2, 3, 2, -3, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(90), deg2rad(90)),
+				1, 2, 3, 3, 2, -1);
 	}
 
 	/**
