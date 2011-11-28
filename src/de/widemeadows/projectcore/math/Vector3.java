@@ -682,4 +682,66 @@ public final class Vector3 {
 	public final boolean isShorterThan(final float otherLength) {
 		return getLengthSquared() < (otherLength * otherLength);
 	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die X-Achse.
+	 *
+	 * @param angle Winkel in Grad, um den rotiert wird.
+	 *
+	 */
+	public void rotateX(float angle) {
+		/*
+		  1,   0,    0
+		  0, cos,  sin
+	      0, -sin, cos
+		 */
+		
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		final float newY = y * c + z * s;
+		final float newZ = -y * s + z * c;
+		y = newY;
+		z = newZ;
+	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die Y-Achse.
+	 *
+	 * @param angle Winkel in Grad, um den rotiert wird.
+	 *
+	 */
+	public void rotateY(float angle) {
+		/*
+		cos, 0, -sin
+	      0, 1,    0
+	    sin, 0,  cos
+		 */
+
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		final float newX = x * c - z * s;
+		final float newZ = x * s + z * c;
+		x = newX;
+		z = newZ;
+	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die Z-Achse.
+	 *
+	 * @param angle Winkel in Grad, um den rotiert wird.
+	 */
+	public void rotateZ(float angle) {
+		/*
+		cos, sin, 0
+	   -sin, cos, 0
+	      0,   0, 1
+		 */
+
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		final float newX = x * c + y * s;
+		final float newY = -x * s + y * c;
+		x = newX;
+		y = newY;
+	}
 }
