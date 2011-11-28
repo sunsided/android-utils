@@ -267,7 +267,7 @@ public final class Ray3 {
 	@NotNull
 	public Ray3 invert() {
 		direction.invert();
-		invDirection.set(1.0f/direction.x, 1.0f/direction.y, 1.0f/direction.z);
+		invDirection.set(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
 		return this;
 	}
 
@@ -306,6 +306,20 @@ public final class Ray3 {
 	}
 
 	/**
+	 * Projiziert einen Punkt auf den Strahl und liefert die Distanz vom Ursprung entlang des Strahls
+	 *
+	 * @param point Der Punkt
+	 * @return Die Distanz zum projizierten Punkt
+	 */
+	public float projectPointF(@NotNull final Vector3 point) {
+		// Richtung bestimmen und auf Richtungsvektor projizieren
+		Vector3 w = point.sub(origin);
+		float distance = w.dot(direction); // TODO: Als static herausziehen, damit für diesen Test das Caching der anderen Werte nicht nötig ist
+		w.recycle();
+		return distance;
+	}
+
+	/**
 	 * Liefert einen Punkt auf dem Strahl anhand eines Skalars <code>t</code>,
 	 * so dass gilt:
 	 * <p>
@@ -330,6 +344,7 @@ public final class Ray3 {
 	public Ray3 transform(@NotNull final Matrix4 transformation) {
 		transformation.transformPointInPlace(origin);
 		transformation.transformVectorInPlace(direction);
+		invDirection.set(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
 		return this;
 	}
 }
