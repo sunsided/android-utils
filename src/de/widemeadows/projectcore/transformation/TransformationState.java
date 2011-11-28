@@ -8,6 +8,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TransformationState {
 
+	// TODO: Clone
+	// TODO: Invert
+	// TODO: Chain
+	// TODO: Cache
+
 	/**
 	 * Der Skalierungsfaktor des Objektes
 	 */
@@ -101,5 +106,38 @@ public class TransformationState {
 	 */
 	public void setScale(final float factor) {
 		scale = factor;
+	}
+
+	/**
+	 * Transformiert einen Punkt
+	 * @param point Der zu transformierende Punkt
+	 */
+	public void transformPoint(@NotNull Vector3 point) {
+		transformVector(point);
+		point.addInPlace(translation);
+	}
+
+	/**
+	 * Transformiert einen Vektor
+	 *
+	 * @param vector Der zu transformierende Vektor
+	 */
+	public void transformVector(@NotNull Vector3 vector) {
+		final float x = scale * (vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
+		final float y = scale * (vector.x * rotation[3] + vector.y * rotation[4] + vector.z * rotation[5]);
+		final float z = scale * (vector.x * rotation[6] + vector.y * rotation[7] + vector.z * rotation[8]);
+		vector.set(x, y, z);
+	}
+
+	/**
+	 * Transformiert einen Vektor invers
+	 * @param vector Der invers zu transformierende Vektor
+	 */
+	public void inverseTransformVector(@NotNull Vector3 vector) {
+		final float invScale = 1.0f / scale; // TODO: Ausgiebigst testen!
+		final float x = (vector.x * rotation[0] + vector.y * rotation[3] + vector.z * rotation[6]) * invScale;
+		final float y = (vector.x * rotation[1] + vector.y * rotation[4] + vector.z * rotation[7]) * invScale;
+		final float z = (vector.x * rotation[2] + vector.y * rotation[5] + vector.z * rotation[8]) * invScale;
+		vector.set(x, y, z);
 	}
 }
