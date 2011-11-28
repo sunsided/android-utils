@@ -16,6 +16,3 @@ transformed_vector = transformation * vector
 
 close all;
 box([vector(1) vector(2) vector(3)]); box([transformed_vector(1) transformed_vector(2) transformed_vector(3)], 'r');
-
-
-inv(transformation)

@@ -867,6 +867,23 @@ public final class Matrix4 {
 	}
 
 	/**
+	 * Schnelles Invertieren einer affinen Transformationsmatrix ohne Skalierung und Scherung
+	 */
+	public void invertAffine() {
+		final float invTx = -(values[M11] * values[M41] + values[M12] * values[M42] + values[M13] * values[M43]);
+		final float invTy = -(values[M21] * values[M41] + values[M22] * values[M42] + values[M23] * values[M43]);
+		final float invTz = -(values[M31] * values[M41] + values[M32] * values[M42] + values[M33] * values[M43]);
+
+		swapFields(M12, M21);
+		swapFields(M13, M31);
+		swapFields(M23, M32);
+
+		values[M41] = invTx;
+		values[M42] = invTy;
+		values[M43] = invTz;
+	}
+
+	/**
 	 * Liefert eine transponierte Kopie dieser Matrix
 	 * @return Die transponierte Kopie
 	 */
@@ -1283,4 +1300,27 @@ public final class Matrix4 {
 		if (o instanceof Matrix4) return equals((Matrix4)o, MathUtils.DEFAULT_EPSILON);
 		return super.equals(o);
 	}
+
+	/**
+	 * Vertausacht zwei Felder
+	 * @param field1 Das erste Feld
+	 * @param field2 Das zweite Feld
+	 */
+	public void swapFields(int field1, int field2) {
+		assert field1 >= 0 && field1 <= 15;
+		assert field2 >= 0 && field2 <= 15;
+		float swap = values[field1];
+		values[field1] = values[field2];
+		values[field2] = swap;
+	}
+	
+	@Override
+	public String toString() {
+		return  values[M11] + ",\t" + values[M12] + ",\t" + values[M13] + ",\t" + values[M14] + ";\n" +
+				values[M21] + ",\t" + values[M22] + ",\t" + values[M23] + ",\t" + values[M24] + ";\n" +
+				values[M31] + ",\t" + values[M32] + ",\t" + values[M33] + ",\t" + values[M34] + ";\n" +
+				values[M41] + ",\t" + values[M42] + ",\t" + values[M43] + ",\t" + values[M44];
+
+	}
 }
+
