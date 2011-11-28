@@ -8,7 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Symmetrische Box
+ * Symmetrische, achsenausgerichtete Box
+ *
+ * @see OrientedBoxThin
  */
 public final class AxisAlignedBox {
 
@@ -345,8 +347,8 @@ public final class AxisAlignedBox {
 			tymax = (center.y - extent.y - ray.origin.y) * divY;
 		}
 		if ((txmin > tymax) || (tymin > txmax)) return Float.NaN;
-		if (tymin > txmin) txmin = tymin;
-		if (tymax < txmax) txmax = tymax;
+		if (tymin > txmin) txmin = tymin; // TODO: max() verwenden
+		if (tymax < txmax) txmax = tymax; // TODO: min() verwenden
 
 		if (divZ >= 0) {
 			tzmin = (center.z - extent.z - ray.origin.z) * divZ;
@@ -357,7 +359,7 @@ public final class AxisAlignedBox {
 		}
 
 		if ((txmin > tzmax) || (tzmin > txmax)) return Float.NaN;
-		if (tzmin > txmin) txmin = tzmin;
+		if (tzmin > txmin) txmin = tzmin; // TODO: max() verwenden
 		return txmin;
 	}
 	
@@ -392,8 +394,8 @@ public final class AxisAlignedBox {
 			tymax = (center.y - extent.y - ray.origin.y) * divY;
 		}
 		if ((txmin > tymax) || (tymin > txmax)) return Float.NaN;
-		if (tymin > txmin) txmin = tymin;
-		if (tymax < txmax) txmax = tymax;
+		if (tymin > txmin) txmin = tymin; // TODO: max() verwenden
+		if (tymax < txmax) txmax = tymax; // TODO: min() verwenden
 
 		if (divZ >= 0) {
 			tzmin = (center.z - extent.z - ray.origin.z) * divZ;
@@ -404,7 +406,7 @@ public final class AxisAlignedBox {
 		}
 
 		if ((txmin > tzmax) || (tzmin > txmax)) return Float.NaN;
-		if (tzmin > txmin) txmin = tzmin;
+		if (tzmin > txmin) txmin = tzmin; // TODO: max() verwenden
 		//if (tzmax < txmax) txmax = tzmax;
 		//return ((txmin >= nearBound) && (txmax <= farBound)) ? txmin : Float.NaN;
 		return ((txmin >= nearBound) && (txmin <= farBound)) ? txmin : Float.NaN;

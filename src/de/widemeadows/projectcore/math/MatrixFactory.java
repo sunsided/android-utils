@@ -141,8 +141,8 @@ public class MatrixFactory {
 	 * <h3>Layout</h3>
 	 * <pre>
 	 *  cos, sin, 0, 0
-	 *    0,   1, 0, 0
-	 * -sin, cos, 1, 0
+	 * -sin, cos, 0, 0
+	 *    0,   0, 1, 0
 	 *    0,   0, 0, 1
 	 * </pre>
 	 *
@@ -171,8 +171,8 @@ public class MatrixFactory {
 	 * <h3>Layout</h3>
 	 * <pre>
 	 *  cos, sin, 0, 0
-	 *    0,   1, 0, 0
-	 * -sin, cos, 1, 0
+	 * -sin, cos, 0, 0
+	 *    0,   0, 1, 0
 	 *    0,   0, 0, 1
 	 * </pre>
 	 *
