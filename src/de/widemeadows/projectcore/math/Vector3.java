@@ -690,16 +690,26 @@ public final class Vector3 {
 	 *
 	 */
 	public void rotateX(float angle) {
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		rotateX(c, s);
+	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die X-Achse.
+	 *
+	 * @param cosTheta Cosinus des Winkels, um den rotiert wird.
+	 * @param sinTheta Cosinus des Winkels, um den rotiert wird.
+	 */
+	public void rotateX(final float cosTheta, final float sinTheta) {
 		/*
 		  1,   0,    0
 		  0, cos,  sin
 	      0, -sin, cos
 		 */
-		
-		final float c = FloatMath.cos(angle);
-		final float s = FloatMath.sin(angle);
-		final float newY = y * c + z * s;
-		final float newZ = -y * s + z * c;
+
+		final float newY = y * cosTheta + z * sinTheta;
+		final float newZ = -y * sinTheta + z * cosTheta;
 		y = newY;
 		z = newZ;
 	}
@@ -711,16 +721,26 @@ public final class Vector3 {
 	 *
 	 */
 	public void rotateY(float angle) {
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		rotateY(c, s);
+	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die Y-Achse.
+	 *
+	 * @param cosTheta Cosinus des Winkels, um den rotiert wird.
+	 * @param sinTheta Cosinus des Winkels, um den rotiert wird.
+	 */
+	public void rotateY(final float cosTheta, final float sinTheta) {
 		/*
 		cos, 0, -sin
 	      0, 1,    0
 	    sin, 0,  cos
 		 */
 
-		final float c = FloatMath.cos(angle);
-		final float s = FloatMath.sin(angle);
-		final float newX = x * c - z * s;
-		final float newZ = x * s + z * c;
+		final float newX = x * cosTheta - z * sinTheta;
+		final float newZ = x * sinTheta + z * cosTheta;
 		x = newX;
 		z = newZ;
 	}
@@ -731,16 +751,26 @@ public final class Vector3 {
 	 * @param angle Winkel in Grad, um den rotiert wird.
 	 */
 	public void rotateZ(float angle) {
+		final float c = FloatMath.cos(angle);
+		final float s = FloatMath.sin(angle);
+		rotateZ(c, s);
+	}
+
+	/**
+	 * Rotiert den aktuellen Vektor um die Z-Achse.
+	 *
+	 * @param cosTheta Cosinus des Winkels, um den rotiert wird.
+	 * @param sinTheta Cosinus des Winkels, um den rotiert wird.
+	 */
+	public void rotateZ(final float cosTheta, final float sinTheta) {
 		/*
 		cos, sin, 0
 	   -sin, cos, 0
 	      0,   0, 1
 		 */
 
-		final float c = FloatMath.cos(angle);
-		final float s = FloatMath.sin(angle);
-		final float newX = x * c + y * s;
-		final float newY = -x * s + y * c;
+		final float newX = x * cosTheta + y * sinTheta;
+		final float newY = -x * sinTheta + y * cosTheta;
 		x = newX;
 		y = newY;
 	}
