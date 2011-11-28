@@ -330,6 +330,7 @@ public final class Ray3 {
 	public Ray3 transform(@NotNull final Matrix4 transformation) {
 		transformation.transformPointInPlace(origin);
 		transformation.transformVectorInPlace(direction);
+		invDirection.set(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
 		return this;
 	}
 }
