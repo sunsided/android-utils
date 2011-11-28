@@ -335,7 +335,7 @@ public final class Frustum {
 	 * @param point Der Punkt
 	 * @return Testergebnis
 	 */
-	public Intersection contains(@NotNull Vector3 point) {
+	public boolean intersects(@NotNull Vector3 point) {
 
 		float pcz,pcx,pcy,aux;
 
@@ -345,21 +345,21 @@ public final class Frustum {
 		// compute and test the Z coordinate
 		pcz = v.dot(_Z);
 		if (pcz > _farDistance || pcz < _nearDistance)
-			return Intersection.OUTSIDE;
+			return false; //return Intersection.OUTSIDE;
 
 		// compute and test the Y coordinate
 		pcy = v.dot(_Y);
 		aux = pcz * _tangens;
 		if (pcy > aux || pcy < -aux)
-			return Intersection.OUTSIDE;
+			return false; // return Intersection.OUTSIDE;
 			
 		// compute and test the X coordinate
 		pcx = v.dot(_X);
 		aux = aux * _ratio;
 		if (pcx > aux || pcx < -aux)
-			return Intersection.OUTSIDE;
+			return false; // return Intersection.OUTSIDE;
 
-		return Intersection.INSIDE;
+		return true; // return Intersection.INSIDE;
 	}
 
 	/**
@@ -367,9 +367,9 @@ public final class Frustum {
 	 * @param sphere Die Kugel
 	 * @return Testergebnis
 	 */
-	public Intersection contains(@NotNull Sphere sphere) {
+	public boolean intersects(@NotNull Sphere sphere) {
 
-		Intersection result = Intersection.INSIDE;
+		boolean result = true; // Intersection result = Intersection.INSIDE;
 
 		Vector3 position = sphere.getPosition();
 		float radius = sphere.getRadius();
@@ -381,27 +381,27 @@ public final class Frustum {
 
 		az = v.dot(_Z);
 		if (az > _farDistance + radius || az < _nearDistance-radius)
-			return(Intersection.OUTSIDE);
+			return false; // return(Intersection.OUTSIDE);
 		if (az > _farDistance - radius || az < _nearDistance+radius)
-			result = Intersection.INTERSECTS;
+			result = true; // result = Intersection.INTERSECTS;
 
 		ay = v.dot(_Y);
 		d = _sphereFactorY * radius;
 		az *= _tangens;
 		if (ay > az+d || ay < -az-d)
-			return(Intersection.OUTSIDE);
+			return false; // return(Intersection.OUTSIDE);
 		if (ay > az-d || ay < -az+d)
-			result = Intersection.INTERSECTS;
+			result = true; // result = Intersection.INTERSECTS;
 
 		ax = v.dot(_X);
 		az *= _ratio;
 		d = _sphereFactorX * radius;
 		if (ax > az+d || ax < -az-d)
-			return(Intersection.OUTSIDE);
+			return false; // return(Intersection.OUTSIDE);
 		if (ax > az-d || ax < -az+d)
-			result = Intersection.INTERSECTS;
+			result = true; // result = Intersection.INTERSECTS;
 
-		return(result);
+		return result;
 	}
 
 	/**
