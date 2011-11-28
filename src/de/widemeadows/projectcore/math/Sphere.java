@@ -145,7 +145,7 @@ public final class Sphere {
 	 * Die Position der Kugel
 	 */
 	@NotNull
-	private final Vector3 _position = Vector3.createNew();
+	private final Vector3 _origin = Vector3.createNew();
 	
 	/**
 	 * Setzt die Position der Kugel
@@ -154,7 +154,7 @@ public final class Sphere {
 	 * @param z Z-Koordinate
 	 */
 	public void setPosition(float x, float y, float z) {
-		_position.set(x, y, z);
+		_origin.set(x, y, z);
 	}
 
 	/**
@@ -163,7 +163,7 @@ public final class Sphere {
 	 * @param pos Die Position
 	 */
 	public void setPosition(@NotNull final Vector3 pos) {
-		_position.set(pos.x, pos.y, pos.z);
+		_origin.set(pos.x, pos.y, pos.z);
 	}
 	
 	/**
@@ -171,25 +171,25 @@ public final class Sphere {
 	 * @return Die Position der Kugel
 	 */
 	@NotNull
-	public Vector3 getPosition() { return _position; }
+	public Vector3 getPosition() { return _origin; }
 	
 	/**
 	 * Bezieht die X-Koordinate der Kugel
 	 * @return X-Koordinate
 	 */
-	public float getX() { return _position.x; }
+	public float getX() { return _origin.x; }
 	
 	/**
 	 * Bezieht die Y-Koordinate der Sphere
 	 * @return Y-Koordinate
 	 */
-	public float getY() { return _position.y; }
+	public float getY() { return _origin.y; }
 	
 	/**
 	 * Bezieht die Z-Koordinate der Sphere
 	 * @return Z-Koordinate
 	 */
-	public float getZ() { return _position.z; }
+	public float getZ() { return _origin.z; }
 
 	/**
 	 * Erzeugt eine Kugel mit Radius 1
@@ -204,24 +204,13 @@ public final class Sphere {
 		assert radius > 0;
 		_radius = radius;
 	}
-	
-	/**
-	 * Ermittelt, ob der Punkt innerhalb oder auf der Kugel liegt
-	 *
-	 * @param point Der zu testende Punkt
-	 * @return <code>true</code>, wenn der Punkt innerhalb der Kugel liegt
-	 */
-	public boolean containsPoint(@NotNull final Vector3 point) {
-		return _position.getDistanceSquared(point) <= _radiusSq;
-	}
 
 	/**
 	 * Modifiziert die Kugel so, dass der Punkt in ihr liegt
 	 * @param point Der zu umfassende Punkt
-	 * @see Sphere#containsPoint(Vector3)
 	 */
 	public void add(@NotNull final Vector3 point) {
-		float distance = _position.getDistanceSquared(point);
+		float distance = _origin.getDistanceSquared(point);
 		if (distance <= _radiusSq) return;
 		_radius = distance;
 	}
@@ -279,7 +268,7 @@ public final class Sphere {
 	 * @return Diese Instanz für method chaining
 	 */
 	public Sphere set(@NotNull final Sphere other) {
-		_position.set(other._position);
+		_origin.set(other._origin);
 		_radius = other._radius;
 		_radiusSq = other._radiusSq;
 		return this;
@@ -311,5 +300,33 @@ public final class Sphere {
 		setPosition(position);
 		setRadius(radius);
 		return this;
+	}
+
+	/**
+	 * Ermittelt, ob der Punkt innerhalb oder auf der Kugel liegt
+	 *
+	 * @param point Der zu testende Punkt
+	 * @return <code>true</code>, wenn der Punkt innerhalb der Kugel liegt
+	 */
+	public boolean intersects(@NotNull final Vector3 point) {
+		return _origin.getDistanceSquared(point) <= _radiusSq;
+	}
+
+	/**
+	 * Ermittelt, ob der Ray innerhalb oder auf der Kugel liegt
+	 *
+	 * @param ray Der zu testende Ray
+	 * @return <code>true</code>, wenn der Ray innerhalb der Kugel liegt
+	 */
+	public boolean intersects(@NotNull final Ray3 ray) {
+		// Projektion des Kugel-Mittelpunktes auf den Strahl
+		Vector3 projected = ray.projectPoint(this._origin);
+		
+		// Distanz von projiziertem Punkt zu Mittelpunkt berechnen
+		final float distSq = projected.getDistanceSquared(_origin);
+		projected.recycle();
+
+		// Wenn Distanz < Radius - Treffer
+		return distSq <= _radiusSq;
 	}
 }
