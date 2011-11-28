@@ -198,6 +198,17 @@ public class TransformationState {
 	}
 
 	/**
+	 * Transformiert einen Strahl
+	 *
+	 * @param ray Der Strahl
+	 */
+	public void transform(@NotNull Ray3 ray) {
+		transformPoint(ray.origin);
+		transformPoint(ray.direction);
+		ray.setDirection(ray.direction);
+	}
+
+	/**
 	 * Transformiert einen Strahl invers
 	 * @param ray Der Strahl
 	 */
