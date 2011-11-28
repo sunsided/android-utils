@@ -1,20 +1,11 @@
 package de.widemeadows.projectcore.math;
 
-import android.opengl.GLU;
 import org.jetbrains.annotations.NotNull;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Work in progress
  */
-@Deprecated
 public final class Frustum {
-
-	/**
-	 * Das Aspektverhältnis
-	 */
-//	private float _aspectRatio;
 
 	/**
 	 * Entfernung der nahen Plane
@@ -183,7 +174,6 @@ public final class Frustum {
         assert nearDistance > 0;
         assert farDistance > nearDistance;
 
-//		_aspectRatio = aspectRatio;
 		_ratio = aspectRatio;
 		_nearDistance = nearDistance;
 		_farDistance = farDistance;
@@ -402,22 +392,6 @@ public final class Frustum {
 			result = true; // result = Intersection.INTERSECTS;
 
 		return result;
-	}
-
-	/**
-	 * Wendet das Frustum auf die OpenGL-Instanz an
-	 * @param gl Die OpenGL-Instanz
-	 */
-	public void apply(@NotNull GL10 gl) {
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-
-        float zoomDingsFoo = _fieldOfView * _inverseZoomFactor;
-        GLU.gluPerspective(gl, zoomDingsFoo, _ratio, _nearDistance, _farDistance);
-		GLU.gluLookAt(gl, eye.x, eye.y, eye.z, target.x, target.y, target.z, _up.x, _up.y, _up.z);
-
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
 	}
 
     public void setAspectRatio(float aspectRatio) {
