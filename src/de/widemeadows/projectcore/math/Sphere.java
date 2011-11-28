@@ -329,4 +329,19 @@ public final class Sphere {
 		// Wenn Distanz < Radius - Treffer
 		return distSq <= _radiusSq;
 	}
+
+	/**
+	 * Ermittelt, ob sich zwei Spheres überlappen
+	 *
+	 * @param sphere Der zu testende Sphere
+	 * @return <code>true</code>, wenn eine Überlappung vorliegt
+	 */
+	public boolean intersects(@NotNull final Sphere sphere) {
+		// Distanz der beiden Mittelpunkte berechnen
+		final float distSq = sphere._origin.getDistanceSquared(_origin);
+
+		// Wenn die Distanz kleiner als die Summe beider Radien ist - Überlappung
+		float radiusSum = sphere._radius + _radius;
+		return distSq <= (radiusSum*radiusSum);
+	}
 }
