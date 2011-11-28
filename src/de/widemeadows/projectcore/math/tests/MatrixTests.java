@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
 import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -309,6 +310,30 @@ public class MatrixTests {
 				-0.375f,      -1.3375f, -0.2f,         0.9125f,
 				 0.25f,        1.45f,    0.1f,        -0.8f,
 				Epsilon));
+	}
+
+	/**
+	 * Testet das Invertieren einer Matrix
+	 */
+	@Test
+	public void invertAffine() {
+		// Invertieren der Einheitsmatrix --> Einheitsmatrix
+		Matrix4 a = Matrix4.UNIT.getInverted();
+		assertTrue(a.equals(Matrix4.UNIT, Epsilon));
+
+		a.invertAffine();
+		assertTrue(a.equals(Matrix4.UNIT, Epsilon));
+
+		Vector3 pt = Vector3.createNew(1, 2, 3); 
+		a = MatrixFactory.getRotationX(deg2rad(45)).mul(MatrixFactory.getTranslation(10, 20, 30));
+		a.transformPointInPlace(pt);
+
+		a.invertAffine();
+		a.transformPointInPlace(pt);
+
+		assertEquals(1, pt.x, DEFAULT_EPSILON);
+		assertEquals(2, pt.y, DEFAULT_EPSILON);
+		assertEquals(3, pt.z, DEFAULT_EPSILON);
 	}
 
 	/**

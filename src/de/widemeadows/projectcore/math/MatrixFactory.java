@@ -506,4 +506,30 @@ public class MatrixFactory {
 		);
 	}
 
+	/**
+	 * Erzeugt eine Skalierungsmatrix
+
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *   fx,  0,  0, 0
+	 *    0, fy,  0, 0
+	 *    0,  0, fz, 0
+	 *    0,   0, 0, 1
+	 * </pre>
+	 *
+	 * @param factorX Die X-Skalierung
+	 * @param factorY Die Y-Skalierung
+	 * @param factorZ Die Z-Skalierung
+	 * @return Die Skalierungsmatrix
+	 */
+	@NotNull
+	@ReturnsCachedValue
+	public static Matrix4 getScaling(final float factorX, final float factorY, final float factorZ) {
+		return Matrix4.createNew().set(
+				factorX, 0.0f, 0.0f, 0.0f,
+				0.0f, factorY, 0.0f, 0.0f,
+				0.0f, 0.0f, factorZ, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
 }
