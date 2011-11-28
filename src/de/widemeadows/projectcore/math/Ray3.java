@@ -319,4 +319,17 @@ public final class Ray3 {
 	public Vector3 getPoint(final float t){
 		return direction.mul(t).addInPlace(origin);
 	}
+
+	/**
+	 * Transformiert diesen Strahl
+	 *
+	 * @param transformation Die Transformationsmatrix
+	 * @return Diese Instanz für method chaining
+	 */
+	@NotNull
+	public Ray3 transform(@NotNull final Matrix4 transformation) {
+		transformation.transformPointInPlace(origin);
+		transformation.transformVectorInPlace(direction);
+		return this;
+	}
 }
