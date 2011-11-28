@@ -1,38 +1,151 @@
 package de.widemeadows.projectcore.math;
 
+import de.widemeadows.projectcore.cache.IObjectCache;
+import de.widemeadows.projectcore.cache.ObjectFactory;
+import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Definiert eine Kugel
  */
-@Deprecated
 public final class Sphere {
-	
+
+	/**
+	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
+	 */
+	public static final IObjectCache<Sphere> Cache = new ThreadLocalObjectCache<Sphere>(new ObjectFactory<Sphere>() {
+		@NotNull
+		@Override
+		public Sphere createNew() {
+			return new Sphere();
+		}
+	});
+
+	/**
+	 * Erzeugt eine neue Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand der Instanz kann korrupt sein!
+	 * </p>
+	 *
+	 * @param originX    Der Ursprung (X-Komponente)
+	 * @param originY    Der Ursprung (Y-Komponente)
+	 * @param originZ    Der Ursprung (Z-Komponente)
+	 * @param radius     Der Radius
+	 * @return Die neue oder aufbereitete Instanz
+	 * @see #Cache
+	 */
+	@NotNull
+	public static Sphere createNew(final float originX, final float originY, final float originZ,
+	                             final float radius) {
+		return Cache.getOrCreate().set(originX, originY, originZ, radius);
+	}
+
+	/**
+	 * Erzeugt eine neue {@link Sphere}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand kann korrupt sein!
+	 * </p>
+	 *
+	 * @param origin    Der Ursprung
+	 * @param radius Der Radius
+	 * @return Die neue oder aufbereitete Sphere
+	 * @see #Cache
+	 */
+	public static Sphere createNew(@NotNull final Vector3 origin, final float radius) {
+		return Cache.getOrCreate().set(origin, radius);
+	}
+
+	/**
+	 * Erzeugt eine neue {@link Sphere}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand kann korrupt sein!
+	 * </p>
+	 *
+	 * @param other Die zu kopierende Sphere
+	 * @return Die neue oder aufbereitete Sphere
+	 * @see #Cache
+	 */
+	public static Sphere createNew(@NotNull final Sphere other) {
+		return Cache.getOrCreate().set(other);
+	}
+
+	/**
+	 * Erzeugt eine neue {@link Sphere}-Instanz.
+	 * <p>
+	 * <strong>Hinweis:</strong> Der Zustand kann korrupt sein!
+	 * </p>
+	 *
+	 * @return Die neue oder aufbereitete Sphere
+	 * @see #Cache
+	 */
+	@NotNull
+	public static Sphere createNew() {
+		return Cache.getOrCreate();
+	}
+
+	/**
+	 * Recyclet einen Ray
+	 *
+	 * @param box Der zu recyclende Ray
+	 * @see #Cache
+	 * @see AxisAlignedBox#recycle()
+	 */
+	public static void recycle(@NotNull final Sphere box) {
+		Cache.registerElement(box);
+	}
+
+	/**
+	 * Registriert diesen Ray für das spätere Cache
+	 *
+	 * @see #Cache
+	 * @see Vector3#recycle(Vector3)
+	 */
+	public void recycle() {
+		Cache.registerElement(this);
+	}
+
 	/**
 	 * Radius der Kugel
+	 * @see #_radiusSq
 	 */
 	private float _radius = 1.f;
-	
+
+	/**
+	 * Quadrierter Radius der Kugel
+	 * @see #_radius
+	 */
+	private float _radiusSq = 1.f;
+
 	/**
 	 * Bezieht den Radius
 	 * @return Der Radius
 	 */
 	public float getRadius() { return _radius; }
-	
+
+	/**
+	 * Bezieht den quadrierten Radius
+	 *
+	 * @return Der quadrierte Radius
+	 */
+	public float getRadiusSq() {
+		return _radiusSq;
+	}
+
 	/**
 	 * Setzt den Radius
 	 * @param radius Der Radius im Bereich ]0..n]
 	 */
-	public void setRadius(float radius) {
+	public void setRadius(final float radius) {
 		assert radius > 0;
 		_radius = radius;
+		_radiusSq = radius*radius;
 	}
 	
 	/**
 	 * Die Position der Kugel
 	 */
 	@NotNull
-	private Vector3 _position = Vector3.createNew();
+	private final Vector3 _position = Vector3.createNew();
 	
 	/**
 	 * Setzt die Position der Kugel
@@ -42,6 +155,15 @@ public final class Sphere {
 	 */
 	public void setPosition(float x, float y, float z) {
 		_position.set(x, y, z);
+	}
+
+	/**
+	 * Setzt die Position der Kugel
+	 *
+	 * @param pos Die Position
+	 */
+	public void setPosition(@NotNull final Vector3 pos) {
+		_position.set(pos.x, pos.y, pos.z);
 	}
 	
 	/**
@@ -89,8 +211,8 @@ public final class Sphere {
 	 * @param point Der zu testende Punkt
 	 * @return <code>true</code>, wenn der Punkt innerhalb der Kugel liegt
 	 */
-	public boolean containsPoint(@NotNull Vector3 point) {
-		return _position.getDistance(point) <= _radius;
+	public boolean containsPoint(@NotNull final Vector3 point) {
+		return _position.getDistanceSquared(point) <= _radiusSq;
 	}
 
 	/**
@@ -98,9 +220,9 @@ public final class Sphere {
 	 * @param point Der zu umfassende Punkt
 	 * @see Sphere#containsPoint(Vector3)
 	 */
-	public void add(@NotNull Vector3 point) {
-		float distance = _position.getDistance(point);
-		if (distance <= _radius) return;
+	public void add(@NotNull final Vector3 point) {
+		float distance = _position.getDistanceSquared(point);
+		if (distance <= _radiusSq) return;
 		_radius = distance;
 	}
 
@@ -112,7 +234,7 @@ public final class Sphere {
 	 * @see Sphere#createFrom(float, Vector3...)
 	 */
 	@NotNull
-	public Sphere createFrom(@NotNull Vector3... points) {
+	public Sphere createFrom(@NotNull final Vector3... points) {
 		return createFrom(0.01f, points);
 	}
 
@@ -125,7 +247,7 @@ public final class Sphere {
 	 * @see Sphere#createFrom(Vector3...)
 	 */
 	@NotNull
-	public Sphere createFrom(float minRadius, @NotNull Vector3 ... points) {
+	public Sphere createFrom(float minRadius, @NotNull final Vector3 ... points) {
 		assert minRadius > 0;
 		assert points.length > 0;
 
@@ -148,5 +270,46 @@ public final class Sphere {
 
 		// Voilà
 		return sphere;
+	}
+
+	/**
+	 * Setzt die Werte
+	 *
+	 * @param other Die zu kopierende Kugel
+	 * @return Diese Instanz für method chaining
+	 */
+	public Sphere set(@NotNull final Sphere other) {
+		_position.set(other._position);
+		_radius = other._radius;
+		_radiusSq = other._radiusSq;
+		return this;
+	}
+	
+	/**
+	 * Setzt die Werte
+	 *
+	 * @param x Die X-Koordinate
+	 * @param y Die Y-Koordinate
+	 * @param z Die Z-Koordinate
+	 * @param radius   Der Radius im Bereich ]0..n]
+	 * @return Diese Instanz für method chaining
+	 */
+	public Sphere set(final float x, final float y, final float z, final float radius) {
+		setPosition(x, y, z);
+		setRadius(radius);
+		return this;
+	}
+
+	/**
+	 * Setzt die Werte
+	 *
+	 * @param position Die Position
+	 * @param radius   Der Radius im Bereich ]0..n]
+	 * @return Diese Instanz für method chaining
+	 */
+	public Sphere set(@NotNull final Vector3 position, final float radius) {
+		setPosition(position);
+		setRadius(radius);
+		return this;
 	}
 }
