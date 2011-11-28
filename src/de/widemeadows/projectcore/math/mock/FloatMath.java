@@ -16,6 +16,8 @@ package de.widemeadows.projectcore.math.mock;
      * limitations under the License.
      */
 
+import de.widemeadows.projectcore.AndroidHelper;
+
 /**
  * Math routines similar to those found in {@link java.lang.Math}. Performs
  * computations on {@code float} values directly without incurring the overhead
@@ -40,7 +42,7 @@ public class FloatMath {
 	 * @return the floor of value
 	 */
 	public static float floor(float value) {
-		return (float) Math.floor((double) value);
+		return AndroidHelper.IsAndroidSdk ? android.util.FloatMath.floor(value) : (float) Math.floor((double) value);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class FloatMath {
 	 * @return the ceiling of value
 	 */
 	public static float ceil(float value) {
-		return (float) Math.ceil((double) value);
+		return AndroidHelper.IsAndroidSdk ? android.util.FloatMath.ceil(value) : (float) Math.ceil((double) value);
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class FloatMath {
 	 * @return the sine of angle
 	 */
 	public static float sin(float angle) {
-		return (float) Math.sin((double) angle);
+		return AndroidHelper.IsAndroidSdk ? android.util.FloatMath.sin(angle) : (float) Math.sin((double) angle);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class FloatMath {
 	 * @return the cosine of angle
 	 */
 	public static float cos(float angle) {
-		return (float) Math.cos((double) angle);
+		return AndroidHelper.IsAndroidSdk ? android.util.FloatMath.cos(angle) : (float) Math.cos((double) angle);
 	}
 
 	/**
@@ -82,6 +84,6 @@ public class FloatMath {
 	 * @return the square root of value
 	 */
 	public static float sqrt(float value) {
-		return (float) Math.sqrt((double) value);
+		return AndroidHelper.IsAndroidSdk ? android.util.FloatMath.sqrt(value) : (float) Math.sqrt((double) value);
 	}
 }

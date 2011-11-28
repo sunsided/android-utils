@@ -8,6 +8,9 @@ import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
+import static de.widemeadows.projectcore.math.MathUtils.isZero;
+
 /**
  * 4D-Matrix.
  * <p>
@@ -1131,9 +1134,9 @@ public final class Matrix4 {
 	    final float x = (getAt(0, 0) * vector.x) + (getAt(1, 0) * vector.y) + (getAt(2, 0) * vector.z);
 	    final float y = (getAt(0, 1) * vector.x) + (getAt(1, 1) * vector.y) + (getAt(2, 1) * vector.z);
 	    final float z = (getAt(0, 2) * vector.x) + (getAt(1, 2) * vector.y) + (getAt(2, 2) * vector.z);
-	    final float w = (getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z);
-	    final float invW = MathUtils.isZero(w, MathUtils.DEFAULT_EPSILON) ? 1.0f : 1.0f / w;
-	    vector.set(x * invW, y * invW, z * invW);
+	    assert isZero((getAt(0, 3) * vector.x) + (getAt(1, 3) * vector.y) + (getAt(2, 3) * vector.z), DEFAULT_EPSILON);
+	    // final float invW = MathUtils.isZero(w, DEFAULT_EPSILON) ? 1.0f : 1.0f / w;
+	    vector.set(x, y, z);
     }
 
 	/**

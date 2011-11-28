@@ -74,7 +74,7 @@ public class MatrixFactoryTests {
 
 		// Testet die Rotation um die X-Achse
 		{
-			Matrix4 rotation = MatrixFactory.getRotationX(MathUtils.deg2Rad(90));
+			Matrix4 rotation = MatrixFactory.getRotationX(MathUtils.deg2rad(90));
 			Vector3 result = rotation.transformPoint(a);
 			assertEquals(a.x, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.z, result.y, MathUtils.DEFAULT_EPSILON);
@@ -88,21 +88,21 @@ public class MatrixFactoryTests {
 
 		// Testet die Rotation um die Y-Achse
 		{
-			Matrix4 rotation = MatrixFactory.getRotationY(MathUtils.deg2Rad(90));
+			Matrix4 rotation = MatrixFactory.getRotationY(MathUtils.deg2rad(90));
 			Vector3 result = rotation.transformPoint(a);
-			assertEquals(-a.z, result.x, MathUtils.DEFAULT_EPSILON);
+			assertEquals(a.z, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.x, result.z, MathUtils.DEFAULT_EPSILON);
 
 			result = rotation.transformVector(a);
-			assertEquals(-a.z, result.x, MathUtils.DEFAULT_EPSILON);
+			assertEquals(a.z, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.y, result.y, MathUtils.DEFAULT_EPSILON);
 			assertEquals(-a.x, result.z, MathUtils.DEFAULT_EPSILON);
 		}
 
 		// Testet die Rotation um die Z-Achse
 		{
-			Matrix4 rotation = MatrixFactory.getRotationZ(MathUtils.deg2Rad(90));
+			Matrix4 rotation = MatrixFactory.getRotationZ(MathUtils.deg2rad(90));
 			Vector3 result = rotation.transformPoint(a);
 			assertEquals(-a.y, result.x, MathUtils.DEFAULT_EPSILON);
 			assertEquals(a.x, result.y, MathUtils.DEFAULT_EPSILON);
@@ -123,7 +123,7 @@ public class MatrixFactoryTests {
 
 		Vector3 translate = Vector3.createNew(10, 20, 30);
 		Matrix4 transform = MatrixFactory.getTransformation(
-				Vector3.createNew(MathUtils.deg2Rad(90), 0, 0), // 90° um die X-Achse
+				Vector3.createNew(MathUtils.deg2rad(90), 0, 0), // 90° um die X-Achse
 				translate);
 
 		Vector3 a = Vector3.createNew(1, 2, 3);
@@ -151,7 +151,7 @@ public class MatrixFactoryTests {
 		Vector3 translate = Vector3.createNew(10, 20, 30);
 		Matrix4 transform = MatrixFactory.getTransformation(
 				Vector3.createNew(10, 100, 1000),
-				Vector3.createNew(MathUtils.deg2Rad(90), 0, 0), // 90° um die X-Achse
+				Vector3.createNew(MathUtils.deg2rad(90), 0, 0), // 90° um die X-Achse
 				translate);
 
 		Vector3 a = Vector3.createNew(1, 2, 3);

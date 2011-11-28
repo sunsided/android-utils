@@ -1,6 +1,7 @@
 package de.widemeadows.projectcore.math;
 
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
+import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,9 +15,20 @@ public class MatrixFactory {
 	private MatrixFactory() {}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die X-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die X-Achse
 	 *
-	 * @param theta Der Winkel
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *    1,   0,    0, 0
+	 *    0, cos,  sin, 0
+	 *    0, -sin, cos, 0
+	 *    0,    0,   0, 1
+	 * </pre>
+	 *
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -28,18 +40,23 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationX(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, cos, sin, 0.0f,
-				0.0f, -sin, cos, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationX(final float theta) {
+		return getRotationX(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die X-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die X-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *    1,   0,    0, 0
+	 *    0, cos,  sin, 0
+	 *    0, -sin, cos, 0
+	 *    0,    0,   0, 1
+	 * </pre>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -48,7 +65,7 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationX(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationX(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, cosTheta, sinTheta, 0.0f,
@@ -57,9 +74,20 @@ public class MatrixFactory {
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Y-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Y-Achse
 	 *
-	 * @param theta Der Winkel
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, 0, -sin, 0
+	 *    0, 1,    0, 0
+	 *  sin, 0,  cos, 0
+	 *    0, 0,    0, 1
+	 * </pre>
+	 *
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -71,18 +99,23 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationY(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				cos, 0.0f, -sin, 0.0f,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				-sin, 0.0f, cos, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationY(final float theta) {
+		return getRotationY(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Y-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Y-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, 0, -sin, 0
+	 *    0, 1,    0, 0
+	 *  sin, 0,  cos, 0
+	 *    0, 0,    0, 1
+	 * </pre>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -91,18 +124,29 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationY(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationY(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				cosTheta, 0.0f, -sinTheta, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
-				-sinTheta, 0.0f, cosTheta, 0.0f,
+				sinTheta, 0.0f, cosTheta, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Z-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Z-Achse
 	 *
-	 * @param theta Der Winkel
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, sin, 0, 0
+	 *    0,   1, 0, 0
+	 * -sin, cos, 1, 0
+	 *    0,   0, 0, 1
+	 * </pre>
+	 *
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -114,18 +158,23 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationZ(float theta) {
-		float cos = (float) Math.cos(theta);
-		float sin = (float) Math.sin(theta);
-		return Matrix4.createNew().set(
-				cos, sin, 0.0f, 0.0f,
-				-sin, cos, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f);
+	public static Matrix4 getRotationZ(final float theta) {
+		return getRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
-	 * Erzeugt eine Matrix zur Rotation um die Z-Achse
+	 * Erzeugt eine rechtshändige Matrix zur Rotation um die Z-Achse
+	 *
+	 * <h3>RH-/LH-System</h3>
+	 * <a href="http://www.cprogramming.com/tutorial/3d/rotationMatrices.html">Rotations in Three Dimensions</a>
+	 *
+	 * <h3>Layout</h3>
+	 * <pre>
+	 *  cos, sin, 0, 0
+	 *    0,   1, 0, 0
+	 * -sin, cos, 1, 0
+	 *    0,   0, 0, 1
+	 * </pre>
 	 *
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -134,7 +183,7 @@ public class MatrixFactory {
 	 */
 	@NotNull
 	@ReturnsCachedValue
-	public static Matrix4 getRotationZ(float cosTheta, float sinTheta) {
+	public static Matrix4 getRotationZ(final float cosTheta, final float sinTheta) {
 		return Matrix4.createNew().set(
 				cosTheta, sinTheta, 0.0f, 0.0f,
 				-sinTheta, cosTheta, 0.0f, 0.0f,
@@ -146,7 +195,7 @@ public class MatrixFactory {
 	 * Erzeugt eine Matrix zur Rotation um eine Achse
 	 *
 	 * @param axis  Die Achse
-	 * @param theta Der Winkel
+	 * @param theta Der Winkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -166,7 +215,7 @@ public class MatrixFactory {
 
 	/**
 	 * Erzeugt eine Matrix zur Rotation um eine Achse
-	 *
+		 *
 	 * @param axis     Die Achse
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -211,9 +260,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur progressiven Rotation basierend auf Winkelgeschwindigkeit
 	 *
-	 * @param deltaX Winkelgeschwindigkeit in X-Richtung
-	 * @param deltaY Winkelgeschwindigkeit in Y-Richtung
-	 * @param deltaZ Winkelgeschwindigkeit in Z-Richtung
+	 * @param deltaX Winkelgeschwindigkeit in X-Richtung in radians/frame
+	 * @param deltaY Winkelgeschwindigkeit in Y-Richtung in radians/frame
+	 * @param deltaZ Winkelgeschwindigkeit in Z-Richtung in radians/frame
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -236,9 +285,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-ZXZ
 	 *
-	 * @param z  Der Winkel um die Z-Achse
-	 * @param x1 Der Winkel um die X'-Achse
-	 * @param z2 Der Winkel um die Z''-Achse
+	 * @param z  Der Winkel um die Z-Achse in radians
+	 * @param x1 Der Winkel um die X'-Achse in radians
+	 * @param z2 Der Winkel um die Z''-Achse in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZYZ(float, float, float)
@@ -272,9 +321,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-ZYZ
 	 *
-	 * @param z  Der Winkel um die Z-Achse
-	 * @param y1 Der Winkel um die Y'-Achse
-	 * @param z2 Der Winkel um die Z''-Achse
+	 * @param z  Der Winkel um die Z-Achse in radians
+	 * @param y1 Der Winkel um die Y'-Achse in radians
+	 * @param z2 Der Winkel um die Z''-Achse in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerRPY(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
@@ -308,9 +357,9 @@ public class MatrixFactory {
 	/**
 	 * Erzeugt eine Matrix zur Rotation gemäß Euler-Roll-Pitch-Yaw
 	 *
-	 * @param rollX  Der Rollwinkel
-	 * @param pitchY Der Nickwinkel
-	 * @param yawZ   Der Gierwinkel
+	 * @param rollX  Der Rollwinkel in radians
+	 * @param pitchY Der Nickwinkel in radians
+	 * @param yawZ   Der Gierwinkel in radians
 	 * @return Die Rotationsmatrix
 	 * @see MatrixFactory#getRotationEulerZXZ(float, float, float)
 	 * @see MatrixFactory#getRotationEulerZYZ(float, float, float)

@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.math.tests;
 
 import de.widemeadows.projectcore.math.MathUtils;
 import de.widemeadows.projectcore.math.Matrix4;
+import de.widemeadows.projectcore.math.MatrixFactory;
 import de.widemeadows.projectcore.math.Vector3;
 import de.widemeadows.projectcore.math.exceptions.MatrixException;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -341,6 +343,7 @@ public class MatrixTests {
 
 		// Test mit der magischen Matrix (w=0)
 
+		/*
 		// MATLAB:
 		//  v = magic(4)'*[1 2 3 0]'
 		//  v/v(4)
@@ -349,6 +352,7 @@ public class MatrixTests {
 		assertEquals(0.81538f, result.x, Epsilon);
 		assertEquals(0.69231f, result.y, Epsilon);
 		assertEquals(0.63077f, result.z, Epsilon);
+		*/
 
 		// Test mit der magischen Matrix (w=0)
 
@@ -410,5 +414,210 @@ public class MatrixTests {
 		foo.clear();
 
 		System.out.println("Erzeugen und Recyclen von " + iterations + " Matrizen (uncached): " + elapsed / (float) iterations + " ms pro Instanz");
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationX() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(90)),
+				1, 2, 3,
+				1, -3, 2);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(180)),
+				1, 2, 3,
+				1, -2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(270)),
+				1, 2, 3,
+				1, 3, -2);
+
+		transformVectorAndPoint(MatrixFactory.getRotationX(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationY() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(90)),
+				1, 2, 3,
+				3, 2, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(180)),
+				1, 2, 3,
+				-1, 2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(270)),
+				1, 2, 3,
+				-3, 2, 1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationY(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationZ() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(0)),
+				1, 2, 3,
+				1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(90)),
+				1, 2, 3,
+				-2, 1, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(180)),
+				1, 2, 3,
+				-1, -2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(270)),
+				1, 2, 3,
+				2, -1, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationZ(deg2rad(360)),
+				1, 2, 3,
+				1, 2, 3);
+	}
+
+	/**
+	 * Überprüft die Vektor-/Punktrotation
+	 */
+	@Test
+	public void vectorRotationRPY() {
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, 2, 3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(360), deg2rad(360), deg2rad(360)),
+				1, 2, 3, 1, 2, 3);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, -3, 2);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(180), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, -2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(270), deg2rad(0), deg2rad(0)),
+				1, 2, 3, 1, 3, -2);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(90), deg2rad(0)),
+				1, 2, 3, 3, 2, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(180), deg2rad(0)),
+				1, 2, 3, -1, 2, -3);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(0), deg2rad(270), deg2rad(0)),
+				1, 2, 3, -3, 2, 1);
+
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(90), deg2rad(0)),
+				1, 2, 3, 2, -3, -1);
+
+		transformVectorAndPoint(MatrixFactory.getRotationEulerRPY(deg2rad(90), deg2rad(90), deg2rad(90)),
+				1, 2, 3, 3, 2, -1);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix     Die anzuwendende Matrix
+	 * @param xIn        Der Vektor-Eingangswert (X)
+	 * @param yIn        Der Vektor-Eingangswert (Y)
+	 * @param zIn        Der Vektor-Eingangswert (Z)
+	 * @param xExpectedV Der erwartete Vektorwert (X) für den Vektor
+	 * @param yExpectedV Der erwartete Vektorwert (Y) für den Vektor
+	 * @param zExpectedV Der erwartete Vektorwert (Z) für den Vektor
+	 * @param xExpectedP Der erwartete Vektorwert (X) für den Punkt
+	 * @param yExpectedP Der erwartete Vektorwert (Y) für den Punkt
+	 * @param zExpectedP Der erwartete Vektorwert (Z) für den Punkt
+	 * @see #transformVector
+	 */
+	private void transformVectorAndPoint(@NotNull final Matrix4 matrix,
+	                                     final float xIn, final float yIn, final float zIn,
+	                                     final float xExpectedV, final float yExpectedV, final float zExpectedV,
+	                                     final float xExpectedP, final float yExpectedP, final float zExpectedP) {
+		transformVector(matrix, xIn, yIn, zIn, xExpectedV, yExpectedV, zExpectedV);
+		transformPoint(matrix, xIn, yIn, zIn, xExpectedP, yExpectedP, zExpectedP);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix    Die anzuwendende Matrix
+	 * @param xIn       Der Vektor-Eingangswert (X)
+	 * @param yIn       Der Vektor-Eingangswert (Y)
+	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X) für Vektor und Punkt
+	 * @param yExpected Der erwartete Vektorwert (Y) für Vektor und Punkt
+	 * @param zExpected Der erwartete Vektorwert (Z) für Vektor und Punkt
+	 * @see #transformVector
+	 */
+	private void transformVectorAndPoint(@NotNull final Matrix4 matrix,
+	                                     final float xIn, final float yIn, final float zIn,
+	                                     final float xExpected, final float yExpected, final float zExpected) {
+		transformVector(matrix, xIn, yIn, zIn, xExpected, yExpected, zExpected);
+		transformPoint(matrix, xIn, yIn, zIn, xExpected, yExpected, zExpected);
+	}
+
+	/**
+	 * Führt die Vektortransformation durch
+	 *
+	 * @param matrix Die anzuwendende Matrix
+	 * @param xIn Der Vektor-Eingangswert (X)
+	 * @param yIn Der Vektor-Eingangswert (Y)
+	 * @param zIn Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X)
+	 * @param yExpected Der erwartete Vektorwert (Y)
+	 * @param zExpected Der erwartete Vektorwert (Z)
+	 * @see #transformVector
+	 */
+	@NotNull
+	private Vector3 transformPoint(@NotNull final Matrix4 matrix, final float xIn, final float yIn, final float zIn, final float xExpected, final float yExpected, final float zExpected) {
+		Vector3 result = matrix.transformPoint(Vector3.createNew(xIn, yIn, zIn));
+		assertEquals(xExpected, result.x, Epsilon);
+		assertEquals(yExpected, result.y, Epsilon);
+		assertEquals(zExpected, result.z, Epsilon);
+		return result;
+	}
+
+	/**
+	 * Führt die Punkttransformation durch
+	 *
+	 * @param matrix    Die anzuwendende Matrix
+	 * @param xIn       Der Vektor-Eingangswert (X)
+	 * @param yIn       Der Vektor-Eingangswert (Y)
+	 * @param zIn       Der Vektor-Eingangswert (Z)
+	 * @param xExpected Der erwartete Vektorwert (X)
+	 * @param yExpected Der erwartete Vektorwert (Y)
+	 * @param zExpected Der erwartete Vektorwert (Z)
+	 * @see #transformPoint(de.widemeadows.projectcore.math.Matrix4, float, float, float, float, float, float)
+	 */
+	@NotNull
+	private Vector3 transformVector(@NotNull final Matrix4 matrix, final float xIn, final float yIn, final float zIn, final float xExpected, final float yExpected, final float zExpected) {
+		Vector3 result = matrix.transformPoint(Vector3.createNew(xIn, yIn, zIn));
+		assertEquals(xExpected, result.x, Epsilon);
+		assertEquals(yExpected, result.y, Epsilon);
+		assertEquals(zExpected, result.z, Epsilon);
+		return result;
 	}
 }

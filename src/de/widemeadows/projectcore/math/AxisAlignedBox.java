@@ -132,6 +132,7 @@ public final class AxisAlignedBox {
 	 * Erzeugt eine neue Instanz der {@link AxisAlignedBox}-Klasse
 	 */
 	private AxisAlignedBox() {
+        this.center.set(0.0f, 0.0f, 0.0f);
 		this.extent.set(0.5f, 0.5f, 0.5f);
 	}
 
@@ -437,4 +438,32 @@ public final class AxisAlignedBox {
 		final float t = getIntersectionF(ray);
 		return Float.isNaN(t) ? null : ray.getPoint(t);
 	}
+
+    /**
+     * Transformiert die Box mittels der Matrix
+     *
+     * @param transformation Die anzuwendende Transformation
+     */
+    @NotNull @ReturnsCachedValue
+    public AxisAlignedBox transform(@NotNull final Matrix4 transformation) {
+        AxisAlignedBox box = AxisAlignedBox.createNew(this);
+        box.transformInPlace(transformation);
+        return box;
+    }
+
+    /**
+     * Transformiert die Box mittels der Matrix
+     *
+     * @param transformation Die anzuwendende Transformation
+     */
+    public void transformInPlace(@NotNull final Matrix4 transformation) {
+
+	    // Kudos: http://zeuxcg.org/2010/10/17/aabb-from-obb-with-component-wise-abs/
+	    final float x = Math.abs(transformation.getAt(Matrix4.M11)) * extent.x + Math.abs(transformation.getAt(Matrix4.M12)) * extent.y + Math.abs(transformation.getAt(Matrix4.M13)) * extent.z;
+	    final float y = Math.abs(transformation.getAt(Matrix4.M21)) * extent.x + Math.abs(transformation.getAt(Matrix4.M22)) * extent.y + Math.abs(transformation.getAt(Matrix4.M23)) * extent.z;
+	    final float z = Math.abs(transformation.getAt(Matrix4.M31)) * extent.x + Math.abs(transformation.getAt(Matrix4.M32)) * extent.y + Math.abs(transformation.getAt(Matrix4.M33)) * extent.z;
+
+	    extent.set(x, y, z);
+	    transformation.transformPointInPlace(center);
+    }
 }

@@ -4,6 +4,7 @@ import de.widemeadows.projectcore.math.*;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
+import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.*;
 
 /**
@@ -254,5 +255,27 @@ public class BoxTests {
 
 
 		System.out.println("Performance Ray-Box-Intersection: " + elapsed1/(float)iterations/2 + " ms");
+	}
+
+    /**
+     * Test die Rotation der Box
+     */
+    @Test
+    public void boxRotation() {
+        //Matrix4 translation = MatrixFactory.getRotationEulerRPY(0, MathUtils.deg2rad(45), 0);
+        Matrix4 translation = MatrixFactory.getRotationY(deg2rad(45));
+        AxisAlignedBox box = AxisAlignedBox.createNew();
+	    AxisAlignedBox box2 = box.transform(translation);
+	    // System.out.printf("AABB " + box.extent + " --> " + box2.extent + "\n");
+	    assertEquals(0.70710677f, box2.extent.x, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.y, DEFAULT_EPSILON);
+	    assertEquals(0.70710677f, box2.extent.z, DEFAULT_EPSILON);
+
+	    translation = MatrixFactory.getRotationY(deg2rad(90));
+	    box = AxisAlignedBox.createNew();
+	    box2 = box.transform(translation);
+	    assertEquals(0.5, box2.extent.x, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.y, DEFAULT_EPSILON);
+	    assertEquals(0.5, box2.extent.z, DEFAULT_EPSILON);
 	}
 }
