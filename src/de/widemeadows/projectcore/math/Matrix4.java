@@ -23,6 +23,37 @@ import static de.widemeadows.projectcore.math.MathUtils.isZero;
 public final class Matrix4 {
 
 	/**
+	 * Interface für Klassen, die eine Matrix beziehen können.
+	 * <p/>
+	 * Die ermittelte Matrix darf nicht <c>null</c> sein.
+	 */
+	public interface IMatrixResolver {
+
+		/**
+		 * Bezieht eine Matrix
+		 * @return Die Matrix (darf nicht <c>null</c> sein)
+		 */
+		@NotNull
+		Matrix4 get();
+	}
+
+	/**
+	 * Interface für Klassen, die eine Matrix beziehen können.
+	 * <p/>
+	 * Die ermittelte Matrix darf <c>null</c> sein.
+	 */
+	public interface INullableMatrixResolver {
+
+		/**
+		 * Bezieht eine Matrix
+		 *
+		 * @return Die Matrix (kann <c>null</c> sein)
+		 */
+		@Nullable
+		Matrix4 get();
+	}
+	
+	/**
 	 * Instanz, die die Verwaltung nicht länger benötigter Instanzen übernimmt
 	 */
 	public static final IObjectCache<Matrix4> Cache = new ThreadLocalObjectCache<Matrix4>(new ObjectFactory<Matrix4>() {
