@@ -48,7 +48,7 @@ public class TransformationState {
 	private final float[] translation = new float[] { 0.0f, 0.0f, 0.0f };
 
 	/**
-	 * Bezieht die X-Transformation
+	 * Bezieht die X-Translation
 	 * @return Translation in X-Richtung
 	 */
 	public float getTranslationX() {
@@ -56,7 +56,7 @@ public class TransformationState {
 	}
 
 	/**
-	 * Setzt die X-Transformation
+	 * Setzt die X-Translation
 	 * @param value Der Wert
 	 */
 	public void setTranslationX(final float value) {
@@ -64,7 +64,16 @@ public class TransformationState {
 	}
 
 	/**
-	 * Bezieht die Y-Transformation
+	 * Ergänzt die X-Translation
+	 *
+	 * @param value Der Wert
+	 */
+	public void translateX(final float value) {
+		translation[0] += value;
+	}
+
+	/**
+	 * Bezieht die Y-Translation
 	 * @return Translation in Y-Richtung
 	 */
 	public float getTranslationY() {
@@ -72,7 +81,7 @@ public class TransformationState {
 	}
 
 	/**
-	 * Setzt die Y-Transformation
+	 * Setzt die Y-Translation
 	 *
 	 * @param value Der Wert
 	 */
@@ -81,7 +90,16 @@ public class TransformationState {
 	}
 
 	/**
-	 * Bezieht die Z-Transformation
+	 * Ergänzt die Y-Translation
+	 *
+	 * @param value Der Wert
+	 */
+	public void translateY(final float value) {
+		translation[1] += value;
+	}
+
+	/**
+	 * Bezieht die Z-Translation
 	 * @return Translation in Z-Richtung
 	 */
 	public float getTranslationZ() {
@@ -89,7 +107,7 @@ public class TransformationState {
 	}
 
 	/**
-	 * Setzt die Z-Transformation
+	 * Setzt die Z-Translation
 	 *
 	 * @param value Der Wert
 	 */
@@ -98,7 +116,16 @@ public class TransformationState {
 	}
 
 	/**
-	 * Setzt die Transformation
+	 * Ergänzt die Z-Translation
+	 *
+	 * @param value Der Wert
+	 */
+	public void translateZ(final float value) {
+		translation[2] += value;
+	}
+
+	/**
+	 * Setzt die Translation
 	 *
 	 * @param x Der Wert
 	 * @param y Der Wert
@@ -108,6 +135,19 @@ public class TransformationState {
 		translation[0] = x;
 		translation[1] = y;
 		translation[2] = z;
+	}
+
+	/**
+	 * Ergänzt die Translation
+	 *
+	 * @param x Der Wert
+	 * @param y Der Wert
+	 * @param z Der Wert
+	 */
+	public void translate(final float x, final float y, final float z) {
+		translation[0] += x;
+		translation[1] += y;
+		translation[2] += z;
 	}
 
 	/**
