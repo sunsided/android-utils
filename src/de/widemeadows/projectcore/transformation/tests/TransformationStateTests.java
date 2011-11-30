@@ -58,4 +58,27 @@ public class TransformationStateTests {
 		assertEquals(0, point.z, DEFAULT_EPSILON);
 	}
 
+	/**
+	 * Überprüft die Rotation
+	 */
+	@Test
+	public void rotationTest() {
+
+		TransformationState state = new TransformationState();
+
+		// Nicht-Rotation
+		Vector3 point = Vector3.createNew(1, 2, 3);
+		state.transformPoint(point);
+		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(2, point.y, DEFAULT_EPSILON);
+		assertEquals(3, point.z, DEFAULT_EPSILON);
+
+		// Nicht-Rotation
+		point = Vector3.createNew(1, 2, 3);
+		state.transformPoint(point);
+		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(2, point.y, DEFAULT_EPSILON);
+		assertEquals(3, point.z, DEFAULT_EPSILON);
+	}
+
 }
