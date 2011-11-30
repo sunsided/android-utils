@@ -2,6 +2,7 @@ package de.widemeadows.projectcore.transformation;
 
 import de.widemeadows.projectcore.math.Ray3;
 import de.widemeadows.projectcore.math.Vector3;
+import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -277,5 +278,115 @@ public class TransformationState {
 		inverseTransformPoint(ray.origin);
 		inverseTransformVector(ray.direction);
 		ray.setDirection(ray.direction); // Inverse berechnen lassen
+	}
+
+	/**
+	 * Setzt die Rotation um die X-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void setRotationX(final float theta) {
+		setRotationX(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
+	 * Setzt die Rotation um die Y-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void setRotationY(final float theta) {
+		setRotationY(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
+	 * Setzt die Rotation um die Z-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void setRotationZ(final float theta) {
+		setRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
+	 * Setzt die Rotation um die X-Achse
+	 *
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	public void setRotationX(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, cosTheta, sinTheta, 0.0f,
+				0.0f, -sinTheta, cosTheta, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		rotation[0] = 1;
+		rotation[3] = 0;
+		rotation[6] = 0;
+
+		rotation[1] = 0;
+		rotation[4] = cosTheta;
+		rotation[7] = sinTheta;
+
+		rotation[2] = 0;
+		rotation[5] = -sinTheta;
+		rotation[8] = cosTheta;
+	}
+
+	/**
+	 * Setzt die Rotation um die Y-Achse
+	 *
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	public void setRotationY(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				cosTheta, 0.0f, -sinTheta, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				sinTheta, 0.0f, cosTheta, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		rotation[0] = cosTheta;
+		rotation[3] = 0;
+		rotation[6] = -sinTheta;
+
+		rotation[1] = 0;
+		rotation[4] = 1;
+		rotation[7] = 0;
+
+		rotation[2] = sinTheta;
+		rotation[5] = 0;
+		rotation[8] = cosTheta;
+	}
+
+	/**
+	 * Setzt die Rotation um die Z-Achse
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	public void setRotationZ(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				cosTheta, sinTheta, 0.0f, 0.0f,
+				-sinTheta, cosTheta, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		rotation[0] = cosTheta;
+		rotation[3] = sinTheta;
+		rotation[6] = 0;
+
+		rotation[1] = -sinTheta;
+		rotation[4] = cosTheta;
+		rotation[7] = 0;
+
+		rotation[2] = 0;
+		rotation[5] = 0;
+		rotation[8] = 1;
 	}
 }

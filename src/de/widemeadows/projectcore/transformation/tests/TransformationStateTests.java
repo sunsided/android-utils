@@ -5,6 +5,7 @@ import de.widemeadows.projectcore.transformation.TransformationState;
 import org.junit.Test;
 
 import static de.widemeadows.projectcore.math.MathUtils.DEFAULT_EPSILON;
+import static de.widemeadows.projectcore.math.MathUtils.deg2rad;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -75,10 +76,11 @@ public class TransformationStateTests {
 
 		// Nicht-Rotation
 		point = Vector3.createNew(1, 2, 3);
+		state.setRotationY(deg2rad(90));
 		state.transformPoint(point);
-		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(3, point.x, DEFAULT_EPSILON);
 		assertEquals(2, point.y, DEFAULT_EPSILON);
-		assertEquals(3, point.z, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
 	}
 
 }
