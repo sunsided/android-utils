@@ -22,12 +22,14 @@ public class TransformationState {
 	/**
 	 * Der Skalierungsfaktor des Objektes
 	 */
-	private float scale = 1.0f;
+	@NotNull
+	private final float[] scale = new float[] {1.0f, 1.0f, 1.0f};
 
 	/**
 	 * Der inverse Skalierungsfaktor
 	 */
-	private float invScale = 1.0f;
+	@NotNull
+	private final float[] invScale = new float[]{1.0f, 1.0f, 1.0f};
 
 	/**
 	 * Die affine 3x3-Rotationsmatrix
@@ -43,29 +45,14 @@ public class TransformationState {
 	 * Der affine Translationsvektor
 	 */
 	@NotNull
-	private final Vector3 translation = Vector3.createNew();
-
-	/**
-	 * Liefert den dirty-Zustand des Objektes
-	 * @return Der Dirty-Zustand
-	 */
-	public boolean isDirty() {
-		return isDirty;
-	}
-
-	/**
-	 * Markiert die Transformation als dirty
-	 */
-	public void makeDirty() {
-		isDirty = true;
-	}
+	private final float[] translation = new float[] { 0.0f, 0.0f, 0.0f };
 
 	/**
 	 * Bezieht die X-Transformation
 	 * @return Translation in X-Richtung
 	 */
 	public float getTranslationX() {
-		return translation.x;
+		return translation[0];
 	}
 
 	/**
@@ -73,8 +60,7 @@ public class TransformationState {
 	 * @param value Der Wert
 	 */
 	public void setTranslationX(final float value) {
-		translation.x = value;
-		isDirty = true;
+		translation[0] = value;
 	}
 
 	/**
@@ -82,7 +68,7 @@ public class TransformationState {
 	 * @return Translation in Y-Richtung
 	 */
 	public float getTranslationY() {
-		return translation.y;
+		return translation[1];
 	}
 
 	/**
@@ -91,8 +77,7 @@ public class TransformationState {
 	 * @param value Der Wert
 	 */
 	public void setTranslationY(final float value) {
-		translation.y = value;
-		isDirty = true;
+		translation[1] = value;
 	}
 
 	/**
@@ -100,7 +85,7 @@ public class TransformationState {
 	 * @return Translation in Z-Richtung
 	 */
 	public float getTranslationZ() {
-		return translation.z;
+		return translation[2];
 	}
 
 	/**
@@ -109,8 +94,7 @@ public class TransformationState {
 	 * @param value Der Wert
 	 */
 	public void setTranslationZ(final float value) {
-		translation.z = value;
-		isDirty = true;
+		translation[2] = value;
 	}
 
 	/**
@@ -121,16 +105,35 @@ public class TransformationState {
 	 * @param z Der Wert
 	 */
 	public void setTranslation(final float x, final float y, final float z) {
-		translation.set(x, y, z);
-		isDirty = true;
+		translation[0] = x;
+		translation[1] = y;
+		translation[2] = z;
 	}
 
 	/**
 	 * Bezieht die Skalierung
 	 * @return Der Skalierungsfaktor
 	 */
-	public float getScale() {
-		return scale;
+	public float getScaleX() {
+		return scale[0];
+	}
+
+	/**
+	 * Bezieht die Skalierung
+	 *
+	 * @return Der Skalierungsfaktor
+	 */
+	public float getScaleY() {
+		return scale[1];
+	}
+
+	/**
+	 * Bezieht die Skalierung
+	 *
+	 * @return Der Skalierungsfaktor
+	 */
+	public float getScaleZ() {
+		return scale[2];
 	}
 
 	/**
@@ -140,8 +143,14 @@ public class TransformationState {
 	 */
 	public void setScale(final float factor) {
 		assert factor > 0;
-		scale = factor;
-		invScale = 1.0f / factor;
+		scale[0] = factor;
+		scale[1] = factor;
+		scale[2] = factor;
+		
+		final float invFactor = 1.0f / factor;
+		invScale[0] = invFactor;
+		invScale[1] = invFactor;
+		invScale[2] = invFactor;
 		isDirty = true;
 	}
 
@@ -151,7 +160,7 @@ public class TransformationState {
 	 */
 	public void transformPoint(@NotNull Vector3 point) {
 		transformVector(point);
-		point.addInPlace(translation);
+		point.addInPlace(translation[0], translation[1], translation[2]);
 	}
 
 	/**
@@ -160,9 +169,9 @@ public class TransformationState {
 	 * @param vector Der zu transformierende Vektor
 	 */
 	public void transformVector(@NotNull Vector3 vector) {
-		final float x = scale * (vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
-		final float y = scale * (vector.x * rotation[3] + vector.y * rotation[4] + vector.z * rotation[5]);
-		final float z = scale * (vector.x * rotation[6] + vector.y * rotation[7] + vector.z * rotation[8]);
+		final float x = (scale[0] * vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
+		final float y = (vector.x * rotation[3] + scale[1] * vector.y * rotation[4] + vector.z * rotation[5]);
+		final float z = (vector.x * rotation[6] + vector.y * rotation[7] + scale[2] * vector.z * rotation[8]);
 		vector.set(x, y, z);
 	}
 
@@ -171,10 +180,19 @@ public class TransformationState {
 	 * @param vector Der invers zu transformierende Vektor
 	 */
 	public void inverseTransformVector(@NotNull Vector3 vector) {
-		final float invScale = this.invScale;
-		final float x = (vector.x * rotation[0] + vector.y * rotation[3] + vector.z * rotation[6]) * invScale;
-		final float y = (vector.x * rotation[1] + vector.y * rotation[4] + vector.z * rotation[7]) * invScale;
-		final float z = (vector.x * rotation[2] + vector.y * rotation[5] + vector.z * rotation[8]) * invScale;
+		final float invScaleX = this.invScale[0];
+		final float invScaleY = this.invScale[1];
+		final float invScaleZ = this.invScale[2];
+
+		// Vektoren sind ohne Translation
+		final float vectorX = vector.x;
+		final float vectorY = vector.y;
+		final float vectorZ = vector.z;
+
+		// Rotationsmatrix ist orthogonal --> R^-1 == R^T
+		final float x = (vectorX * rotation[0] * invScaleX + vectorY * rotation[3] + vectorZ * rotation[6]);
+		final float y = (vectorX * rotation[1] + vectorY * rotation[4] * invScaleY + vectorZ * rotation[7]);
+		final float z = (vectorX * rotation[2] + vectorY * rotation[5] + vectorZ * rotation[8] * invScaleZ);
 		vector.set(x, y, z);
 	}
 
@@ -184,16 +202,19 @@ public class TransformationState {
 	 * @param point Der invers zu transformierende Punkt
 	 */
 	public void inverseTransformPoint(@NotNull Vector3 point) {
-		final float invScale = this.invScale;
+		final float invScaleX = this.invScale[0];
+		final float invScaleY = this.invScale[1];
+		final float invScaleZ = this.invScale[2];
 
-		final float tx = -(rotation[0] * translation.x + rotation[3] * translation.y + rotation[6] * translation.z);
-		final float ty = -(rotation[1] * translation.x + rotation[4] * translation.y + rotation[7] * translation.z);
-		final float tz = -(rotation[2] * translation.x + rotation[5] * translation.y + rotation[8] * translation.z);
-		
-		final float x = (point.x * rotation[0] + point.y * rotation[3] + point.z * rotation[6]) * invScale + tx;
-		final float y = (point.x * rotation[1] + point.y * rotation[4] + point.z * rotation[7]) * invScale + ty;
-		final float z = (point.x * rotation[2] + point.y * rotation[5] + point.z * rotation[8]) * invScale + tz;
+		// Vektoren sind mit Translation
+		final float pointX = point.x - translation[0];
+		final float pointY = point.y - translation[1];
+		final float pointZ = point.z - translation[2];
 
+		// Rotationsmatrix ist orthogonal --> R^-1 == R^T
+		final float x = (pointX * rotation[0] * invScaleX + pointY * rotation[3] + pointZ * rotation[6]);
+		final float y = (pointX * rotation[1] + pointY * rotation[4] * invScaleY + pointZ * rotation[7]);
+		final float z = (pointX * rotation[2] + pointY * rotation[5] + pointZ * rotation[8] * invScaleZ);
 		point.set(x, y, z);
 	}
 
@@ -204,8 +225,8 @@ public class TransformationState {
 	 */
 	public void transform(@NotNull Ray3 ray) {
 		transformPoint(ray.origin);
-		transformPoint(ray.direction);
-		ray.setDirection(ray.direction);
+		transformVector(ray.direction);
+		ray.setDirection(ray.direction); // Inverse berechnen lassen
 	}
 
 	/**
@@ -214,7 +235,7 @@ public class TransformationState {
 	 */
 	public void inverseTransform(@NotNull Ray3 ray) {
 		inverseTransformPoint(ray.origin);
-		inverseTransformPoint(ray.direction);
-		ray.setDirection(ray.direction);
+		inverseTransformVector(ray.direction);
+		ray.setDirection(ray.direction); // Inverse berechnen lassen
 	}
 }
