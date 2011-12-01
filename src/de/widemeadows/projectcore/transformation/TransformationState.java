@@ -2,8 +2,10 @@ package de.widemeadows.projectcore.transformation;
 
 import de.widemeadows.projectcore.math.Ray3;
 import de.widemeadows.projectcore.math.Vector3;
-import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
+
+import static de.widemeadows.projectcore.math.mock.FloatMath.cos;
+import static de.widemeadows.projectcore.math.mock.FloatMath.sin;
 
 /**
  * Transformationszustand eines Objektes
@@ -301,7 +303,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationX(final float theta) {
-		setRotationX(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationX(cos(theta), sin(theta));
 	}
 
 	/**
@@ -310,7 +312,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void rotateObjectX(final float theta) {
-		rotateObjectX(FloatMath.cos(theta), FloatMath.sin(theta));
+		rotateObjectX(cos(theta), sin(theta));
 	}
 
 	/**
@@ -319,7 +321,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationY(final float theta) {
-		setRotationY(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationY(cos(theta), sin(theta));
 	}
 
 	/**
@@ -328,7 +330,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void rotateObjectY(final float theta) {
-		rotateObjectY(FloatMath.cos(theta), FloatMath.sin(theta));
+		rotateObjectY(cos(theta), sin(theta));
 	}
 
 	/**
@@ -337,7 +339,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationZ(final float theta) {
-		setRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationZ(cos(theta), sin(theta));
 	}
 
 	/**
@@ -346,7 +348,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void rotateObjectZ(final float theta) {
-		rotateObjectZ(FloatMath.cos(theta), FloatMath.sin(theta));
+		rotateObjectZ(cos(theta), sin(theta));
 	}
 
 	/**
@@ -555,14 +557,14 @@ public class TransformationState {
 	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
 	 */
 	public void setRotation(final float rollX, final float pitchY, final float yawZ) {
-		float cr = (float) Math.cos(rollX); // Φ
-		float sr = (float) Math.sin(rollX);
+		float cr = cos(rollX); // Φ
+		float sr = sin(rollX);
 
-		float cp = (float) Math.cos(pitchY); // Θ
-		float sp = (float) Math.sin(pitchY);
+		float cp = cos(pitchY); // Θ
+		float sp = sin(pitchY);
 
-		float cy = (float) Math.cos(yawZ); // Ψ
-		float sy = (float) Math.sin(yawZ);
+		float cy = cos(yawZ); // Ψ
+		float sy = sin(yawZ);
 
 		setRotationRPY(cr, sr, cp, sp, cy, sy);
 	}
@@ -577,14 +579,14 @@ public class TransformationState {
 	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
 	 */
 	public void rotate(final float rollX, final float pitchY, final float yawZ) {
-		float cr = (float) Math.cos(rollX); // Φ
-		float sr = (float) Math.sin(rollX);
+		float cr = cos(rollX); // Φ
+		float sr = sin(rollX);
 
-		float cp = (float) Math.cos(pitchY); // Θ
-		float sp = (float) Math.sin(pitchY);
+		float cp = cos(pitchY); // Θ
+		float sp = sin(pitchY);
 
-		float cy = (float) Math.cos(yawZ); // Ψ
-		float sy = (float) Math.sin(yawZ);
+		float cy = cos(yawZ); // Ψ
+		float sy = sin(yawZ);
 
 		rotate(cr, sr, cp, sp, cy, sy);
 	}
