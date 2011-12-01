@@ -63,7 +63,7 @@ public class TransformationStateTests {
 	 * Überprüft die Rotation
 	 */
 	@Test
-	public void rotationTest() {
+	public void setRotationTest() {
 
 		TransformationState state = new TransformationState();
 
@@ -103,13 +103,40 @@ public class TransformationStateTests {
 		state.setRotation(deg2rad(90), deg2rad(90), deg2rad(90));
 		state.transformPoint(point);
 
-		// Nach Rotation um Z:       1, 2, 3 --> -2,  1, 3
-		// Nach Rotation um Y:      -2, 1, 3 -->  2,  1, 3
-		// Nach Rotation um X:		 2, 1, 3 -->  3, -2, 1
-
 		assertEquals(3, point.x, DEFAULT_EPSILON);
-		assertEquals(-2, point.y, DEFAULT_EPSILON);
-		assertEquals(1, point.z, DEFAULT_EPSILON);
+		assertEquals(2, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
 	}
 
+	/**
+	 * Überprüft die Rotation
+	 */
+	@Test
+	public void rotateTest() {
+
+		TransformationState state = new TransformationState();
+
+		// Nicht-Rotation
+		Vector3 point = Vector3.createNew(1, 2, 3);
+		state.transformPoint(point);
+		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(2, point.y, DEFAULT_EPSILON);
+		assertEquals(3, point.z, DEFAULT_EPSILON);
+
+		// Rotation um X
+		point = Vector3.createNew(1, 2, 3);
+		state.rotateX(deg2rad(90));
+		state.transformPoint(point);
+		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(-3, point.y, DEFAULT_EPSILON);
+		assertEquals(2, point.z, DEFAULT_EPSILON);
+
+		// Erneute Rotation um X --> Rotation um 180°
+		point = Vector3.createNew(1, 2, 3);
+		state.rotateX(deg2rad(90));
+		state.transformPoint(point);
+		assertEquals(1, point.x, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(-3, point.z, DEFAULT_EPSILON);
+	}
 }

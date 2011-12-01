@@ -290,6 +290,15 @@ public class TransformationState {
 	}
 
 	/**
+	 * Setzt die Rotation um die X-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void rotateX(final float theta) {
+		rotateX(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
 	 * Setzt die Rotation um die Y-Achse
 	 *
 	 * @param theta Der Winkel in radians
@@ -333,6 +342,37 @@ public class TransformationState {
 		rotation[2] = 0;
 		rotation[5] = -sinTheta;
 		rotation[8] = cosTheta;
+	}
+
+	/**
+	 * Setzt die Rotation um die X-Achse
+	 *
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	private void rotateX(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, cosTheta, sinTheta, 0.0f,
+				0.0f, -sinTheta, cosTheta, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		final float[] newRotation = new float[9];
+		newRotation[0] = 1;
+		newRotation[3] = 0;
+		newRotation[6] = 0;
+
+		newRotation[1] = 0;
+		newRotation[4] = cosTheta;
+		newRotation[7] = sinTheta;
+
+		newRotation[2] = 0;
+		newRotation[5] = -sinTheta;
+		newRotation[8] = cosTheta;
+
+		multiply3x3FromLeft(rotation, newRotation);
 	}
 
 	/**
@@ -437,5 +477,40 @@ public class TransformationState {
 		rotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
 		rotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
 		rotation[8] = cosRoll * cosPitch;
+	}
+
+	/**
+	 * Multipliziert zwei 3x3-Matrizen miteinander
+	 * 
+	 * @param left Die linke Matrix
+	 * @param right Die rechte Matrix 
+	 */
+	private static void multiply3x3FromLeft(@NotNull final float[] right, @NotNull final float[] left) {
+
+		//                           Spalte 1           Spalte 2           Spalte 3
+		//
+		// | a b c |   | r s t |   | a*r + b*u + c*x    a*s + b*v + c*y    a*t + b*w + c*z |
+		// | d e f | X | u v w | = | d*r + e*u + f*x    d*s + e*v + f*y    d*t + e*w + f*z |
+		// | g h i |   | x y z |   | g*r + h*u + i*x    g*s + h*v + i*y    g*t + h*w + i*z |
+
+		// | 1 4 7 |   | 1 4 7 |   | 1*1 + 4*2 + 7*3    1*4 + 4*5 + 7*6    1*7 + 4*8 + 7*9 |
+		// | 2 5 8 | X | 2 5 8 | = | 2*1 + 5*2 + 8*3    2*4 + 5*5 + 8*6    2*7 + 5*8 + 8*9 |
+		// | 3 6 9 |   | 3 6 9 |   | 3*1 + 6*2 + 9*3    3*4 + 6*5 + 9*6    3*7 + 6*8 + 9*9 |
+
+		final float[] multiplied = new float[9];
+
+		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
+		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
+		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
+
+		multiplied[1] = (left[1] * right[0]) + (left[4] * right[1]) + (left[7] * right[2]);
+		multiplied[4] = (left[1] * right[3]) + (left[4] * right[4]) + (left[7] * right[5]);
+		multiplied[7] = (left[1] * right[6]) + (left[4] * right[7]) + (left[7] * right[8]);
+
+		multiplied[2] = (left[2] * right[0]) + (left[5] * right[1]) + (left[8] * right[2]);
+		multiplied[5] = (left[2] * right[3]) + (left[5] * right[4]) + (left[8] * right[5]);
+		multiplied[8] = (left[2] * right[6]) + (left[5] * right[7]) + (left[8] * right[8]);
+		
+		System.arraycopy(multiplied, 0, right, 0, 9);
 	}
 }
