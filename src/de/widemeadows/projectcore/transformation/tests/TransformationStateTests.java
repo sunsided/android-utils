@@ -158,7 +158,7 @@ public class TransformationStateTests {
 		// RPY-test
 		point = Vector3.createNew(1, 2, 3);
 		state.resetRotation();
-		state.setRotation(deg2rad(180), deg2rad(90), deg2rad(90)); // Rotation um X, Y, Z der Welt!
+		state.rotate(deg2rad(180), deg2rad(90), deg2rad(90)); // Rotation um X, Y, Z der Welt!
 		state.transformPoint(point);
 		assertEquals(2, point.x, DEFAULT_EPSILON);
 		assertEquals(-3, point.y, DEFAULT_EPSILON);

@@ -632,38 +632,41 @@ public class TransformationState {
 	 */
 	private void rotate(final float cosRoll, final float sinRoll, final float cosPitch, final float sinPitch, final float cosYaw, final float sinYaw) {
 
-		final float[] newRotation = new float[9];
+		final float newRotation0 = cosPitch * cosYaw;
+		final float newRotation3 = cosPitch * sinYaw;
+		final float newRotation6 = -sinPitch;
 
-		newRotation[0] = cosPitch * cosYaw;
-		newRotation[3] = cosPitch * sinYaw;
-		newRotation[6] = -sinPitch;
+		final float sRsP = sinRoll * sinPitch;
+		final float newRotation1 = sRsP * cosYaw - cosRoll * sinYaw;
+		final float newRotation4 = sRsP * sinYaw + cosRoll * cosYaw;
+		final float newRotation7 = sinRoll * cosPitch;
 
-		newRotation[1] = sinRoll * sinPitch * cosYaw - cosRoll * sinYaw;
-		newRotation[4] = sinRoll * sinPitch * sinYaw + cosRoll * cosYaw;
-		newRotation[7] = sinRoll * cosPitch;
+		final float cRsP = cosRoll * sinPitch;
+		final float newRotation2 = cRsP * cosYaw + sinRoll * sinYaw;
+		final float newRotation5 = cRsP * sinYaw - sinRoll * cosYaw;
+		final float newRotation8 = cosRoll * cosPitch;
 
-		newRotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
-		newRotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
-		newRotation[8] = cosRoll * cosPitch;
+		final float m0 = (newRotation0 * rotation[0]) + (newRotation3 * rotation[1]) + (newRotation6 * rotation[2]);
+		final float m3 = (newRotation0 * rotation[3]) + (newRotation3 * rotation[4]) + (newRotation6 * rotation[5]);
+		final float m6 = (newRotation0 * rotation[6]) + (newRotation3 * rotation[7]) + (newRotation6 * rotation[8]);
 
+		final float m1 = (newRotation1 * rotation[0]) + (newRotation4 * rotation[1]) + (newRotation7 * rotation[2]);
+		final float m4 = (newRotation1 * rotation[3]) + (newRotation4 * rotation[4]) + (newRotation7 * rotation[5]);
+		final float m7 = (newRotation1 * rotation[6]) + (newRotation4 * rotation[7]) + (newRotation7 * rotation[8]);
 
-		final float[] multiplied = new float[9];
-		final float[] left = newRotation;
-		final float[] right = rotation;
+		final float m2 = (newRotation2 * rotation[0]) + (newRotation5 * rotation[1]) + (newRotation8 * rotation[2]);
+		final float m5 = (newRotation2 * rotation[3]) + (newRotation5 * rotation[4]) + (newRotation8 * rotation[5]);
+		final float m8 = (newRotation2 * rotation[6]) + (newRotation5 * rotation[7]) + (newRotation8 * rotation[8]);
 
-		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
-		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
-		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
-
-		multiplied[1] = (left[1] * right[0]) + (left[4] * right[1]) + (left[7] * right[2]);
-		multiplied[4] = (left[1] * right[3]) + (left[4] * right[4]) + (left[7] * right[5]);
-		multiplied[7] = (left[1] * right[6]) + (left[4] * right[7]) + (left[7] * right[8]);
-
-		multiplied[2] = (left[2] * right[0]) + (left[5] * right[1]) + (left[8] * right[2]);
-		multiplied[5] = (left[2] * right[3]) + (left[5] * right[4]) + (left[8] * right[5]);
-		multiplied[8] = (left[2] * right[6]) + (left[5] * right[7]) + (left[8] * right[8]);
-
-		System.arraycopy(multiplied, 0, right, 0, 9);
+		rotation[0] = m0;
+		rotation[1] = m1;
+		rotation[2] = m2;
+		rotation[3] = m3;
+		rotation[4] = m4;
+		rotation[5] = m5;
+		rotation[6] = m6;
+		rotation[7] = m7;
+		rotation[8] = m8;
 	}
 
 	/**
