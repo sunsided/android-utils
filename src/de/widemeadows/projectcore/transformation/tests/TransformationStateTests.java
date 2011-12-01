@@ -97,6 +97,19 @@ public class TransformationStateTests {
 		assertEquals(-2, point.x, DEFAULT_EPSILON);
 		assertEquals(1, point.y, DEFAULT_EPSILON);
 		assertEquals(3, point.z, DEFAULT_EPSILON);
+
+		// Rotation um RPY
+		point = Vector3.createNew(1, 2, 3);
+		state.setRotation(deg2rad(90), deg2rad(90), deg2rad(90));
+		state.transformPoint(point);
+
+		// Nach Rotation um Z:       1, 2, 3 --> -2,  1, 3
+		// Nach Rotation um Y:      -2, 1, 3 -->  2,  1, 3
+		// Nach Rotation um X:		 2, 1, 3 -->  3, -2, 1
+
+		assertEquals(3, point.x, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(1, point.z, DEFAULT_EPSILON);
 	}
 
 }

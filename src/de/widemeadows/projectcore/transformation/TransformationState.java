@@ -313,7 +313,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	public void setRotationX(final float cosTheta, final float sinTheta) {
+	private void setRotationX(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
@@ -341,7 +341,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	public void setRotationY(final float cosTheta, final float sinTheta) {
+	private void setRotationY(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, 0.0f, -sinTheta, 0.0f,
@@ -368,7 +368,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	public void setRotationZ(final float cosTheta, final float sinTheta) {
+	private void setRotationZ(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, sinTheta, 0.0f, 0.0f,
@@ -388,5 +388,54 @@ public class TransformationState {
 		rotation[2] = 0;
 		rotation[5] = 0;
 		rotation[8] = 1;
+	}
+
+	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw.
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param rollX  Der Rollwinkel (Rotation um X) in radians
+	 * @param pitchY Der Nickwinkel (Rotation um Y) in radians
+	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
+	 */
+	public void setRotation(final float rollX, final float pitchY, final float yawZ) {
+		float cr = (float) Math.cos(rollX); // Φ
+		float sr = (float) Math.sin(rollX);
+
+		float cp = (float) Math.cos(pitchY); // Θ
+		float sp = (float) Math.sin(pitchY);
+
+		float cy = (float) Math.cos(yawZ); // Ψ
+		float sy = (float) Math.sin(yawZ);
+
+		setRotationRPY(cr, sr, cp, sp, cy, sy);
+	}
+
+	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param cosRoll  Der Kosinus des Rollwinkel (Rotation um X)
+	 * @param sinRoll  Der Sinus des Rollwinkel (Rotation um X)
+	 * @param cosPitch Der Kosinus des Nickwinkel (Rotation um Y)
+	 * @param sinPitch Der Sinus des Nickwinkel (Rotation um Y)
+	 * @param cosYaw   Der Kosinus des Gierwinkel (Rotation um Z)
+	 * @param sinYaw   Der Sinus des Gierwinkel (Rotation um Z)
+	 */
+	private void setRotationRPY(final float cosRoll, final float sinRoll, final float cosPitch, final float sinPitch, final float cosYaw, final float sinYaw) {
+
+		rotation[0] = cosPitch * cosYaw;
+		rotation[3] = cosPitch * sinYaw;
+		rotation[6] = -sinPitch;
+
+		rotation[1] = sinRoll * sinPitch * cosYaw - cosRoll * sinYaw;
+		rotation[4] = sinRoll * sinPitch * sinYaw + cosRoll * cosYaw;
+		rotation[7] = sinRoll * cosPitch;
+
+		rotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
+		rotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
+		rotation[8] = cosRoll * cosPitch;
 	}
 }
