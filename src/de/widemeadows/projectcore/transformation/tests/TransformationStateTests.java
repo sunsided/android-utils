@@ -125,7 +125,7 @@ public class TransformationStateTests {
 
 		// Rotation um X
 		point = Vector3.createNew(1, 2, 3);
-		state.rotateX(deg2rad(90)); // Rotation um X
+		state.rotateObjectX(deg2rad(90)); // Rotation um X
 		state.transformPoint(point);
 		assertEquals(1, point.x, DEFAULT_EPSILON);
 		assertEquals(-3, point.y, DEFAULT_EPSILON);
@@ -133,7 +133,7 @@ public class TransformationStateTests {
 
 		// Erneute Rotation um X --> Rotation um 180°
 		point = Vector3.createNew(1, 2, 3);
-		state.rotateX(deg2rad(90)); // Rotation um X
+		state.rotateObjectX(deg2rad(90)); // Rotation um X
 		state.transformPoint(point);
 		assertEquals(1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
@@ -141,7 +141,7 @@ public class TransformationStateTests {
 
 		// Erneute Rotation um Y
 		point = Vector3.createNew(1, 2, 3);
-		state.rotateY(deg2rad(90)); // Rotation um Y'
+		state.rotateObjectY(deg2rad(90)); // Rotation um Y'
 		state.transformPoint(point);
 		assertEquals(3, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
@@ -149,10 +149,19 @@ public class TransformationStateTests {
 
 		// Erneute Rotation um Z
 		point = Vector3.createNew(1, 2, 3);
-		state.rotateZ(deg2rad(90)); // Rotation um Z''
+		state.rotateObjectZ(deg2rad(90)); // Rotation um Z''
 		state.transformPoint(point);
 		assertEquals(3, point.x, DEFAULT_EPSILON);
 		assertEquals(-1, point.y, DEFAULT_EPSILON);
 		assertEquals(-2, point.z, DEFAULT_EPSILON);
+
+		// RPY-test
+		point = Vector3.createNew(1, 2, 3);
+		state.resetRotation();
+		state.setRotation(deg2rad(180), deg2rad(90), deg2rad(90)); // Rotation um X, Y, Z der Welt!
+		state.transformPoint(point);
+		assertEquals(2, point.x, DEFAULT_EPSILON);
+		assertEquals(-3, point.y, DEFAULT_EPSILON);
+		assertEquals(-1, point.z, DEFAULT_EPSILON);
 	}
 }

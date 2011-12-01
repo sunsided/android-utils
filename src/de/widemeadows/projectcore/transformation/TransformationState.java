@@ -281,6 +281,21 @@ public class TransformationState {
 	}
 
 	/**
+	 * Setzt die Rotation zurück
+	 */
+	public void resetRotation() {
+		rotation[0] = 1;
+		rotation[1] = 0;
+		rotation[2] = 0;
+		rotation[3] = 0;
+		rotation[4] = 1;
+		rotation[5] = 0;
+		rotation[6] = 0;
+		rotation[7] = 0;
+		rotation[8] = 1;
+	}
+
+	/**
 	 * Setzt die Rotation um die X-Achse
 	 *
 	 * @param theta Der Winkel in radians
@@ -294,8 +309,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateX(final float theta) {
-		rotateX(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectX(final float theta) {
+		rotateObjectX(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
@@ -312,8 +327,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateY(final float theta) {
-		rotateY(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectY(final float theta) {
+		rotateObjectY(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
@@ -330,8 +345,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateZ(final float theta) {
-		rotateZ(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectZ(final float theta) {
+		rotateObjectZ(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
@@ -368,7 +383,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateX(final float cosTheta, final float sinTheta) {
+	private void rotateObjectX(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
@@ -427,7 +442,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateY(final float cosTheta, final float sinTheta) {
+	private void rotateObjectY(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, 0.0f, -sinTheta, 0.0f,
@@ -485,7 +500,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateZ(final float cosTheta, final float sinTheta) {
+	private void rotateObjectZ(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, sinTheta, 0.0f, 0.0f,
@@ -553,6 +568,28 @@ public class TransformationState {
 	}
 
 	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw.
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param rollX  Der Rollwinkel (Rotation um X) in radians
+	 * @param pitchY Der Nickwinkel (Rotation um Y) in radians
+	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
+	 */
+	public void rotate(final float rollX, final float pitchY, final float yawZ) {
+		float cr = (float) Math.cos(rollX); // Φ
+		float sr = (float) Math.sin(rollX);
+
+		float cp = (float) Math.cos(pitchY); // Θ
+		float sp = (float) Math.sin(pitchY);
+
+		float cy = (float) Math.cos(yawZ); // Ψ
+		float sy = (float) Math.sin(yawZ);
+
+		rotate(cr, sr, cp, sp, cy, sy);
+	}
+
+	/**
 	 * Rotiert gemäß Euler Roll-Pitch-Yaw
 	 * <p/>
 	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
@@ -577,6 +614,54 @@ public class TransformationState {
 		rotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
 		rotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
 		rotation[8] = cosRoll * cosPitch;
+	}
+
+	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param cosRoll  Der Kosinus des Rollwinkel (Rotation um X)
+	 * @param sinRoll  Der Sinus des Rollwinkel (Rotation um X)
+	 * @param cosPitch Der Kosinus des Nickwinkel (Rotation um Y)
+	 * @param sinPitch Der Sinus des Nickwinkel (Rotation um Y)
+	 * @param cosYaw   Der Kosinus des Gierwinkel (Rotation um Z)
+	 * @param sinYaw   Der Sinus des Gierwinkel (Rotation um Z)
+	 */
+	private void rotate(final float cosRoll, final float sinRoll, final float cosPitch, final float sinPitch, final float cosYaw, final float sinYaw) {
+
+		final float[] newRotation = new float[9];
+
+		newRotation[0] = cosPitch * cosYaw;
+		newRotation[3] = cosPitch * sinYaw;
+		newRotation[6] = -sinPitch;
+
+		newRotation[1] = sinRoll * sinPitch * cosYaw - cosRoll * sinYaw;
+		newRotation[4] = sinRoll * sinPitch * sinYaw + cosRoll * cosYaw;
+		newRotation[7] = sinRoll * cosPitch;
+
+		newRotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
+		newRotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
+		newRotation[8] = cosRoll * cosPitch;
+
+
+		final float[] multiplied = new float[9];
+		final float[] left = newRotation;
+		final float[] right = rotation;
+
+		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
+		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
+		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
+
+		multiplied[1] = (left[1] * right[0]) + (left[4] * right[1]) + (left[7] * right[2]);
+		multiplied[4] = (left[1] * right[3]) + (left[4] * right[4]) + (left[7] * right[5]);
+		multiplied[7] = (left[1] * right[6]) + (left[4] * right[7]) + (left[7] * right[8]);
+
+		multiplied[2] = (left[2] * right[0]) + (left[5] * right[1]) + (left[8] * right[2]);
+		multiplied[5] = (left[2] * right[3]) + (left[5] * right[4]) + (left[8] * right[5]);
+		multiplied[8] = (left[2] * right[6]) + (left[5] * right[7]) + (left[8] * right[8]);
+
+		System.arraycopy(multiplied, 0, right, 0, 9);
 	}
 
 	/**
