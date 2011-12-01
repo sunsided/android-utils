@@ -201,13 +201,25 @@ public class TransformationStateTests {
 
 		parent.translate(10, 20, 30);
 		parent.setScale(10);
+		parent.rotateObjectY(deg2rad(90));
+
+		// Vektor wird skaliert:   {1, 2, 3} --> {10, 20, 30}
+		// Vektor wird rotiert: {10, 20, 30} --> {30, 20, -10}
+		// Vektor wird transliert: {30, 20, -10} --> {40, 40, 20}
+
+		Vector3 point = Vector3.createNew(1, 2, 3);
+		parent.transformPoint(point);
+		assertEquals(40, point.x, DEFAULT_EPSILON);
+		assertEquals(40, point.y, DEFAULT_EPSILON);
+		assertEquals(20, point.z, DEFAULT_EPSILON);
+
 		child.translate(100, 200, 300);
 		child.chain(parent);
 
-		Vector3 point = Vector3.createNew(1, 2, 3);
+		point = Vector3.createNew(1, 2, 3);
 		child.transformPoint(point);
-		assertEquals(120, point.x, DEFAULT_EPSILON);
+		assertEquals(140, point.x, DEFAULT_EPSILON);
 		assertEquals(240, point.y, DEFAULT_EPSILON);
-		assertEquals(360, point.z, DEFAULT_EPSILON);
+		assertEquals(320, point.z, DEFAULT_EPSILON);
 	}
 }

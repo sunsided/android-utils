@@ -198,6 +198,24 @@ public class TransformationState {
 	}
 
 	/**
+	 * Setzt die Skalierung
+	 *
+	 * @param factor Der Skalierungsfaktor
+	 */
+	public void scale(final float factor) {
+		assert factor > 0;
+		scale[0] *= factor;
+		scale[1] *= factor;
+		scale[2] *= factor;
+
+		final float invFactor = 1.0f / factor;
+		invScale[0] = invFactor;
+		invScale[1] = invFactor;
+		invScale[2] = invFactor;
+		isDirty = true;
+	}
+
+	/**
 	 * Transformiert einen Punkt
 	 * @param point Der zu transformierende Punkt
 	 */
@@ -212,9 +230,9 @@ public class TransformationState {
 	 * @param vector Der zu transformierende Vektor
 	 */
 	public void transformVector(@NotNull Vector3 vector) {
-		final float x = (scale[0] * vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
-		final float y = (vector.x * rotation[3] + scale[1] * vector.y * rotation[4] + vector.z * rotation[5]);
-		final float z = (vector.x * rotation[6] + vector.y * rotation[7] + scale[2] * vector.z * rotation[8]);
+		final float x = scale[0] * (vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
+		final float y = scale[1] * (vector.x * rotation[3] + vector.y * rotation[4] + vector.z * rotation[5]);
+		final float z = scale[2] * (vector.x * rotation[6] + vector.y * rotation[7] + vector.z * rotation[8]);
 		vector.set(x, y, z);
 	}
 
@@ -228,14 +246,14 @@ public class TransformationState {
 		final float invScaleZ = this.invScale[2];
 
 		// Vektoren sind ohne Translation
-		final float vectorX = vector.x;
-		final float vectorY = vector.y;
-		final float vectorZ = vector.z;
+		final float vectorX = vector.x * invScaleX;
+		final float vectorY = vector.y * invScaleY;
+		final float vectorZ = vector.z * invScaleZ;
 
 		// Rotationsmatrix ist orthogonal --> R^-1 == R^T
-		final float x = (vectorX * rotation[0] * invScaleX + vectorY * rotation[3] + vectorZ * rotation[6]);
-		final float y = (vectorX * rotation[1] + vectorY * rotation[4] * invScaleY + vectorZ * rotation[7]);
-		final float z = (vectorX * rotation[2] + vectorY * rotation[5] + vectorZ * rotation[8] * invScaleZ);
+		final float x = (vectorX * rotation[0] + vectorY * rotation[3] + vectorZ * rotation[6]);
+		final float y = (vectorX * rotation[1] + vectorY * rotation[4] + vectorZ * rotation[7]);
+		final float z = (vectorX * rotation[2] + vectorY * rotation[5] + vectorZ * rotation[8]);
 		vector.set(x, y, z);
 	}
 
@@ -250,14 +268,14 @@ public class TransformationState {
 		final float invScaleZ = this.invScale[2];
 
 		// Vektoren sind mit Translation
-		final float pointX = point.x - translation[0];
-		final float pointY = point.y - translation[1];
-		final float pointZ = point.z - translation[2];
+		final float pointX = (point.x - translation[0]) * invScaleX;
+		final float pointY = (point.y - translation[1]) * invScaleY;
+		final float pointZ = (point.z - translation[2]) * invScaleZ;
 
 		// Rotationsmatrix ist orthogonal --> R^-1 == R^T
-		final float x = (pointX * rotation[0] * invScaleX + pointY * rotation[3] + pointZ * rotation[6]);
-		final float y = (pointX * rotation[1] + pointY * rotation[4] * invScaleY + pointZ * rotation[7]);
-		final float z = (pointX * rotation[2] + pointY * rotation[5] + pointZ * rotation[8] * invScaleZ);
+		final float x = (pointX * rotation[0] + pointY * rotation[3] + pointZ * rotation[6]);
+		final float y = (pointX * rotation[1] + pointY * rotation[4] + pointZ * rotation[7]);
+		final float z = (pointX * rotation[2] + pointY * rotation[5] + pointZ * rotation[8]);
 		point.set(x, y, z);
 	}
 
@@ -691,10 +709,8 @@ public class TransformationState {
 	 */
 	public void chain(@NotNull final TransformationState parentTransformation) {
 
-		// TODO: Dirty-State
-
 		// Skalierung verketten
-		scale[0] *= parentTransformation.scale[0];
+		scale[0] *= parentTransformation.scale[0]; // TODO: Allet Kacke!
 		scale[1] *= parentTransformation.scale[1];
 		scale[2] *= parentTransformation.scale[2];
 
@@ -703,7 +719,7 @@ public class TransformationState {
 		final float[] left = rotation;
 		final float[] right = parentTransformation.rotation;
 
-		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
+		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]); // TODO: Allet Kacke!
 		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
 		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
 
@@ -718,7 +734,7 @@ public class TransformationState {
 		System.arraycopy(multiplied, 0, rotation, 0, 9);
 
 		// Translation verketten
-		translation[0] += parentTransformation.translation[0] * parentTransformation.rotation[0] +
+		translation[0] += parentTransformation.translation[0] * parentTransformation.rotation[0] + // TODO: Allet Kacke!
 						  parentTransformation.translation[1] * parentTransformation.rotation[3] +
 						  parentTransformation.translation[2] * parentTransformation.rotation[6];
 		translation[1] += parentTransformation.translation[0] * parentTransformation.rotation[1] +
