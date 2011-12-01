@@ -230,9 +230,13 @@ public class TransformationState {
 	 * @param vector Der zu transformierende Vektor
 	 */
 	public void transformVector(@NotNull Vector3 vector) {
-		final float x = scale[0] * (vector.x * rotation[0] + vector.y * rotation[1] + vector.z * rotation[2]);
-		final float y = scale[1] * (vector.x * rotation[3] + vector.y * rotation[4] + vector.z * rotation[5]);
-		final float z = scale[2] * (vector.x * rotation[6] + vector.y * rotation[7] + vector.z * rotation[8]);
+		final float vx = vector.x * scale[0];
+		final float vy = vector.y * scale[1];
+		final float vz = vector.z * scale[2];
+		
+		final float x = (vx * rotation[0] + vy * rotation[1] + vz * rotation[2]);
+		final float y = (vx * rotation[3] + vy * rotation[4] + vz * rotation[5]);
+		final float z = (vx * rotation[6] + vy * rotation[7] + vz * rotation[8]);
 		vector.set(x, y, z);
 	}
 
@@ -241,7 +245,7 @@ public class TransformationState {
 	 * @param vector Der invers zu transformierende Vektor
 	 */
 	public void inverseTransformVector(@NotNull Vector3 vector) {
-		final float invScaleX = this.invScale[0];
+		final float invScaleX = this.invScale[0]; // TODO: Most probably borked, see: Game Engine Architecture, p. 177
 		final float invScaleY = this.invScale[1];
 		final float invScaleZ = this.invScale[2];
 
@@ -263,7 +267,7 @@ public class TransformationState {
 	 * @param point Der invers zu transformierende Punkt
 	 */
 	public void inverseTransformPoint(@NotNull Vector3 point) {
-		final float invScaleX = this.invScale[0];
+		final float invScaleX = this.invScale[0]; // TODO: Most probably borked, see: Game Engine Architecture, p. 177
 		final float invScaleY = this.invScale[1];
 		final float invScaleZ = this.invScale[2];
 
@@ -708,6 +712,9 @@ public class TransformationState {
 	 * @param parentTransformation Die Elterntransformation
 	 */
 	public void chain(@NotNull final TransformationState parentTransformation) {
+
+		// TODO: Diese Methode total auslagern und Matrix4 verwenden?
+		// TODO: Dazu toMatrix4()- und inverseToMatrix4()-Methode erzeugen, welche die Transformationen enthalten.
 
 		// Skalierung verketten
 		scale[0] *= parentTransformation.scale[0]; // TODO: Allet Kacke!
