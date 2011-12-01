@@ -495,21 +495,27 @@ public class TransformationState {
 				0.0f, 0.0f, 0.0f, 1.0f);
 		 */
 
-		final float[] multiplied = new float[9];
+		final float r0 = rotation[0];
+		final float r1 = rotation[1];
+		final float r3 = rotation[3];
+		final float r4 = rotation[4];
+		final float r6 = rotation[6];
+		final float r7 = rotation[7];
+		
+		final float m0 = (cosTheta * r0) + (sinTheta * r1);
+		final float m3 = (cosTheta * r3) + (sinTheta * r4);
+		final float m6 = (cosTheta * r6) + (sinTheta * r7);
 
-		multiplied[0] = (cosTheta * rotation[0]) + (sinTheta * rotation[1]);
-		multiplied[3] = (cosTheta * rotation[3]) + (sinTheta * rotation[4]);
-		multiplied[6] = (cosTheta * rotation[6]) + (sinTheta * rotation[7]);
+		final float m1 = (-sinTheta * r0) + (cosTheta * r1);
+		final float m4 = (-sinTheta * r3) + (cosTheta * r4);
+		final float m7 = (-sinTheta * r6) + (cosTheta * r7);
 
-		multiplied[1] = (-sinTheta * rotation[0]) + (cosTheta * rotation[1]);
-		multiplied[4] = (-sinTheta * rotation[3]) + (cosTheta * rotation[4]);
-		multiplied[7] = (-sinTheta * rotation[6]) + (cosTheta * rotation[7]);
-
-		multiplied[2] = rotation[2];
-		multiplied[5] = rotation[5];
-		multiplied[8] = rotation[8];
-
-		System.arraycopy(multiplied, 0, rotation, 0, 9);
+		rotation[0] = m0;
+		rotation[1] = m1;
+		rotation[3] = m3;
+		rotation[4] = m4;
+		rotation[6] = m6;
+		rotation[7] = m7;
 
 		/*
 		final float[] multiplied = new float[9];
