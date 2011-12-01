@@ -290,7 +290,7 @@ public class TransformationState {
 	}
 
 	/**
-	 * Setzt die Rotation um die X-Achse
+	 * Rotiert um die X-Achse
 	 *
 	 * @param theta Der Winkel in radians
 	 */
@@ -308,12 +308,30 @@ public class TransformationState {
 	}
 
 	/**
+	 * Rotiert um die Y-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void rotateY(final float theta) {
+		rotateY(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
 	 * Setzt die Rotation um die Z-Achse
 	 *
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationZ(final float theta) {
 		setRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
+	}
+
+	/**
+	 * Rotiert um die Z-Achse
+	 *
+	 * @param theta Der Winkel in radians
+	 */
+	public void rotateZ(final float theta) {
+		rotateZ(FloatMath.cos(theta), FloatMath.sin(theta));
 	}
 
 	/**
@@ -404,6 +422,38 @@ public class TransformationState {
 	}
 
 	/**
+	 * Rotiert um die Y-Achse
+	 *
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	private void rotateY(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				cosTheta, 0.0f, -sinTheta, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				sinTheta, 0.0f, cosTheta, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		final float[] newRotation = new float[9];
+
+		newRotation[0] = cosTheta;
+		newRotation[3] = 0;
+		newRotation[6] = -sinTheta;
+
+		newRotation[1] = 0;
+		newRotation[4] = 1;
+		newRotation[7] = 0;
+
+		newRotation[2] = sinTheta;
+		newRotation[5] = 0;
+		newRotation[8] = cosTheta;
+
+		multiply3x3FromLeft(rotation, newRotation);
+	}
+
+	/**
 	 * Setzt die Rotation um die Z-Achse
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
@@ -428,6 +478,38 @@ public class TransformationState {
 		rotation[2] = 0;
 		rotation[5] = 0;
 		rotation[8] = 1;
+	}
+
+	/**
+	 * Rotiert um die Z-Achse
+	 *
+	 * @param cosTheta Der Kosinus des Winkels
+	 * @param sinTheta Der Sinus des Winkels
+	 */
+	private void rotateZ(final float cosTheta, final float sinTheta) {
+		/*
+		return Matrix4.createNew().set(
+				cosTheta, sinTheta, 0.0f, 0.0f,
+				-sinTheta, cosTheta, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+		 */
+
+		final float[] newRotation = new float[9];
+
+		newRotation[0] = cosTheta;
+		newRotation[3] = sinTheta;
+		newRotation[6] = 0;
+
+		newRotation[1] = -sinTheta;
+		newRotation[4] = cosTheta;
+		newRotation[7] = 0;
+
+		newRotation[2] = 0;
+		newRotation[5] = 0;
+		newRotation[8] = 1;
+
+		multiply3x3FromLeft(rotation, newRotation);
 	}
 
 	/**

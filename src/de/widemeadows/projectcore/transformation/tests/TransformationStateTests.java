@@ -138,5 +138,21 @@ public class TransformationStateTests {
 		assertEquals(1, point.x, DEFAULT_EPSILON);
 		assertEquals(-2, point.y, DEFAULT_EPSILON);
 		assertEquals(-3, point.z, DEFAULT_EPSILON);
+
+		// Erneute Rotation um Y
+		point = Vector3.createNew(1, 2, 3);
+		state.rotateY(deg2rad(90));
+		state.transformPoint(point);
+		assertEquals(3, point.x, DEFAULT_EPSILON);
+		assertEquals(-2, point.y, DEFAULT_EPSILON);
+		assertEquals(1, point.z, DEFAULT_EPSILON);
+
+		// Erneute Rotation um Z
+		point = Vector3.createNew(1, 2, 3);
+		state.rotateZ(deg2rad(90));
+		state.transformPoint(point);
+		assertEquals(3, point.x, DEFAULT_EPSILON);
+		assertEquals(-1, point.y, DEFAULT_EPSILON);
+		assertEquals(-2, point.z, DEFAULT_EPSILON);
 	}
 }
