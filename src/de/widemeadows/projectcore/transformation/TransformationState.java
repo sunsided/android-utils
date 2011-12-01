@@ -683,4 +683,49 @@ public class TransformationState {
 		
 		System.arraycopy(multiplied, 0, right, 0, 9);
 	}
+
+	/**
+	 * Multipliziert diese Transformation von links mit ihrer Elterntransformation
+	 *
+	 * @param parentTransformation Die Elterntransformation
+	 */
+	public void chain(@NotNull final TransformationState parentTransformation) {
+
+		// TODO: Dirty-State
+
+		// Skalierung verketten
+		scale[0] *= parentTransformation.scale[0];
+		scale[1] *= parentTransformation.scale[1];
+		scale[2] *= parentTransformation.scale[2];
+
+		// Rotation verketten
+		final float[] multiplied = new float[9];
+		final float[] left = rotation;
+		final float[] right = parentTransformation.rotation;
+
+		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
+		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
+		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
+
+		multiplied[1] = (left[1] * right[0]) + (left[4] * right[1]) + (left[7] * right[2]);
+		multiplied[4] = (left[1] * right[3]) + (left[4] * right[4]) + (left[7] * right[5]);
+		multiplied[7] = (left[1] * right[6]) + (left[4] * right[7]) + (left[7] * right[8]);
+
+		multiplied[2] = (left[2] * right[0]) + (left[5] * right[1]) + (left[8] * right[2]);
+		multiplied[5] = (left[2] * right[3]) + (left[5] * right[4]) + (left[8] * right[5]);
+		multiplied[8] = (left[2] * right[6]) + (left[5] * right[7]) + (left[8] * right[8]);
+
+		System.arraycopy(multiplied, 0, rotation, 0, 9);
+
+		// Translation verketten
+		translation[0] += parentTransformation.translation[0] * parentTransformation.rotation[0] +
+						  parentTransformation.translation[1] * parentTransformation.rotation[3] +
+						  parentTransformation.translation[2] * parentTransformation.rotation[6];
+		translation[1] += parentTransformation.translation[0] * parentTransformation.rotation[1] +
+						  parentTransformation.translation[1] * parentTransformation.rotation[4] +
+						  parentTransformation.translation[2] * parentTransformation.rotation[7];
+		translation[2] += parentTransformation.translation[0] * parentTransformation.rotation[2] +
+						  parentTransformation.translation[1] * parentTransformation.rotation[5] +
+						  parentTransformation.translation[2] * parentTransformation.rotation[8];
+	}
 }

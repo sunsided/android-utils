@@ -174,4 +174,40 @@ public class TransformationStateTests {
 		assertEquals(2, point.y, DEFAULT_EPSILON);
 		assertEquals(3, point.z, DEFAULT_EPSILON);
 	}
+
+	/**
+	 * Testet das Verketten von Transformationen
+	 */
+	@Test
+	public void scaleTest() {
+		TransformationState state = new TransformationState();
+
+		Vector3 point = Vector3.createNew(1, 2, 3);
+		state.setScale(2.0f);
+		state.transformPoint(point);
+
+		assertEquals(2, point.x, DEFAULT_EPSILON);
+		assertEquals(4, point.y, DEFAULT_EPSILON);
+		assertEquals(6, point.z, DEFAULT_EPSILON);
+	}
+
+	/**
+	 * Testet das Verketten von Transformationen
+	 */
+	@Test
+	public void transformationChaining() {
+		TransformationState parent = new TransformationState();
+		TransformationState child = new TransformationState();
+
+		parent.translate(10, 20, 30);
+		parent.setScale(10);
+		child.translate(100, 200, 300);
+		child.chain(parent);
+
+		Vector3 point = Vector3.createNew(1, 2, 3);
+		child.transformPoint(point);
+		assertEquals(120, point.x, DEFAULT_EPSILON);
+		assertEquals(240, point.y, DEFAULT_EPSILON);
+		assertEquals(360, point.z, DEFAULT_EPSILON);
+	}
 }
