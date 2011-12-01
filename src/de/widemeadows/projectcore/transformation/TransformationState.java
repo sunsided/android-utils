@@ -512,17 +512,17 @@ public class TransformationState {
 		final float[] multiplied = new float[9];
 		final float[] right = rotation;
 
-		multiplied[0] = (newRotation[0] * right[0]) + (newRotation[3] * right[1]) + (newRotation[6] * right[2]);
-		multiplied[3] = (newRotation[0] * right[3]) + (newRotation[3] * right[4]) + (newRotation[6] * right[5]);
-		multiplied[6] = (newRotation[0] * right[6]) + (newRotation[3] * right[7]) + (newRotation[6] * right[8]);
+		multiplied[0] = (newRotation[0] * right[0]) + (newRotation[3] * right[1]) + 0;
+		multiplied[3] = (newRotation[0] * right[3]) + (newRotation[3] * right[4]) + 0;
+		multiplied[6] = (newRotation[0] * right[6]) + (newRotation[3] * right[7]) + 0;
 
-		multiplied[1] = (newRotation[1] * right[0]) + (newRotation[4] * right[1]) + (newRotation[7] * right[2]);
-		multiplied[4] = (newRotation[1] * right[3]) + (newRotation[4] * right[4]) + (newRotation[7] * right[5]);
-		multiplied[7] = (newRotation[1] * right[6]) + (newRotation[4] * right[7]) + (newRotation[7] * right[8]);
+		multiplied[1] = (newRotation[1] * right[0]) + (newRotation[4] * right[1]) + 0;
+		multiplied[4] = (newRotation[1] * right[3]) + (newRotation[4] * right[4]) + 0;
+		multiplied[7] = (newRotation[1] * right[6]) + (newRotation[4] * right[7]) + 0;
 
-		multiplied[2] = (newRotation[2] * right[0]) + (newRotation[5] * right[1]) + (newRotation[8] * right[2]);
-		multiplied[5] = (newRotation[2] * right[3]) + (newRotation[5] * right[4]) + (newRotation[8] * right[5]);
-		multiplied[8] = (newRotation[2] * right[6]) + (newRotation[5] * right[7]) + (newRotation[8] * right[8]);
+		multiplied[2] = 0                           + 0                           + right[2];
+		multiplied[5] = 0                           + 0                           + right[5];
+		multiplied[8] = 0                           + 0                           + right[8];
 
 		System.arraycopy(multiplied, 0, right, 0, 9);
 
