@@ -2,8 +2,10 @@ package de.widemeadows.projectcore.transformation;
 
 import de.widemeadows.projectcore.math.Ray3;
 import de.widemeadows.projectcore.math.Vector3;
-import de.widemeadows.projectcore.math.mock.FloatMath;
 import org.jetbrains.annotations.NotNull;
+
+import static de.widemeadows.projectcore.math.mock.FloatMath.cos;
+import static de.widemeadows.projectcore.math.mock.FloatMath.sin;
 
 /**
  * Transformationszustand eines Objektes
@@ -281,12 +283,27 @@ public class TransformationState {
 	}
 
 	/**
+	 * Setzt die Rotation zurück
+	 */
+	public void resetRotation() {
+		rotation[0] = 1;
+		rotation[1] = 0;
+		rotation[2] = 0;
+		rotation[3] = 0;
+		rotation[4] = 1;
+		rotation[5] = 0;
+		rotation[6] = 0;
+		rotation[7] = 0;
+		rotation[8] = 1;
+	}
+
+	/**
 	 * Setzt die Rotation um die X-Achse
 	 *
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationX(final float theta) {
-		setRotationX(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationX(cos(theta), sin(theta));
 	}
 
 	/**
@@ -294,8 +311,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateX(final float theta) {
-		rotateX(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectX(final float theta) {
+		rotateObjectX(cos(theta), sin(theta));
 	}
 
 	/**
@@ -304,7 +321,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationY(final float theta) {
-		setRotationY(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationY(cos(theta), sin(theta));
 	}
 
 	/**
@@ -312,8 +329,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateY(final float theta) {
-		rotateY(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectY(final float theta) {
+		rotateObjectY(cos(theta), sin(theta));
 	}
 
 	/**
@@ -322,7 +339,7 @@ public class TransformationState {
 	 * @param theta Der Winkel in radians
 	 */
 	public void setRotationZ(final float theta) {
-		setRotationZ(FloatMath.cos(theta), FloatMath.sin(theta));
+		setRotationZ(cos(theta), sin(theta));
 	}
 
 	/**
@@ -330,8 +347,8 @@ public class TransformationState {
 	 *
 	 * @param theta Der Winkel in radians
 	 */
-	public void rotateZ(final float theta) {
-		rotateZ(FloatMath.cos(theta), FloatMath.sin(theta));
+	public void rotateObjectZ(final float theta) {
+		rotateObjectZ(cos(theta), sin(theta));
 	}
 
 	/**
@@ -368,7 +385,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateX(final float cosTheta, final float sinTheta) {
+	private void rotateObjectX(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				1.0f, 0.0f, 0.0f, 0.0f,
@@ -377,20 +394,20 @@ public class TransformationState {
 				0.0f, 0.0f, 0.0f, 1.0f);
 		 */
 
-		final float[] newRotation = new float[9];
-		newRotation[0] = 1;
-		newRotation[3] = 0;
-		newRotation[6] = 0;
+		final float r1 = rotation[1];
+		final float r2 = rotation[2];
+		final float r4 = rotation[4];
+		final float r5 = rotation[5];
+		final float r7 = rotation[7];
+		final float r8 = rotation[8];
 
-		newRotation[1] = 0;
-		newRotation[4] = cosTheta;
-		newRotation[7] = sinTheta;
+		rotation[1] = (cosTheta * r1) + (sinTheta * r2);
+		rotation[4] = (cosTheta * r4) + (sinTheta * r5);
+		rotation[7] = (cosTheta * r7) + (sinTheta * r8);
 
-		newRotation[2] = 0;
-		newRotation[5] = -sinTheta;
-		newRotation[8] = cosTheta;
-
-		multiply3x3FromLeft(rotation, newRotation);
+		rotation[2] = (-sinTheta * r1) + (cosTheta * r2);
+		rotation[5] = (-sinTheta * r4) + (cosTheta * r5);
+		rotation[8] = (-sinTheta * r7) + (cosTheta * r8);
 	}
 
 	/**
@@ -427,7 +444,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateY(final float cosTheta, final float sinTheta) {
+	private void rotateObjectY(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, 0.0f, -sinTheta, 0.0f,
@@ -442,21 +459,14 @@ public class TransformationState {
 		final float r5 = rotation[5];
 		final float r6 = rotation[6];
 		final float r8 = rotation[8];
-		
-		final float m0 = (cosTheta * r0) + (-sinTheta * r2);
-		final float m3 = (cosTheta * r3) + (-sinTheta * r5);
-		final float m6 = (cosTheta * r6) + (-sinTheta * r8);
 
-		final float m2 = (sinTheta * r0) + (cosTheta * r2);
-		final float m5 = (sinTheta * r3) + (cosTheta * r5);
-		final float m8 = (sinTheta * r6) + (cosTheta * r8);
-		
-		rotation[0] = m0;
-		rotation[2] = m2;
-		rotation[3] = m3;
-		rotation[5] = m5;
-		rotation[6] = m6;
-		rotation[8] = m8;
+		rotation[0] = (cosTheta * r0) + (-sinTheta * r2);
+		rotation[3] = (cosTheta * r3) + (-sinTheta * r5);
+		rotation[6] = (cosTheta * r6) + (-sinTheta * r8);
+
+		rotation[2] = (sinTheta * r0) + (cosTheta * r2);
+		rotation[5] = (sinTheta * r3) + (cosTheta * r5);
+		rotation[8] = (sinTheta * r6) + (cosTheta * r8);
 	}
 
 	/**
@@ -492,7 +502,7 @@ public class TransformationState {
 	 * @param cosTheta Der Kosinus des Winkels
 	 * @param sinTheta Der Sinus des Winkels
 	 */
-	private void rotateZ(final float cosTheta, final float sinTheta) {
+	private void rotateObjectZ(final float cosTheta, final float sinTheta) {
 		/*
 		return Matrix4.createNew().set(
 				cosTheta, sinTheta, 0.0f, 0.0f,
@@ -508,20 +518,13 @@ public class TransformationState {
 		final float r6 = rotation[6];
 		final float r7 = rotation[7];
 
-		final float m0 = (cosTheta * r0) + (sinTheta * r1);
-		final float m3 = (cosTheta * r3) + (sinTheta * r4);
-		final float m6 = (cosTheta * r6) + (sinTheta * r7);
+		rotation[0] = (cosTheta * r0) + (sinTheta * r1);
+		rotation[3] = (cosTheta * r3) + (sinTheta * r4);
+		rotation[6] = (cosTheta * r6) + (sinTheta * r7);
 
-		final float m1 = (-sinTheta * r0) + (cosTheta * r1);
-		final float m4 = (-sinTheta * r3) + (cosTheta * r4);
-		final float m7 = (-sinTheta * r6) + (cosTheta * r7);
-
-		rotation[0] = m0;
-		rotation[1] = m1;
-		rotation[3] = m3;
-		rotation[4] = m4;
-		rotation[6] = m6;
-		rotation[7] = m7;
+		rotation[1] = (-sinTheta * r0) + (cosTheta * r1);
+		rotation[4] = (-sinTheta * r3) + (cosTheta * r4);
+		rotation[7] = (-sinTheta * r6) + (cosTheta * r7);
 
 		/*
 		final float[] multiplied = new float[9];
@@ -554,16 +557,38 @@ public class TransformationState {
 	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
 	 */
 	public void setRotation(final float rollX, final float pitchY, final float yawZ) {
-		float cr = (float) Math.cos(rollX); // Φ
-		float sr = (float) Math.sin(rollX);
+		float cr = cos(rollX); // Φ
+		float sr = sin(rollX);
 
-		float cp = (float) Math.cos(pitchY); // Θ
-		float sp = (float) Math.sin(pitchY);
+		float cp = cos(pitchY); // Θ
+		float sp = sin(pitchY);
 
-		float cy = (float) Math.cos(yawZ); // Ψ
-		float sy = (float) Math.sin(yawZ);
+		float cy = cos(yawZ); // Ψ
+		float sy = sin(yawZ);
 
 		setRotationRPY(cr, sr, cp, sp, cy, sy);
+	}
+
+	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw.
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param rollX  Der Rollwinkel (Rotation um X) in radians
+	 * @param pitchY Der Nickwinkel (Rotation um Y) in radians
+	 * @param yawZ   Der Gierwinkel (Rotation um Z) in radians
+	 */
+	public void rotate(final float rollX, final float pitchY, final float yawZ) {
+		float cr = cos(rollX); // Φ
+		float sr = sin(rollX);
+
+		float cp = cos(pitchY); // Θ
+		float sp = sin(pitchY);
+
+		float cy = cos(yawZ); // Ψ
+		float sy = sin(yawZ);
+
+		rotate(cr, sr, cp, sp, cy, sy);
 	}
 
 	/**
@@ -591,6 +616,57 @@ public class TransformationState {
 		rotation[2] = cosRoll * sinPitch * cosYaw + sinRoll * sinYaw;
 		rotation[5] = cosRoll * sinPitch * sinYaw - sinRoll * cosYaw;
 		rotation[8] = cosRoll * cosPitch;
+	}
+
+	/**
+	 * Rotiert gemäß Euler Roll-Pitch-Yaw
+	 * <p/>
+	 * Es wird erst um X-, dann um Y- und zuletzt um Z-Achse rotiert.
+	 *
+	 * @param cosRoll  Der Kosinus des Rollwinkel (Rotation um X)
+	 * @param sinRoll  Der Sinus des Rollwinkel (Rotation um X)
+	 * @param cosPitch Der Kosinus des Nickwinkel (Rotation um Y)
+	 * @param sinPitch Der Sinus des Nickwinkel (Rotation um Y)
+	 * @param cosYaw   Der Kosinus des Gierwinkel (Rotation um Z)
+	 * @param sinYaw   Der Sinus des Gierwinkel (Rotation um Z)
+	 */
+	private void rotate(final float cosRoll, final float sinRoll, final float cosPitch, final float sinPitch, final float cosYaw, final float sinYaw) {
+
+		final float newRotation0 = cosPitch * cosYaw;
+		final float newRotation3 = cosPitch * sinYaw;
+		final float newRotation6 = -sinPitch;
+
+		final float sRsP = sinRoll * sinPitch;
+		final float newRotation1 = sRsP * cosYaw - cosRoll * sinYaw;
+		final float newRotation4 = sRsP * sinYaw + cosRoll * cosYaw;
+		final float newRotation7 = sinRoll * cosPitch;
+
+		final float cRsP = cosRoll * sinPitch;
+		final float newRotation2 = cRsP * cosYaw + sinRoll * sinYaw;
+		final float newRotation5 = cRsP * sinYaw - sinRoll * cosYaw;
+		final float newRotation8 = cosRoll * cosPitch;
+
+		final float m0 = (newRotation0 * rotation[0]) + (newRotation3 * rotation[1]) + (newRotation6 * rotation[2]);
+		final float m3 = (newRotation0 * rotation[3]) + (newRotation3 * rotation[4]) + (newRotation6 * rotation[5]);
+		final float m6 = (newRotation0 * rotation[6]) + (newRotation3 * rotation[7]) + (newRotation6 * rotation[8]);
+
+		final float m1 = (newRotation1 * rotation[0]) + (newRotation4 * rotation[1]) + (newRotation7 * rotation[2]);
+		final float m4 = (newRotation1 * rotation[3]) + (newRotation4 * rotation[4]) + (newRotation7 * rotation[5]);
+		final float m7 = (newRotation1 * rotation[6]) + (newRotation4 * rotation[7]) + (newRotation7 * rotation[8]);
+
+		final float m2 = (newRotation2 * rotation[0]) + (newRotation5 * rotation[1]) + (newRotation8 * rotation[2]);
+		final float m5 = (newRotation2 * rotation[3]) + (newRotation5 * rotation[4]) + (newRotation8 * rotation[5]);
+		final float m8 = (newRotation2 * rotation[6]) + (newRotation5 * rotation[7]) + (newRotation8 * rotation[8]);
+
+		rotation[0] = m0;
+		rotation[1] = m1;
+		rotation[2] = m2;
+		rotation[3] = m3;
+		rotation[4] = m4;
+		rotation[5] = m5;
+		rotation[6] = m6;
+		rotation[7] = m7;
+		rotation[8] = m8;
 	}
 
 	/**
