@@ -436,21 +436,27 @@ public class TransformationState {
 				0.0f, 0.0f, 0.0f, 1.0f);
 		 */
 
-		final float[] newRotation = new float[9];
+		final float r0 = rotation[0];
+		final float r2 = rotation[2];
+		final float r3 = rotation[3];
+		final float r5 = rotation[5];
+		final float r6 = rotation[6];
+		final float r8 = rotation[8];
+		
+		final float m0 = (cosTheta * r0) + (-sinTheta * r2);
+		final float m3 = (cosTheta * r3) + (-sinTheta * r5);
+		final float m6 = (cosTheta * r6) + (-sinTheta * r8);
 
-		newRotation[0] = cosTheta;
-		newRotation[3] = 0;
-		newRotation[6] = -sinTheta;
-
-		newRotation[1] = 0;
-		newRotation[4] = 1;
-		newRotation[7] = 0;
-
-		newRotation[2] = sinTheta;
-		newRotation[5] = 0;
-		newRotation[8] = cosTheta;
-
-		multiply3x3FromLeft(rotation, newRotation);
+		final float m2 = (sinTheta * r0) + (cosTheta * r2);
+		final float m5 = (sinTheta * r3) + (cosTheta * r5);
+		final float m8 = (sinTheta * r6) + (cosTheta * r8);
+		
+		rotation[0] = m0;
+		rotation[2] = m2;
+		rotation[3] = m3;
+		rotation[5] = m5;
+		rotation[6] = m6;
+		rotation[8] = m8;
 	}
 
 	/**
@@ -501,7 +507,7 @@ public class TransformationState {
 		final float r4 = rotation[4];
 		final float r6 = rotation[6];
 		final float r7 = rotation[7];
-		
+
 		final float m0 = (cosTheta * r0) + (sinTheta * r1);
 		final float m3 = (cosTheta * r3) + (sinTheta * r4);
 		final float m6 = (cosTheta * r6) + (sinTheta * r7);
