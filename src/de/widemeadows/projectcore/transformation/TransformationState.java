@@ -450,7 +450,24 @@ public class TransformationState {
 		newRotation[5] = 0;
 		newRotation[8] = cosTheta;
 
-		multiply3x3FromLeft(rotation, newRotation);
+
+
+		final float[] multiplied = new float[9];
+		final float[] right = rotation;
+
+		multiplied[0] = (newRotation[0] * right[0]) + 0                           + (newRotation[6] * right[2]);
+		multiplied[3] = (newRotation[0] * right[3]) + 0                           + (newRotation[6] * right[5]);
+		multiplied[6] = (newRotation[0] * right[6]) + 0                           + (newRotation[6] * right[8]);
+
+		multiplied[1] = 0                           + right[1]                    + 0;
+		multiplied[4] = 0                           + right[4]                    + 0;
+		multiplied[7] = 0                           + right[7]                    + 0;
+
+		multiplied[2] = (newRotation[2] * right[0]) + 0                           + (newRotation[8] * right[2]);
+		multiplied[5] = (newRotation[2] * right[3]) + 0                           + (newRotation[8] * right[5]);
+		multiplied[8] = (newRotation[2] * right[6]) + 0                           + (newRotation[8] * right[8]);
+
+		System.arraycopy(multiplied, 0, right, 0, 9);
 	}
 
 	/**
@@ -501,7 +518,7 @@ public class TransformationState {
 		final float r4 = rotation[4];
 		final float r6 = rotation[6];
 		final float r7 = rotation[7];
-		
+
 		final float m0 = (cosTheta * r0) + (sinTheta * r1);
 		final float m3 = (cosTheta * r3) + (sinTheta * r4);
 		final float m6 = (cosTheta * r6) + (sinTheta * r7);
