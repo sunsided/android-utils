@@ -495,21 +495,47 @@ public class TransformationState {
 				0.0f, 0.0f, 0.0f, 1.0f);
 		 */
 
-		final float[] newRotation = new float[9];
+		final float r0 = rotation[0];
+		final float r1 = rotation[1];
+		final float r3 = rotation[3];
+		final float r4 = rotation[4];
+		final float r6 = rotation[6];
+		final float r7 = rotation[7];
+		
+		final float m0 = (cosTheta * r0) + (sinTheta * r1);
+		final float m3 = (cosTheta * r3) + (sinTheta * r4);
+		final float m6 = (cosTheta * r6) + (sinTheta * r7);
 
-		newRotation[0] = cosTheta;
-		newRotation[3] = sinTheta;
-		newRotation[6] = 0;
+		final float m1 = (-sinTheta * r0) + (cosTheta * r1);
+		final float m4 = (-sinTheta * r3) + (cosTheta * r4);
+		final float m7 = (-sinTheta * r6) + (cosTheta * r7);
 
-		newRotation[1] = -sinTheta;
-		newRotation[4] = cosTheta;
-		newRotation[7] = 0;
+		rotation[0] = m0;
+		rotation[1] = m1;
+		rotation[3] = m3;
+		rotation[4] = m4;
+		rotation[6] = m6;
+		rotation[7] = m7;
 
-		newRotation[2] = 0;
-		newRotation[5] = 0;
-		newRotation[8] = 1;
+		/*
+		final float[] multiplied = new float[9];
+		final float[] left = newRotation;
+		final float[] right = rotation;
 
-		multiply3x3FromLeft(rotation, newRotation);
+		multiplied[0] = (left[0] * right[0]) + (left[3] * right[1]) + (left[6] * right[2]);
+		multiplied[3] = (left[0] * right[3]) + (left[3] * right[4]) + (left[6] * right[5]);
+		multiplied[6] = (left[0] * right[6]) + (left[3] * right[7]) + (left[6] * right[8]);
+
+		multiplied[1] = (left[1] * right[0]) + (left[4] * right[1]) + (left[7] * right[2]);
+		multiplied[4] = (left[1] * right[3]) + (left[4] * right[4]) + (left[7] * right[5]);
+		multiplied[7] = (left[1] * right[6]) + (left[4] * right[7]) + (left[7] * right[8]);
+
+		multiplied[2] = (left[2] * right[0]) + (left[5] * right[1]) + (left[8] * right[2]);
+		multiplied[5] = (left[2] * right[3]) + (left[5] * right[4]) + (left[8] * right[5]);
+		multiplied[8] = (left[2] * right[6]) + (left[5] * right[7]) + (left[8] * right[8]);
+
+		System.arraycopy(multiplied, 0, right, 0, 9);
+		*/
 	}
 
 	/**
