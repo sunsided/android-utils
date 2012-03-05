@@ -58,33 +58,18 @@ public final class Vector3 {
         return Cache.getOrCreate().set(other);
     }
 
-	/**
-	 * Erzeugt eine neue Vektor-Instanz.
-	 * <p>
-	 * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
-	 * </p>
-	 *
-	 * @return Der neue oder aufbereitete Vektor
-	 * @see #Cache
-	 */
-	@NotNull
-	public static Vector3 createNew() {
-		return Cache.getOrCreate().set(0, 0, 0);
-	}
-
     /**
      * Erzeugt eine neue Vektor-Instanz.
      * <p>
      * <strong>Hinweis:</strong> Der Zustand der Vektors kann korrupt sein!
      * </p>
      *
-     * @param initializeToZero Gibt an, ob der Wert auf null initialisiert werden soll
      * @return Der neue oder aufbereitete Vektor
      * @see #Cache
      */
     @NotNull
-    public static Vector3 createNew(boolean initializeToZero) {
-	    return initializeToZero ? Cache.getOrCreate().set(0, 0, 0) : Cache.getOrCreate();
+    public static Vector3 createNew() {
+        return Cache.getOrCreate();
     }
 
 	/**

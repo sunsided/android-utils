@@ -4,7 +4,6 @@ import de.widemeadows.projectcore.cache.IObjectCache;
 import de.widemeadows.projectcore.cache.ObjectFactory;
 import de.widemeadows.projectcore.cache.ThreadLocalObjectCache;
 import de.widemeadows.projectcore.cache.annotations.ReturnsCachedValue;
-import de.widemeadows.projectcore.transformation.TransformationState;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -346,30 +345,6 @@ public final class Ray3 {
 		transformation.transformPointInPlace(origin);
 		transformation.transformVectorInPlace(direction);
 		invDirection.set(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
-		return this;
-	}
-
-	/**
-	 * Transformiert diesen Strahl
-	 *
-	 * @param transformation Die Transformationsmatrix
-	 * @return Diese Instanz für method chaining
-	 */
-	@NotNull
-	public Ray3 transform(@NotNull final TransformationState transformation) {
-		transformation.transform(this);
-		return this;
-	}
-
-	/**
-	 * Transformiert diesen Strahl
-	 *
-	 * @param transformation Die Transformationsmatrix
-	 * @return Diese Instanz für method chaining
-	 */
-	@NotNull
-	public Ray3 inverseTransform(@NotNull final TransformationState transformation) {
-		transformation.inverseTransform(this);
 		return this;
 	}
 }
